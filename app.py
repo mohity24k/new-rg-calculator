@@ -81,7 +81,7 @@ page = st.sidebar.radio(
 st.sidebar.markdown("---")
 st.sidebar.caption(
     "Based on: Tamargo, R.J.I. *et al.* (2024). *Metrics of Green Chemistry and "
-    "Sustainability.* In *Sustainable Green Catalytic Processes*"  
+    "Sustainability.* In *Sustainable Green Catalytic Processes* "  \n
     "https://doi.org/10.1002/9781394212767.ch10"
 )
 
