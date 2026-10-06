@@ -18,6 +18,7 @@ from modules import eco_scale as es
 from modules import hazard_metrics as hz
 from modules import visualization as viz
 from modules import data_export as dx
+from modules.autofill_page import render_autofill_page
 
 # ---------------------------------------------------------------------------
 # Page config & session state
@@ -29,7 +30,15 @@ if "routes" not in st.session_state:
     # Stores computed metrics for up to two comparison routes: "Route A", "Route B"
     st.session_state.routes = {"Route A": {}, "Route B": {}}
 
+if "prefill" not in st.session_state:
+    st.session_state.prefill = {}
+    st.session_state.prefill_version = 0
+
 CARBON_MW = 12.011
+
+
+
+
 
 # ---------------------------------------------------------------------------
 # Sample data: benzyl alcohol + p-toluenesulfonyl chloride esterification
@@ -70,7 +79,8 @@ st.sidebar.title("🌱 Green Metrics Studio")
 page = st.sidebar.radio(
     "Navigate",
     [
-        "Dashboard Overview",
+        "Dashboard Overview", 
+        "Upload PDF & Auto-fill",
         "Mass-Based Metrics Calculator",
         "Reaction Eco-Scale Scoring",
         "Global Hazard & Toxicity Impact",
@@ -153,6 +163,13 @@ if page == "Dashboard Overview":
                         "'Save to Route' to populate this comparison slot.")
 
 # ===========================================================================
+# PAGE: UPLOAD PDF & AUTO-FILL
+# ===========================================================================
+
+elif page == "Upload PDF & Auto-fill":
+    render_autofill_page()
+
+# ===========================================================================
 # PAGE 2: MASS-BASED METRICS CALCULATOR
 # ===========================================================================
 
@@ -167,6 +184,10 @@ elif page == "Mass-Based Metrics Calculator":
 
     save_target = st.selectbox("Save results to comparison slot:", ["Route A", "Route B"])
 
+    pf = st.session_state.prefill
+    v = st.session_state.prefill_version
+    prod = pf.get("product", DEFAULT_PRODUCT)
+
     st.subheader("1. Reactants")
     st.caption(
         "Enter every stoichiometric reactant. Mark exactly one as the **limiting "
@@ -175,7 +196,8 @@ elif page == "Mass-Based Metrics Calculator":
         "per 1 mol limiting reagent) to enable the Excess Reactant Factor (ERF)."
     )
     reactants_df = st.data_editor(
-        default_reactants(), num_rows="dynamic", use_container_width=True, key="reactants_editor"
+        pf.get("reactants_df", default_reactants()), num_rows="dynamic",
+        use_container_width=True, key=f"reactants_editor_{v}"
     )
 
     st.subheader("2. Auxiliary Materials (solvents, bases, catalysts, workup reagents)")
@@ -184,33 +206,38 @@ elif page == "Mass-Based Metrics Calculator":
         "toward PMI, E-factor, and Mass Intensity."
     )
     aux_df = st.data_editor(
-        default_auxiliaries(), num_rows="dynamic", use_container_width=True, key="aux_editor"
+        pf.get("aux_df", default_auxiliaries()), num_rows="dynamic",
+        use_container_width=True, key=f"aux_editor_{v}"
     )
-
     st.subheader("3. Product")
     pcol1, pcol2, pcol3, pcol4 = st.columns(4)
     with pcol1:
-        product_name = st.text_input("Product name", DEFAULT_PRODUCT["name"])
+        product_name = st.text_input("Product name", prod["name"], key=f"pn_{v}")
     with pcol2:
         product_mw = st.number_input("Product MW (g/mol)", min_value=0.0,
-                                      value=DEFAULT_PRODUCT["mw"], step=0.01,
+                                      value=float(prod["mw"]), step=0.01,
+                                      key=f"pmw_{v}",
                                       help="Used for theoretical Atom Economy (AE).")
     with pcol3:
         product_actual_mass = st.number_input("Actual isolated mass (g)", min_value=0.0,
-                                                value=DEFAULT_PRODUCT["actual_mass"], step=0.01,
+                                                value=float(prod["actual_mass"]), step=0.01,
+                                                format="%.4f", key=f"pm_{v}",
                                                 help="Used for RME, PMI, E-factor, MP, CE.")
     with pcol4:
         product_carbons = st.number_input("Carbons per product molecule", min_value=0,
-                                           value=DEFAULT_PRODUCT["carbons"], step=1,
+                                           value=int(prod["carbons"]), step=1,
+                                           key=f"pc_{v}",
                                            help="Used for Carbon Efficiency (CE).")
 
     product_moles = st.number_input(
-        "Product moles obtained (mol)", min_value=0.0, value=DEFAULT_PRODUCT["moles"], step=0.001,
+        "Product moles obtained (mol)", min_value=0.0, value=float(prod["moles"]), step=0.001,
+        format="%.5f", key=f"pmol_{v}",
         help="Used to derive product carbon mass for Carbon Efficiency."
     )
 
     water_mass = st.number_input(
-        "Water mass in reaction vessel (g)", min_value=0.0, value=0.0, step=1.0,
+        "Water mass in reaction vessel (g)", min_value=0.0,
+        value=float(pf.get("water_mass", 0.0)), step=1.0, key=f"w_{v}",
         help="Included in PMI (per ACS GCI convention) but excluded from Mass Intensity (MI)."
     )
 
@@ -334,9 +361,18 @@ elif page == "Reaction Eco-Scale Scoring":
     save_target = st.selectbox("Save results to comparison slot:", ["Route A", "Route B"], key="eco_save")
     route_name = st.text_input("Route / reaction label", "Reaction Route")
 
-    col1, col2 = st.columns(2)
+    eco = st.session_state.prefill.get("eco", {})
+    v = st.session_state.prefill_version
+
+    def _idx(options, value):
+        options = list(options)
+        return options.index(value) if value in options else 0
+
+        col1, col2 = st.columns(2)
     with col1:
-        yield_pct = st.slider("Product yield (%)", 0.0, 100.0, 90.0, 0.5,
+        yield_pct = st.slider("Product yield (%)", 0.0, 100.0,
+                               float(eco.get("yield_pct", 90.0)), 0.5,
+                               key=f"ecoy_{v}",
                                help="Penalty = (100 - %yield) / 2")
         price_category = st.selectbox("Price of reaction components", list(es.PRICE_PENALTIES.keys()),
                                        help="Estimated cost to obtain the target mmol of product.")
@@ -347,13 +383,18 @@ elif page == "Reaction Eco-Scale Scoring":
     with col2:
         technical_setups = st.multiselect(
             "Technical setup requirements", list(es.TECHNICAL_SETUP_PENALTIES.keys()),
-            default=["Common setup"],
+            default=eco.get("setups", ["Common setup"]),
+            key=f"ecos_{v}",
             help="Select all equipment/conditions used beyond standard glassware."
         )
-        temp_time_category = st.selectbox("Temperature & time conditions",
-                                           list(es.TEMPERATURE_TIME_PENALTIES.keys()))
-        workup_category = st.selectbox("Workup / purification method",
-                                        list(es.WORKUP_PENALTIES.keys()))
+        temp_time_category = st.selectbox(
+            "Temperature & time conditions", list(es.TEMPERATURE_TIME_PENALTIES.keys()),
+            index=_idx(es.TEMPERATURE_TIME_PENALTIES, eco.get("temp_time")),
+            key=f"ecot_{v}")
+        workup_category = st.selectbox(
+            "Workup / purification method", list(es.WORKUP_PENALTIES.keys()),
+            index=_idx(es.WORKUP_PENALTIES, eco.get("workup")),
+            key=f"ecow_{v}")
 
     if st.button("🧮 Calculate Eco-Scale", type="primary"):
         inputs = es.EcoScaleInputs(
