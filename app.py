@@ -368,7 +368,7 @@ elif page == "Reaction Eco-Scale Scoring":
         options = list(options)
         return options.index(value) if value in options else 0
 
-        col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2)
     with col1:
         yield_pct = st.slider("Product yield (%)", 0.0, 100.0,
                                float(eco.get("yield_pct", 90.0)), 0.5,
