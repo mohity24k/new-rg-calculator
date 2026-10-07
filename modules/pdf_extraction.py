@@ -92,13 +92,13 @@ def render_page(pdf_bytes: bytes, page_idx: int, dpi: int = 200) -> bytes:
 
 
 def call_vlm(png: bytes, base_url: str, model: str = DEFAULT_MODEL,
-             api_key: str = "EMPTY", prompt: str = PROMPT) -> str:
+             api_key: str = "EMPTY", prompt: str = PROMPT, max_tokens: int = 2048) -> str:
     """Send one page image to an OpenAI-compatible chat endpoint (vLLM, etc.)."""
     b64 = base64.b64encode(png).decode()
     payload = {
         "model": model,
         "temperature": 0,
-        "max_tokens": 2048,
+        "max_tokens": max_tokens,
         "messages": [{"role": "user", "content": [
             {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{b64}"}},
             {"type": "text", "text": prompt},
@@ -127,8 +127,13 @@ def extract_document(pdf_bytes: bytes, page_indices: Iterable[int], base_url: st
     idxs = list(page_indices)
     out = []
     for i, p in enumerate(idxs, 1):
-        raw = call_vlm(render_page(pdf_bytes, p), base_url, model, api_key)
-        out.append({"page": p + 1, "data": parse_json(raw), "raw": raw})
+        png = render_page(pdf_bytes, p)
+        raw = call_vlm(png, base_url, model, api_key)
+        data = parse_json(raw)
+        if data is None:  # one retry with more room (answer was probably cut off)
+            raw = call_vlm(png, base_url, model, api_key, max_tokens=4096)
+            data = parse_json(raw)
+        out.append({"page": p + 1, "data": data, "raw": raw})
         if on_progress:
             on_progress(i, len(idxs))
     return out
@@ -152,6 +157,11 @@ ALIASES = {
     "dmf": "CN(C)C=O", "toluene": "Cc1ccccc1",
     "et3n": "CCN(CC)CC", "triethylamine": "CCN(CC)CC",
     "formic acid": "OC=O", "hco2h": "OC=O",
+    "n,n-dimethylformamide": "CN(C)C=O", "dimethylformamide": "CN(C)C=O",
+    "hobt": "On1nnc2ccccc21", "1-hydroxybenzotriazole": "On1nnc2ccccc21",
+    "edc\u00b7hcl": "CCN=C=NCCCN(C)C.Cl", "edc.hcl": "CCN=C=NCCCN(C)C.Cl",
+    "edc hcl": "CCN=C=NCCCN(C)C.Cl", "edc-hcl": "CCN=C=NCCCN(C)C.Cl",
+    "edci": "CCN=C=NCCCN(C)C.Cl", "edc hydrochloride": "CCN=C=NCCCN(C)C.Cl",
 }
 
 
@@ -159,10 +169,34 @@ def _norm(name: str) -> str:
     return re.sub(r"\s+", " ", name.lower()).strip()
 
 
+_QUALIFIER = re.compile(
+    r"\s*\((?:product|products|extraction|solvent|reagent|substrate|catalyst|base|crude|"
+    r"anhydrous[^()]*|\d+[a-z]?|[^()]*%[^()]*|[^()]*\d{2,7}-\d{2}-\d[^()]*|"
+    r"[^()]*(?:received|combi|sigma|aldrich|purified)[^()]*)\)\s*$", re.I)
+
+_GENERIC = {"product", "products", "compound", "compounds", "substrate", "substrates",
+            "reagent", "reagents", "solvent", "catalyst", "base", "additive", "crude product",
+            "starting material", "mixture", "residue"}
+
+_SYNONYMS = [(r"\bp-toluene", "4-toluene"), (r"toluenesulfonate", "methylbenzenesulfonate"),
+             (r"toluenesulfonyl", "methylbenzenesulfonyl"), (r"toluenesulfonic", "methylbenzenesulfonic")]
+
+
 def _clean(name: str) -> str:
-    """Strip vendor/purity/CAS parentheticals before lookup."""
-    n = re.sub(r"\([^()]*(%|\d{2,7}-\d{2}-\d|received|combi|sigma)[^()]*\)", "", name, flags=re.I)
-    return re.sub(r"\s+", " ", n).strip(" ;,")
+    """Strip trailing qualifiers: '(product)', '(3a)', '(99.5%)', '(extraction)', CAS, vendor..."""
+    n, prev = name.strip(), None
+    while prev != n:
+        prev = n
+        n = _QUALIFIER.sub("", n).strip(" ;,")
+    return re.sub(r"\s+", " ", n)
+
+
+def _variants(name: str) -> list[str]:
+    c = _clean(name)
+    s = c
+    for pat, rep in _SYNONYMS:
+        s = re.sub(pat, rep, s, flags=re.I)
+    return list(dict.fromkeys(x for x in (name, c, s) if x))
 
 
 def _opsin(name: str) -> Optional[str]:
@@ -189,7 +223,7 @@ def _pubchem(name: str) -> Optional[str]:
 
 @lru_cache(maxsize=1024)
 def resolve_smiles(name: str) -> Optional[str]:
-    for cand in dict.fromkeys([name, _clean(name)]):
+    for cand in _variants(name):
         if not cand:
             continue
         key = _norm(cand)
@@ -238,6 +272,7 @@ DENSITY = {  # g/mL
     "thf": 0.889, "acetonitrile": 0.786, "methanol": 0.792, "dmf": 0.944,
     "triethylamine": 0.726, "n,n-diisopropylethylamine": 0.742, "diisopropylethylamine": 0.742,
     "dipea": 0.742, "formic acid": 1.22,
+    "n,n-dimethylformamide": 0.944, "dimethylformamide": 0.944,
 }
 _WATER_RE = re.compile(r"\b(water|brine|bicarbonate|aqueous|h2o)\b", re.I)
 _IGNORE_RE = re.compile(r"\b(silica|cartridge|celite)\b", re.I)
@@ -271,14 +306,22 @@ def _role(raw, name: str) -> str:
     return _ROLE_MAP.get(str(raw or "").lower().strip(), "additive")
 
 
-def _density(name: str, role: str) -> Optional[float]:
+@lru_cache(maxsize=1)
+def _smiles_density() -> dict:
+    out = {}
+    for k, v in DENSITY.items():
+        if k in ALIASES and _canon(ALIASES[k]):
+            out[_canon(ALIASES[k])] = v
+    return out
+
+
+def _density(name: str, role: str, smiles: Optional[str] = None) -> Optional[float]:
     if role == "water":
         return 1.0
-    n = _norm(_clean(name))
-    for k in sorted(DENSITY, key=len, reverse=True):
-        if n == k:
-            return DENSITY[k]
-    return None
+    if smiles and smiles in _smiles_density():          # any name that resolves to a known solvent
+        return _smiles_density()[smiles]
+    return DENSITY.get(_norm(_clean(name)))
+
 
 # ---------------------------------------------------------------------------
 # 5. Merge pages -> one validated review table
@@ -290,7 +333,9 @@ def build_review_table(pages: list[dict]) -> pd.DataFrame:
         for c in (p.get("data") or {}).get("components") or []:
             if not isinstance(c, dict) or not str(c.get("name") or "").strip():
                 continue
-            name = str(c["name"]).strip()
+            name = _clean(str(c["name"]))
+            if not name or _norm(name) in _GENERIC:
+                continue
             role = _role(c.get("role"), name)
             qty, unit, equiv = _num(c.get("quantity")), _unit(c.get("unit")), _num(c.get("equivalents"))
             if unit == "mol%" and qty is not None:
@@ -329,7 +374,7 @@ def build_review_table(pages: list[dict]) -> pd.DataFrame:
                 mol = q * MOL_UNITS[u]
         mw, carbons = _mol_props(r["smiles"])
         if vol is not None and mass is None:
-            d = _density(r["name"], r["role"])
+            d = _density(r["name"], r["role"], r["smiles"])
             if d:
                 mass = vol * d
                 r["flags"].add("mass = volume x density")
@@ -351,6 +396,10 @@ def build_review_table(pages: list[dict]) -> pd.DataFrame:
             r["mass"] = r["mol"] * r["mw"]
             r["flags"].add("derived from equivalents")
 
+    for r in rec.values():
+        if r["role"] != "ignore" and r["qty"] is None and r["equiv"] is None:
+            r["role"] = "ignore"
+            r["flags"] = {"no amount stated on any page (set Role back to include)"}
     n_prod = sum(1 for r in rec.values() if r["role"] == "product")
     rows = []
     for r in rec.values():
@@ -360,6 +409,8 @@ def build_review_table(pages: list[dict]) -> pd.DataFrame:
             r["flags"].add("mass missing")
         if r["role"] == "reactant" and r["mol"] is None:
             r["flags"].add("moles missing")
+        if r["role"] == "catalyst" and r["equiv"] is not None and r["equiv"] >= 0.5:
+            r["flags"].add("stoichiometric amount: check Role (reagent?)")
         if r["role"] == "product" and n_prod > 1:
             r["flags"].add("several products: keep one, set others to ignore")
         rows.append({
