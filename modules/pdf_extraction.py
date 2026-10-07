@@ -23,6 +23,7 @@ import requests
 
 from modules import eco_scale as es
 
+PIPELINE_VERSION = "2026-10-07.2"
 DEFAULT_MODEL = "Qwen/Qwen2.5-VL-7B-Instruct"
 
 ROLES = ["reactant", "solvent", "base", "catalyst", "additive",
@@ -65,6 +66,8 @@ Rules:
 - solvent = reaction solvent. workup = solvents, aqueous solutions, drying agents used in work-up/purification.
 - product = the isolated product; give its isolated mass (or mmol) as quantity.
 - Use "ignore" (or omit) for chromatography silica, cartridges, instruments, NMR standards, vendor/purity lines.
+- "quantity" must be ONE literal number. Never write arithmetic: for "2 x 20 mL" write 40.
+- Use only these roles: reactant, solvent, base, catalyst, additive, workup, product, ignore.
 - Never invent numbers. If a value is not printed, use null.
 - If the page has no experimental procedure, return {"components": [], "yield_percent": null, "conditions": {}}.
 """
@@ -110,30 +113,77 @@ def call_vlm(png: bytes, base_url: str, model: str = DEFAULT_MODEL,
     return r.json()["choices"][0]["message"]["content"]
 
 
-def parse_json(text: str) -> Optional[dict]:
-    m = re.search(r"\{.*\}", text or "", re.S)
-    if not m:
-        return None
+def _fix_json(text: str) -> str:
+    """Repair what small VLMs commonly get wrong: arithmetic in values, trailing commas, None."""
+    t = text
+    for _ in range(5):
+        n = re.sub(r"(:\s*)(\d+(?:\.\d+)?)\s*[*\u00d7xX]\s*(\d+(?:\.\d+)?)(?=\s*[,}\]])",
+                   lambda m: f"{m.group(1)}{float(m.group(2)) * float(m.group(3)):g}", t)
+        n = re.sub(r"(:\s*)(\d+(?:\.\d+)?)\s*\+\s*(\d+(?:\.\d+)?)(?=\s*[,}\]])",
+                   lambda m: f"{m.group(1)}{float(m.group(2)) + float(m.group(3)):g}", n)
+        if n == t:
+            break
+        t = n
+    t = re.sub(r",\s*([}\]])", r"\1", t)
+    return re.sub(r":\s*(None|NaN)\b", ": null", t)
+
+
+def parse_json_status(text: str) -> tuple[Optional[dict], str]:
+    """Returns (data, status). Never silently loses a page: status explains what happened."""
+    text = text or ""
+    m = re.search(r"\{.*\}", text, re.S)
+    if m:
+        body = m.group(0)
+    elif "{" in text:
+        body = text[text.index("{"):]
+    else:
+        return None, "no JSON in answer"
     try:
-        return json.loads(m.group(0))
+        return json.loads(body), "ok"
     except json.JSONDecodeError:
-        return None
+        pass
+    fixed = _fix_json(body)
+    try:
+        return json.loads(fixed), "repaired JSON"
+    except json.JSONDecodeError:
+        pass
+    closers = [i for i, ch in enumerate(fixed) if ch == "}"][::-1][:60]
+    for j in closers:                       # answer was cut off: keep the complete items
+        for tail in ("]}", "]}}", "}"):
+            try:
+                return json.loads(fixed[:j + 1] + tail), "repaired (answer cut off, last items may be missing)"
+            except json.JSONDecodeError:
+                continue
+    return None, "invalid JSON"
+
+
+def parse_json(text: str) -> Optional[dict]:
+    return parse_json_status(text)[0]
+
+
+RETRY_SUFFIX = ("\n\nIMPORTANT: your previous answer was not valid JSON. Output strictly valid JSON only. "
+                "Never write arithmetic such as 2 * 20; write the computed number (40).")
 
 
 def extract_document(pdf_bytes: bytes, page_indices: Iterable[int], base_url: str,
                      model: str = DEFAULT_MODEL, api_key: str = "EMPTY",
                      on_progress: Optional[Callable[[int, int], None]] = None) -> list[dict]:
-    """Returns [{'page': 1-based, 'data': dict|None, 'raw': str}, ...]"""
+    """Returns [{'page', 'data', 'raw', 'status', 'n_components'}, ...] (page is 1-based)."""
     idxs = list(page_indices)
     out = []
     for i, p in enumerate(idxs, 1):
         png = render_page(pdf_bytes, p)
         raw = call_vlm(png, base_url, model, api_key)
-        data = parse_json(raw)
-        if data is None:  # one retry with more room (answer was probably cut off)
-            raw = call_vlm(png, base_url, model, api_key, max_tokens=4096)
-            data = parse_json(raw)
-        out.append({"page": p + 1, "data": data, "raw": raw})
+        data, status = parse_json_status(raw)
+        if data is None:  # retry with a stricter instruction (temperature is 0, so same prompt = same answer)
+            raw2 = call_vlm(png, base_url, model, api_key, prompt=PROMPT + RETRY_SUFFIX, max_tokens=4096)
+            data2, status2 = parse_json_status(raw2)
+            if data2 is not None:
+                raw, data, status = raw2, data2, status2 + " (after retry)"
+        n = len(data.get("components") or []) if isinstance(data, dict) else 0
+        if data is not None and n == 0:
+            status = "no compounds on this page" + ("" if status == "ok" else f" ({status})")
+        out.append({"page": p + 1, "data": data, "raw": raw, "status": status, "n_components": n})
         if on_progress:
             on_progress(i, len(idxs))
     return out
@@ -281,14 +331,23 @@ _ROLE_MAP = {"reagent": "reactant", "substrate": "reactant", "starting material"
              "reactant": "reactant", "solvent": "solvent", "eluent": "workup", "base": "base",
              "catalyst": "catalyst", "photocatalyst": "catalyst", "additive": "additive",
              "workup": "workup", "product": "product", "internal standard": "ignore",
-             "ignore": "ignore", "byproduct": "ignore"}
+             "ignore": "ignore", "byproduct": "ignore", "extraction": "workup", "drying agent": "workup",
+             "chromatography": "workup", "quench": "workup", "purification": "workup",
+             "work-up": "workup", "support": "ignore", "stationary phase": "ignore"}
+
+_SUBS = str.maketrans("\u2080\u2081\u2082\u2083\u2084\u2085\u2086\u2087\u2088\u2089", "0123456789")
 
 
 def _num(x) -> Optional[float]:
     try:
         return float(x)
     except (TypeError, ValueError):  # None, lists like [8, 2], strings
-        return None
+        pass
+    if isinstance(x, str):           # "2 x 20" -> 40
+        m = re.fullmatch(r"\s*(\d+(?:\.\d+)?)\s*[*\u00d7xX]\s*(\d+(?:\.\d+)?)\s*", x)
+        if m:
+            return float(m.group(1)) * float(m.group(2))
+    return None
 
 
 def _unit(u) -> str:
@@ -333,7 +392,7 @@ def build_review_table(pages: list[dict]) -> pd.DataFrame:
         for c in (p.get("data") or {}).get("components") or []:
             if not isinstance(c, dict) or not str(c.get("name") or "").strip():
                 continue
-            name = _clean(str(c["name"]))
+            name = _clean(str(c["name"]).translate(_SUBS))
             if not name or _norm(name) in _GENERIC:
                 continue
             role = _role(c.get("role"), name)
@@ -342,11 +401,13 @@ def build_review_table(pages: list[dict]) -> pd.DataFrame:
                 equiv, qty, unit = qty / 100, None, ""
             elif unit in EQUIV_UNITS and qty is not None:
                 equiv, qty, unit = qty, None, ""
+            if role in ("solvent", "workup", "water", "ignore") and qty is None:
+                equiv = None
             known = unit in MASS_UNITS or unit in VOL_UNITS or unit in MOL_UNITS
             has_amt = (qty is not None and known) or equiv is not None
 
             smiles = None if role in ("ignore", "water") else _canon(resolve_smiles(name))
-            key = smiles or _norm(_clean(name))
+            key = (smiles or _norm(_clean(name))) + ("|workup" if role == "workup" else "")
             if key not in rec:
                 rec[key] = dict(name=name, role=role, qty=qty, unit=unit, equiv=equiv,
                                 smiles=smiles, pages={p["page"]}, flags=set(), has_amt=has_amt)
@@ -401,8 +462,12 @@ def build_review_table(pages: list[dict]) -> pd.DataFrame:
             r["role"] = "ignore"
             r["flags"] = {"no amount stated on any page (set Role back to include)"}
     n_prod = sum(1 for r in rec.values() if r["role"] == "product")
-    rows = []
+    rows, seen_ignored = [], set()
     for r in rec.values():
+        if r["role"] == "ignore":                      # show each ignored name only once
+            if _norm(r["name"]) in seen_ignored:
+                continue
+            seen_ignored.add(_norm(r["name"]))
         if r["role"] in ("reactant", "product") and not r["mw"]:
             r["flags"].add("MW unknown: enter MW")
         if r["role"] != "ignore" and r["mass"] is None:
