@@ -4,6 +4,7 @@ autofill_page.py
 Streamlit page: upload PDF -> extract with Qwen2.5-VL -> human review -> apply to calculators.
 """
 
+import pandas as pd
 import streamlit as st
 
 from modules import eco_scale as es
@@ -30,6 +31,7 @@ def render_autofill_page():
         "before it is sent to the calculators."
     )
 
+    st.caption(f"pipeline version {px.PIPELINE_VERSION}")
     with st.expander("⚙️ Extraction server settings"):
         base_url = st.text_input("OpenAI-compatible endpoint", _secret("VLM_BASE_URL", "http://localhost:8000/v1"))
         model = st.text_input("Model name", _secret("VLM_MODEL", px.DEFAULT_MODEL))
@@ -69,6 +71,16 @@ def render_autofill_page():
         return
 
     st.markdown("---")
+    bad = [p for p in ex["pages"] if p["data"] is None]
+    st.subheader("Extraction status per page")
+    if bad:
+        st.error("Pages that could not be read: " + ", ".join(str(p["page"]) for p in bad)
+                 + ". Their content is NOT in the table below. See 'Raw model output'.")
+    st.dataframe(
+        pd.DataFrame([{"Page": p["page"], "Status": p["status"], "Compounds": p["n_components"]}
+                      for p in ex["pages"]]),
+        hide_index=True, use_container_width=True)
+
     st.subheader("1. Review extracted materials")
     n_flag = int((ex["df"]["Flag"] != "").sum()) if not ex["df"].empty else 0
     st.caption(f"{len(ex['df'])} rows extracted, **{n_flag} need attention** (see the Flag column). "
