@@ -15,7 +15,13 @@ where X(actual) is the calculated/emitted burden and X(target) is the
 regulatory or sustainable threshold. Under this convention, Y >= 1 means
 the process is operating AT OR WITHIN the target threshold (favorable),
 while Y < 1 means the actual burden EXCEEDS the target (unfavorable).
-This app follows that convention consistently for AP, ODP, SFP, GWP and ADP.
+This app follows that convention consistently for AT, WE, AP, ODP, SFP, GWP and ADP
+(Eqs. 10.37, 10.38, 10.40, 10.42, 10.44, 10.46, 10.47).
+
+Caution: the chapter's prose describes these scores the other way round ("lower Y_AT =
+cleaner air", "higher global hazard scores are more dangerous"), which matches X/X(T),
+not the printed X(T)/X. The printed equations are implemented; `burden_ratio` gives the
+reciprocal (X/X(T), > 1 = exceeds target) for users who follow the prose convention.
 """
 
 from dataclasses import dataclass
@@ -31,8 +37,25 @@ def hazard_ratio(x_actual: float, x_target: float) -> float:
     Y < 1   -> exceeds target / unfavorable
     """
     if x_actual <= 0:
-        return float("inf")
+        return float("inf") if x_target > 0 else float("nan")
     return x_target / x_actual
+
+
+def burden_ratio(x_actual: float, x_target: float) -> float:
+    """Reciprocal convention X(actual) / X(target): > 1 means the target is exceeded."""
+    if x_target <= 0:
+        return float("inf") if x_actual > 0 else 0.0
+    return x_actual / x_target
+
+
+def air_toxicity_score(x_at: float, x_at_target: float) -> float:
+    """Y_AT = X_AT(T) / X_AT   (Eq. 10.37). X_AT from annual life-cycle emissions."""
+    return hazard_ratio(x_at, x_at_target)
+
+
+def water_ecotoxicity_score(x_we: float, x_we_target: float) -> float:
+    """Y_WE = X_WE(T) / X_WE   (Eq. 10.38). X_WE = 1,4-DCB-eq emissions per capita per year."""
+    return hazard_ratio(x_we, x_we_target)
 
 
 def ingestion_toxicity_potential(c_water: float, ld50: float) -> float:

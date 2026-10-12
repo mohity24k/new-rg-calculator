@@ -154,9 +154,13 @@ def render_autofill_page():
     with e2:
         setups = st.multiselect("Technical setup", list(es.TECHNICAL_SETUP_PENALTIES),
                                 default=sug["setups"], key=f"es_{ex['id']}")
-        workup = st.selectbox("Workup / purification", list(es.WORKUP_PENALTIES),
-                              index=_idx(es.WORKUP_PENALTIES, sug["workup"]), key=f"ew_{ex['id']}")
-    st.caption("Price and hazard (GHS) categories are not stated in papers; set them on the Eco-Scale page.")
+        workup_steps = st.multiselect(
+            "Workup / purification steps", list(es.WORKUP_PENALTIES),
+            default=list(dict.fromkeys(sug["workup_steps"])), key=f"ew_{ex['id']}",
+            help="Penalties add up. Repeated steps (e.g. two aqueous washes) can be added on the "
+                 "Eco-Scale page.")
+    st.caption("Price and hazard symbols are not stated in papers; set them on the Eco-Scale page "
+               "(the compound list is pre-filled there).")
 
     with st.expander("Raw model output (debugging)"):
         for p in ex["pages"]:
@@ -172,7 +176,7 @@ def render_autofill_page():
             st.error(f"Could not convert the table: {type(e).__name__}: {e}")
             return
         tables["eco"] = {"yield_pct": yield_pct, "temp_time": temp_time,
-                         "setups": setups or ["Common setup"], "workup": workup}
+                         "setups": setups or ["Common setup"], "workup_steps": workup_steps}
         st.session_state.prefill = tables
         st.session_state.prefill_version = st.session_state.get("prefill_version", 0) + 1
         st.success("Applied. Open **Mass-Based Metrics Calculator** and **Reaction Eco-Scale Scoring**: "
