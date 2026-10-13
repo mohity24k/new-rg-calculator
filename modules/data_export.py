@@ -6,13 +6,29 @@ CSV / JSON summary report.
 """
 
 import json
+import math
+
 import pandas as pd
+
+
+def _finite(v):
+    """inf / NaN are not valid JSON: export them as readable strings instead."""
+    if isinstance(v, float) and not math.isfinite(v):
+        return "undefined" if math.isnan(v) else ("infinite" if v > 0 else "-infinite")
+    if isinstance(v, dict):
+        return {k: _finite(x) for k, x in v.items()}
+    if isinstance(v, (list, tuple)):
+        return [_finite(x) for x in v]
+    return v
 
 
 def build_summary_dataframe(metrics_dict: dict) -> pd.DataFrame:
     """Convert a flat {metric_name: value} dict into a tidy two-column DataFrame."""
-    rows = [{"Metric": k, "Value": v} for k, v in metrics_dict.items()]
-    return pd.DataFrame(rows)
+    rows = [{"Metric": k, "Value": _finite(v)} for k, v in metrics_dict.items()]
+    df = pd.DataFrame(rows, columns=["Metric", "Value"])
+    df["Value"] = df["Value"].astype(object)   # numbers and text in one column (Arrow-safe as str)
+    df["Value"] = df["Value"].map(lambda v: f"{v:.6g}" if isinstance(v, float) else str(v))
+    return df
 
 
 def build_combined_report(route_name: str,
@@ -36,7 +52,7 @@ def flatten_report(report: dict) -> dict:
     for section, content in report.items():
         if isinstance(content, dict):
             for k, v in content.items():
-                flat[f"{section} :: {k}"] = v
+                flat[f"{section} :: {k}"] = _finite(v)
         else:
             flat[section] = content
     return flat
@@ -47,4 +63,4 @@ def to_csv_bytes(df: pd.DataFrame) -> bytes:
 
 
 def to_json_bytes(data) -> bytes:
-    return json.dumps(data, indent=2, default=str).encode("utf-8")
+    return json.dumps(_finite(data), indent=2, default=str, allow_nan=False).encode("utf-8")

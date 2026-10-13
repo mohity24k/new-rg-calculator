@@ -1018,13 +1018,15 @@ def to_app_tables(df: pd.DataFrame, original: Optional[pd.DataFrame] = None) -> 
         "Carbons/molecule": rx["Carbons"].fillna(0).round().astype(int),
         "Stoich. ratio (per limiting reagent)": 1.0,   # edit if the reaction is not 1:1
         "Limiting reagent?": rx.index == lim_idx,
+        "Benign?": False,
     }).reset_index(drop=True)
 
     ax = d[d["Role"].isin(AUX_ROLES)]
     aux_df = pd.DataFrame({"Name": ax["Name"].astype(str),
-                           "Mass (g)": ax["Mass (g)"].fillna(0.0)}).reset_index(drop=True)
+                           "Mass (g)": ax["Mass (g)"].fillna(0.0), "Benign?": False}).reset_index(drop=True)
 
     out = {"reactants_df": reactants_df, "aux_df": aux_df,
+           "compounds": list(dict.fromkeys(list(reactants_df["Name"]) + list(aux_df["Name"]))),
            "water_mass": float(d.loc[d["Role"] == "water", "Mass (g)"].fillna(0).sum())}
 
     pr = d[d["Role"] == "product"]
@@ -1084,10 +1086,18 @@ def suggest_eco_inputs(meta: dict, yield_pct: Optional[float]) -> dict:
 
     workup_text = " ".join(str(w) for w in meta.get("workup") or []).lower()
     workup = next((v for k, v in _WORKUP_RULES if re.search(k, workup_text)), "None")
+    steps = []                                   # every step mentioned (penalties add up)
+    for item in meta.get("workup") or []:
+        for part in re.split(r"[;,/]| and | then ", str(item).lower()):
+            hit = next((v for k, v in _WORKUP_RULES if re.search(k, part)), None)
+            if hit:
+                steps.append(hit)
 
     tt = tt if tt in es.TEMPERATURE_TIME_PENALTIES else next(iter(es.TEMPERATURE_TIME_PENALTIES))
     workup = workup if workup in es.WORKUP_PENALTIES else "None"
     setups = [x for x in setups if x in es.TECHNICAL_SETUP_PENALTIES]
     y = _num(yield_pct)
+    steps = [x for x in steps if x in es.WORKUP_PENALTIES]
     return {"yield_pct": float(min(100.0, max(0.0, y if y is not None else 90.0))),
-            "temp_time": tt, "setups": setups or ["Common setup"], "workup": workup}
+            "temp_time": tt, "setups": setups or ["Common setup"], "workup": workup,
+            "workup_steps": steps}

@@ -4,6 +4,8 @@ visualization.py
 Plotly chart builders and color-coding helpers for the Streamlit UI.
 """
 
+import math
+
 import plotly.graph_objects as go
 import streamlit as st
 
@@ -22,7 +24,7 @@ def metric_color(value: float, good_threshold: float, moderate_threshold: float,
     If higher_is_better=False (e.g., E-factor, PMI): value <= good_threshold -> green,
         <= moderate_threshold -> yellow, else red.
     """
-    if value is None:
+    if value is None or (isinstance(value, float) and math.isnan(value)):
         return YELLOW
     if higher_is_better:
         if value >= good_threshold:
@@ -40,15 +42,34 @@ def metric_color(value: float, good_threshold: float, moderate_threshold: float,
             return RED
 
 
-def render_colored_metric(label: str, value: float, unit: str, color: str, help_text: str = ""):
-    """Render a single metric as a colored 'card' using HTML in Streamlit."""
+def format_value(value) -> str:
+    """Human-readable number: handles text, None, inf/NaN, and very small/large values."""
+    if value is None:
+        return "n/a"
+    if isinstance(value, str):
+        return value
+    try:
+        v = float(value)
+    except (TypeError, ValueError):
+        return str(value)
+    if math.isnan(v):
+        return "undefined"
+    if math.isinf(v):
+        return "∞" if v > 0 else "-∞"
+    if v != 0 and (abs(v) < 0.01 or abs(v) >= 1e6):
+        return f"{v:.3g}"
+    return f"{v:,.2f}"
+
+
+def render_colored_metric(label: str, value, unit: str, color: str, help_text: str = ""):
+    """Render a single metric (number or text) as a colored 'card' using HTML in Streamlit."""
     st.markdown(
         f"""
         <div style="border-left: 6px solid {color}; padding: 10px 14px; margin-bottom:10px;
                     background-color: rgba(120,120,120,0.08); border-radius: 6px;">
             <div style="font-size: 0.82rem; color: gray; text-transform: uppercase;
                         letter-spacing: 0.03em;">{label}</div>
-            <div style="font-size: 1.5rem; font-weight: 700;">{value:,.2f} <span
+            <div style="font-size: 1.5rem; font-weight: 700;">{format_value(value)} <span
                         style="font-size:0.9rem; font-weight:400;">{unit}</span></div>
         </div>
         """,
@@ -68,9 +89,16 @@ def radar_chart(route_a_name: str, route_a_values: dict,
     categories = list(route_a_values.keys())
     categories_closed = categories + [categories[0]]
 
-    values_a = [route_a_values.get(c, 0) for c in categories]
+    def _clip(v):  # radar axes are 0-100; missing / non-finite values plot at 0
+        try:
+            v = float(v)
+        except (TypeError, ValueError):
+            return 0.0
+        return 0.0 if math.isnan(v) else max(0.0, min(100.0, v))
+
+    values_a = [_clip(route_a_values.get(c)) for c in categories]
     values_a += [values_a[0]]
-    values_b = [route_b_values.get(c, 0) for c in categories]
+    values_b = [_clip(route_b_values.get(c)) for c in categories]
     values_b += [values_b[0]]
 
     fig = go.Figure()
