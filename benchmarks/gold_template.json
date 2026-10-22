@@ -1,0 +1,20 @@
+{
+  "_how_to_use": "Copy to gold.json. Add one entry per reaction you checked by hand against the PDF. 'file' is the PDF file name; 'label' is the compound number used in the paper (or leave it null and give 'product'). Units: g, mg, mL, uL, mmol, mol. Give the amount as printed (mass or volume or mmol).",
+  "reactions": [
+    {
+      "file": "example_si.pdf",
+      "label": "3b",
+      "product": "4-methylbiphenyl",
+      "yield_percent": 83,
+      "components": [
+        {"name": "4-bromotoluene", "role": "reactant", "quantity": 0.5, "unit": "mmol"},
+        {"name": "phenylboronic acid", "role": "reactant", "quantity": 91, "unit": "mg"},
+        {"name": "Pd(PPh3)4", "role": "catalyst", "quantity": null, "unit": null},
+        {"name": "K2CO3", "role": "base", "quantity": null, "unit": null},
+        {"name": "1,4-dioxane", "role": "reaction_solvent", "quantity": 2, "unit": "mL"},
+        {"name": "ethyl acetate", "role": "workup", "quantity": 30, "unit": "mL"},
+        {"name": "4-methylbiphenyl", "role": "product", "quantity": 70, "unit": "mg"}
+      ]
+    }
+  ]
+}

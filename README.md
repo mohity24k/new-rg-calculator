@@ -43,6 +43,7 @@ green_metrics_app/
 └── modules/
     ├── mass_metrics.py        # AE, RME, PMI, MI, E-factor, CE, MP, EMY, ERF, yield
     ├── pdf_extraction.py      # PDF -> VLM -> review table -> calculator inputs
+    ├── extraction/            # dataset pipeline: page filter, multi-reaction schema, batching
     ├── autofill_page.py       # Streamlit page for the PDF auto-fill
     ├── inputs.py              # cleaning of the editable tables
     ├── eco_scale.py            # Eco-Scale penalty tables & scoring
@@ -86,6 +87,49 @@ and set `VLM_BASE_URL` (e.g. `http://<host>:8000/v1`), `VLM_MODEL` and
 `VLM_API_KEY` in `.streamlit/secrets.toml`, or type them under
 "Extraction server settings". Pages are rendered at up to 2000 px
 (~3,600 image tokens per page for Qwen2.5-VL).
+
+## Building a dataset (many papers, many reactions)
+
+`modules/extraction/` is a second extraction pipeline made for datasets. The classic Upload PDF
+mode is unchanged; the page also offers it as **Several reactions per document (new)**.
+
+What it does differently:
+
+- **Page filter.** Pages are labelled from their text layer (procedure, scanned, spectrum,
+  references, other). Spectra, reference lists and discussion pages are not sent to the model.
+- **Text first.** Procedure pages are sent as text (exact numbers, ~4x fewer tokens than an
+  image). Only scanned pages and optimization tables are sent as images (1280 px).
+- **Many reactions per document.** Each substrate-scope entry is its own record. General
+  procedures are extracted too, and entries that cite them ("following GP A") inherit the
+  missing amounts, solvent, conditions and workup, with a flag.
+- **Optimization tables** (entry / solvent / base / yield) are saved separately: they show the
+  effect of one change on the same reaction.
+- **Every mass is tagged by role**: reactant, reagent, catalyst, base, additive,
+  reaction_solvent, workup, purification, water, product.
+- **Parallel requests with structured output.** 32 requests in flight (vLLM batches them), and
+  the server is asked for JSON that matches a schema, so answers need no repair.
+- **Checkpoints.** Results are written after every paper; a new run continues where the last one
+  stopped. Model answers are kept in `raw/`, so a parser fix can be applied without the GPU.
+- **Validation flags** (recomputed yield, mass balance, printed mmol vs mass, equivalents,
+  temperature, time, solvent volume per mmol, missing workup / chromatography amounts).
+  Nothing is dropped. Thresholds are in `config/extraction.yaml`.
+
+```bash
+export VLM_API_KEY=...            # same key as the vLLM server
+# measure speed (and accuracy, with a hand-checked gold file) before a large run
+python scripts/benchmark_extraction.py --pdf a.pdf --pdf b.pdf --concurrency 1,8,32 --classic-pages 5
+# extract a folder of PDFs (resumable), then add structures / masses / checks
+python scripts/build_dataset.py extract --pdf-dir pdfs/ --out data/run1
+python scripts/build_dataset.py enrich --out data/run1
+python scripts/build_dataset.py stats --out data/run1
+```
+
+On Colab, `notebooks/colab_dataset_extraction.ipynb` starts the server and runs the pipeline in
+the same session (no tunnel), writing to Google Drive. An optional `manifest.csv`
+(`file,doi,group`) links SI files to their paper so train/test splits can be made by paper.
+
+Output files: `papers.jsonl` (one line per finished paper), `reactions.jsonl`,
+`reactions_enriched.jsonl`, `tables.jsonl`, `raw/<paper_id>.jsonl`, `smiles_cache.json`.
 
 ## Notes on conventions
 
