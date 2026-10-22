@@ -1,0 +1,30 @@
+# Settings for the dataset extraction pipeline (modules/extraction).
+# Every threshold the pipeline uses lives here. Edit and re-run; no code changes needed.
+
+page_filter:
+  min_text_chars: 200          # fewer characters than this = scanned page or figure (sent as an image)
+  min_procedure_score: 3       # keyword hits needed to treat a page as an experimental procedure
+  spectrum_max_words: 120      # NMR / IR spectrum pages: few words, mostly numbers and "ppm"
+  reference_min_hits: 8        # journal / year / DOI patterns that mark a reference list
+
+chunking:
+  max_chars: 6000              # text sent per request (~1,500-2,000 tokens)
+
+images:
+  max_side_px: 1280            # long side of rendered pages for the vision path
+
+server:
+  concurrency: 32              # requests in flight at once (vLLM batches them)
+  max_tokens: 3072             # answer length per request
+  timeout_s: 300
+  retries: 2                   # extra attempts after a connection error or timeout
+
+validation:
+  yield_tolerance_pct: 5       # reported vs recomputed yield (percentage points)
+  mass_balance_tolerance: 0.02 # product may exceed the theoretical maximum by this fraction
+  moles_mass_tolerance: 0.05   # printed mmol vs mass / MW
+  max_equiv: 20                # equivalents above this are flagged
+  catalyst_max_equiv: 0.5      # a "catalyst" above this is probably a reagent
+  temperature_c: [-100, 300]
+  time_h: [0, 336]
+  solvent_ml_per_mmol: [0.05, 100]   # reaction solvent volume per mmol of limiting reagent

@@ -5,3 +5,4 @@ requests
 pymupdf
 rdkit
 py2opsin
+pyyaml

@@ -142,3 +142,39 @@ def test_autofill_flow_end_to_end(vlm_url, monkeypatch):
     eco = at.session_state.routes["Route A"]["eco_scale"]
     # yield 5 + inert gas 1 + heating > 1 h 3 + extraction 3 + chromatography 10 = 22
     assert eco["Total Penalty"] == 22
+
+
+def test_autofill_multi_reaction_mode(monkeypatch):
+    """New mode: general procedure + substrate entry come back as separate reactions; the
+    selected one goes through the same review and apply steps as the classic mode."""
+    from tests.test_dataset_extraction import INTRO, PROCEDURE_TEXT, Stub, make_pdf
+    data = make_pdf([INTRO, PROCEDURE_TEXT])
+
+    class Upload:
+        name = "si.pdf"
+
+        def getvalue(self):
+            return data
+
+    import streamlit as st
+    monkeypatch.setattr(st, "file_uploader", lambda *a, **k: Upload())
+    stub = Stub(delay=0)
+    try:
+        at = goto(AppTest.from_file(APP, default_timeout=120).run(), "Upload PDF & Auto-fill")
+        at.text_input[0].set_value(stub.url).run()
+        next(r for r in at.radio if r.label == "Extraction mode").set_value(
+            "Several reactions per document (new)").run()
+        button(at, "Extract").click().run()
+        assert not at.exception and not at.error
+        assert stub.calls == 1                                  # the intro page is not sent
+        sel = next(s for s in at.selectbox if s.label == "Reaction to review")
+        assert sel.options[0].startswith("3b: 4-methylbiphenyl (83%)")     # specific reaction first
+        assert any(o.startswith("General procedure A") for o in sel.options)
+        at.checkbox[0].check().run()
+        button(at, "Apply to calculators").click().run()
+        pf = at.session_state.prefill
+        assert pf["product"]["name"] == "4-methylbiphenyl"
+        assert "1,4-dioxane" in pf["compounds"] and "phenylboronic acid" in list(pf["reactants_df"]["Name"])
+        assert "Classical chromatography" in pf["eco"]["workup_steps"]
+    finally:
+        stub.close()
