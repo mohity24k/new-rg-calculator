@@ -29,7 +29,8 @@ from gms.chem.structure import canon as _canon, mol_props as _mol_props  # noqa:
 from gms.chem.units import (DENSITY, EQUIV_UNITS, MASS_UNITS, MOL_UNITS, SUBS as _SUBS, VOL_UNITS,  # noqa: F401
                             density as _density, hours as _hours, num as _num, parse_qty as _parse_qty,
                             sig as _sig, text as _text, unit as _unit)
-from gms.metrics import ecoscale as es
+from gms.chem import conditions
+from gms.metrics import ecoscale as es  # noqa: F401
 
 PIPELINE_VERSION = "2026-10-12.1"
 DEFAULT_MODEL = "Qwen/Qwen2.5-VL-7B-Instruct"
@@ -699,52 +700,19 @@ def estimate_yield(df: pd.DataFrame, original: Optional[pd.DataFrame] = None) ->
     return round(100 * pr.iloc[0]["Moles (mol)"] / rx["Moles (mol)"].min(), 1)
 
 
-_WORKUP_RULES = [  # (regex, Eco-Scale category), ordered highest penalty first
-    (r"chromatograph|\bcolumn\b", "Classical chromatography"),
-    (r"distill", "Distillation"),
-    (r"sublim", "Sublimation"),
-    (r"(?<!solid-phase )(?<!solid phase )extract|separatory|\bwash",
-     "Liquid-liquid extraction (incl. drying/filtration of desiccant)"),
-    (r"solid[- ]phase extract|\bspe\b", "Solid-phase extraction"),
-    (r"crystal", "Crystallization and filtration"),
-    (r"filtrat|filter", "Simple filtration"),
-]
-
-
 def suggest_eco_inputs(meta: dict, yield_pct: Optional[float]) -> dict:
     """Best-guess Eco-Scale inputs. Price and safety are NOT in a paper: the user sets them."""
-    t, h = meta.get("temperature_c"), meta.get("time_h")
-    short = h is not None and h < 1
-    if t is not None and t < 0:
-        tt = "Cooling, < 0 degC"
-    elif t is not None and t <= 5:
-        tt = "Cooling to 0 degC"
-    elif (t is not None and t > 35) or meta.get("heated"):
-        tt = "Heating, < 1 h" if short else "Heating, > 1 h"
-    else:
-        tt = "Room temperature, < 1 h" if short else "Room temperature, < 24 h"
-
-    setups = []
-    if re.search(r"nitrogen|argon|inert|\bn2\b|\bar\b|glove", str(meta.get("atmosphere") or ""), re.I):
-        setups.append("Inert gas atmosphere")
-    if re.search(r"\bleds?\b|light|photo|irradiat|\buv\b|h\u03bd|\bhv\b|microwave|\bmw\b|"
-                 r"ultrasound|sonicat|electro", str(meta.get("activation") or ""), re.I):
+    tt = conditions.temp_time_category(meta.get("temperature_c"), meta.get("time_h"), bool(meta.get("heated")))
+    setups = [x for x in conditions.setups_from_conditions(meta.get("atmosphere"), meta.get("activation"))
+              if x != "Glove box"] or (["Inert gas atmosphere"] if conditions.INERT_RE.search(
+                  str(meta.get("atmosphere") or "")) else [])
+    if conditions.ACTIVATION_RE.search(str(meta.get("activation") or "")) and \
+            "Unconventional activation (microwave / ultrasound / photochemical)" not in setups:
         setups.append("Unconventional activation (microwave / ultrasound / photochemical)")
-
     workup_text = " ".join(str(w) for w in meta.get("workup") or []).lower()
-    workup = next((v for k, v in _WORKUP_RULES if re.search(k, workup_text)), "None")
-    steps = []                                   # every step mentioned (penalties add up)
-    for item in meta.get("workup") or []:
-        for part in re.split(r"[;,/]| and | then ", str(item).lower()):
-            hit = next((v for k, v in _WORKUP_RULES if re.search(k, part)), None)
-            if hit:
-                steps.append(hit)
-
-    tt = tt if tt in es.TEMPERATURE_TIME_PENALTIES else next(iter(es.TEMPERATURE_TIME_PENALTIES))
-    workup = workup if workup in es.WORKUP_PENALTIES else "None"
-    setups = [x for x in setups if x in es.TECHNICAL_SETUP_PENALTIES]
+    workup = next((v for k, v in conditions.WORKUP_RULES if re.search(k, workup_text)), "None")
+    steps = conditions.workup_steps_from_text(meta.get("workup"))
     y = _num(yield_pct)
-    steps = [x for x in steps if x in es.WORKUP_PENALTIES]
     return {"yield_pct": float(min(100.0, max(0.0, y if y is not None else 90.0))),
             "temp_time": tt, "setups": setups or ["Common setup"], "workup": workup,
             "workup_steps": steps}

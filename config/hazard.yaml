@@ -1,0 +1,95 @@
+# Hazard data and hazard scores.
+
+ghs:
+  # Which GHS classification to use when PubChem lists several, in this order.
+  source_priority:
+    - "Regulation (EC) No 1272/2008"      # EU harmonised classification (CLP Annex VI)
+    - "European Chemicals Agency (ECHA)"  # aggregated company notifications (C&L Inventory)
+  # ECHA aggregated notifications: keep an H-statement only if at least this share of the
+  # company reports includes it. Lower = more cautious, but more noise from impure grades.
+  min_report_share_pct: 50
+
+# EcoScale safety penalties use the old EU hazard symbols. This is the translation from GHS
+# hazard statements (after CLP Regulation Annex VII; approximate, because the two systems do
+# not match one to one). "T+" replaces "T" and "F+" replaces "F" for the same compound.
+ecoscale_symbols:
+  "T+": [H300, H310, H330]
+  "T":  [H301, H311, H331, H340, H350, H360, H370, H372]
+  "F+": [H220, H222, H224]
+  "F":  [H225, H228, H250, H260]
+  "E":  [H200, H201, H202, H203, H204, H205, H240, H241]
+  "N":  [H400, H410, H411]
+
+# Hazard score of one material = the highest score among its H-statements, per dimension.
+# Health and environment follow the CHEM21 solvent guide scoring (Prat et al. 2016); the
+# physical-hazard scale is this tool's own and uses the GHS categories. 1 = low, 10 = severe.
+scores:
+  health:
+    H340: 10
+    H350: 10
+    H360: 10
+    H341: 7
+    H351: 7
+    H361: 7
+    H300: 9
+    H310: 9
+    H330: 9
+    H301: 7
+    H311: 7
+    H331: 7
+    H370: 7
+    H372: 7
+    H314: 7
+    H334: 7
+    H318: 6
+    H371: 6
+    H373: 6
+    H304: 4
+    H302: 4
+    H312: 4
+    H332: 4
+    H336: 4
+    H315: 4
+    H317: 4
+    H319: 4
+    H335: 4
+    H362: 4
+  safety:
+    H200: 10
+    H201: 10
+    H202: 10
+    H203: 10
+    H204: 9
+    H205: 9
+    H240: 10
+    H241: 9
+    H250: 9
+    H220: 8
+    H224: 8
+    H260: 8
+    H271: 8
+    H242: 7
+    H225: 6
+    H228: 6
+    H251: 6
+    H261: 6
+    H270: 6
+    H272: 6
+    H226: 4
+    H252: 4
+    H290: 3
+  environment:
+    H400: 7
+    H410: 7
+    H420: 10
+    H411: 6
+    H412: 5
+    H413: 4
+  default_no_statement: 1      # material with GHS data and no statement in that dimension
+
+# A material counts as "high hazard" (for the high-hazard mass intensity and for the diagnosis)
+# when its score in any dimension is at least this value.
+high_hazard_min: 7
+
+# Solvent class (CHEM21 ranking after discussion) -> number used for the mass-weighted class.
+solvent_class: {recommended: 1, problematic: 2, hazardous: 3, highly hazardous: 4}
