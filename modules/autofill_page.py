@@ -9,12 +9,12 @@ import pandas as pd
 import requests
 import streamlit as st
 
-from modules import eco_scale as es
-from modules import pdf_extraction as px
-from modules.extraction import config as xcfg
-from modules.extraction import enrich as xen
-from modules.extraction import pipeline as xpl
-from modules.extraction.engines import HttpEngine
+from gms.metrics import ecoscale as es
+from gms.extraction import classic as px
+from gms.extraction import config as xcfg
+from gms.extraction import enrich as xen
+from gms.extraction import pipeline as xpl
+from gms.extraction.engines import HttpEngine
 
 CLASSIC = "One reaction (classic)"
 MULTI = "Several reactions per document (new)"

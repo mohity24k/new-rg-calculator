@@ -24,10 +24,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from modules import pdf_extraction as px  # noqa: E402
-from modules.extraction import config as cfgmod  # noqa: E402
-from modules.extraction import enrich, pipeline  # noqa: E402
-from modules.extraction.engines import HttpEngine  # noqa: E402
+from gms.extraction import classic as px  # noqa: E402
+from gms.extraction import config as cfgmod  # noqa: E402
+from gms.extraction import enrich, pipeline  # noqa: E402
+from gms.extraction.engines import HttpEngine  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Accuracy against a gold file

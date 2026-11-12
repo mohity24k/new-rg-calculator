@@ -13,9 +13,9 @@ Run with:  streamlit run app.py
 import pandas as pd
 import streamlit as st
 
-from modules import mass_metrics as mm
-from modules import eco_scale as es
-from modules import hazard_metrics as hz
+from gms.metrics import mass as mm
+from gms.metrics import ecoscale as es
+from gms.metrics import hazard_ratios as hz
 from modules import visualization as viz
 from modules import data_export as dx
 from modules.inputs import AUX_DEFAULTS, REACTANT_DEFAULTS, clean_rows, with_defaults

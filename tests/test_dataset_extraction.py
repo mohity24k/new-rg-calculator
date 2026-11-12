@@ -13,10 +13,10 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import pymupdf
 import pytest
 
-from modules import mass_metrics as mm
-from modules import pdf_extraction as px
-from modules.extraction import config, engines, enrich, pages, pipeline
-from modules.extraction import schema as sc
+from gms.metrics import mass as mm
+from gms.extraction import classic as px
+from gms.extraction import config, engines, enrich, pages, pipeline
+from gms.extraction import schema as sc
 
 CFG = config.load_config()
 

@@ -21,55 +21,27 @@ Checks (thresholds in config/extraction.yaml, section `validation`):
 from __future__ import annotations
 
 import copy
-import json
 import re
-from pathlib import Path
 from typing import Optional
 
 import pandas as pd
 
-from modules import pdf_extraction as px
-
-_CACHE: dict[str, Optional[str]] = {}
-
+from gms.chem import names, structure, units
+from gms.extraction import classic
 
 def load_cache(path: Optional[str]):
-    if path and Path(path).exists():
-        _CACHE.update(json.loads(Path(path).read_text(encoding="utf-8")))
+    if path:
+        names.RESOLVER.load(path)
 
 
 def save_cache(path: Optional[str]):
     if path:
-        Path(path).write_text(json.dumps(_CACHE, ensure_ascii=False, indent=0, sort_keys=True), encoding="utf-8")
+        names.RESOLVER.save(path)
 
 
 def resolve(name: str, online: bool = True) -> Optional[str]:
-    """Name -> canonical SMILES via the alias table, OPSIN, then (online) PubChem."""
-    name = str(name or "").strip()
-    if not name:
-        return None
-    if name in _CACHE and (_CACHE[name] is not None or online):
-        return _CACHE[name]
-    for cand in px._variants(name):
-        if px._norm(cand) in px.ALIASES:
-            s = px._canon(px.ALIASES[px._norm(cand)])
-            _CACHE[name] = s
-            return s
-    transient = False
-    for cand in px._variants(name):
-        s = px._opsin(cand)
-        if not s and online:
-            try:
-                s = px._pubchem(cand)
-            except px._LookupFailed:
-                transient = True
-        s = px._canon(s) if s else None
-        if s:
-            _CACHE[name] = s
-            return s
-    if online and not transient:
-        _CACHE[name] = None              # definitive miss: do not ask PubChem again
-    return None
+    """Name -> canonical SMILES (the application's single resolver)."""
+    return names.resolve_smiles(name, online)
 
 
 def _flag(rec: dict, code: str, detail: str):
@@ -82,22 +54,22 @@ def _amounts(c: dict, online: bool):
         return
     if c["role"] != "water" and not c.get("generic"):
         c["smiles"] = resolve(c["name"], online)
-    c["mw"], c["carbons"] = px._mol_props(c["smiles"])
+    c["mw"], c["carbons"] = structure.mol_props(c["smiles"])
     q, u = c.get("quantity"), (c.get("unit") or "")
     if q is not None:
-        if u in px.MASS_UNITS:
-            c["mass_g"] = q * px.MASS_UNITS[u]
-        elif u in px.VOL_UNITS:
-            c["volume_ml"] = q * px.VOL_UNITS[u]
-            d = px._density(c["name"], "water" if c["role"] == "water" else c["role"], c["smiles"])
+        if u in units.MASS_UNITS:
+            c["mass_g"] = q * units.MASS_UNITS[u]
+        elif u in units.VOL_UNITS:
+            c["volume_ml"] = q * units.VOL_UNITS[u]
+            d = units.density(c["name"], "water" if c["role"] == "water" else c["role"], c["smiles"])
             if d:
                 c["mass_g"] = c["volume_ml"] * d
                 c["flags"].append("mass = volume x density")
             else:
                 c["flags"].append("volume given, density unknown")
-        elif u in px.MOL_UNITS:
-            c["moles"] = q * px.MOL_UNITS[u]
-    if c["moles"] is None and c.get("mmol") is not None and u not in px.MOL_UNITS:
+        elif u in units.MOL_UNITS:
+            c["moles"] = q * units.MOL_UNITS[u]
+    if c["moles"] is None and c.get("mmol") is not None and u not in units.MOL_UNITS:
         if c["mass_g"] is None or not c["mw"]:
             c["moles"] = c["mmol"] / 1000
     if c["mass_g"] is not None and c["moles"] is None and c["mw"]:
@@ -147,7 +119,7 @@ def enrich_reaction(rec: dict, cfg: dict, online: bool = True) -> dict:
     if unresolved:
         _flag(r, "unresolved_structure", "no structure for: " + ", ".join(unresolved))
     for c in comps:
-        if c.get("mmol") and c["mass_g"] and c["mw"] and (c.get("unit") or "") not in px.MOL_UNITS:
+        if c.get("mmol") and c["mass_g"] and c["mw"] and (c.get("unit") or "") not in units.MOL_UNITS:
             calc = c["mass_g"] / c["mw"] * 1000
             if abs(calc - c["mmol"]) > v["moles_mass_tolerance"] * max(calc, c["mmol"]):
                 c["flags"].append(f"printed {c['mmol']:g} mmol but mass/MW = {calc:.3g} mmol")
@@ -234,14 +206,14 @@ def to_review_table(rec: dict) -> pd.DataFrame:
             flags.append("moles missing")
         if c["role"] == "reagent":
             flags.append("stoichiometric reagent")
-        rows.append({"Name": c["name"], "Role": role, "Mass (g)": px._sig(c.get("mass_g")),
-                     "Moles (mol)": px._sig(c.get("moles")), "MW (g/mol)": c.get("mw"),
+        rows.append({"Name": c["name"], "Role": role, "Mass (g)": units.sig(c.get("mass_g")),
+                     "Moles (mol)": units.sig(c.get("moles")), "MW (g/mol)": c.get("mw"),
                      "Carbons": c.get("carbons"), "SMILES": c.get("smiles"), "Page": pages,
                      "Flag": "; ".join(dict.fromkeys(flags))})
-    df = px._typed(pd.DataFrame(rows, columns=px.COLUMNS))
+    df = classic._typed(pd.DataFrame(rows, columns=classic.COLUMNS))
     if df.empty:
         return df
-    df["_o"] = df["Role"].map(px.ROLES.index)
+    df["_o"] = df["Role"].map(classic.ROLES.index)
     return df.sort_values(["_o", "Name"], key=lambda c: c.str.lower() if c.dtype == object else c) \
              .drop(columns="_o").reset_index(drop=True)
 

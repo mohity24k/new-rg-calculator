@@ -20,8 +20,8 @@ from typing import Callable, Optional
 
 import requests
 
-from modules.extraction import schema as sc
-from modules.extraction.pages import Unit
+from gms.extraction import schema as sc
+from gms.extraction.pages import Unit
 
 TRANSPORT = "transport"     # server unreachable / timeout / 5xx: retry the paper later
 CONTENT = "content"         # the server answered but the request was refused (e.g. too long)

@@ -6,7 +6,7 @@ import math
 import pytest
 
 from modules import data_export as dx
-from modules import mass_metrics as mm
+from gms.metrics import mass as mm
 
 
 def curzons():

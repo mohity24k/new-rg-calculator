@@ -22,7 +22,14 @@ from typing import Callable, Iterable, Optional
 import pandas as pd
 import requests
 
-from modules import eco_scale as es
+from gms.chem.names import ALIASES, GENERIC as _GENERIC, LookupFailed as _LookupFailed  # noqa: F401
+from gms.chem.names import AQUEOUS_RE as _AQUEOUS_RE, DRYING_RE as _DRYING_RE, WATER_RE as _WATER_RE  # noqa: F401
+from gms.chem.names import clean as _clean, norm as _norm, resolve_smiles, variants as _variants  # noqa: F401
+from gms.chem.structure import canon as _canon, mol_props as _mol_props  # noqa: F401
+from gms.chem.units import (DENSITY, EQUIV_UNITS, MASS_UNITS, MOL_UNITS, SUBS as _SUBS, VOL_UNITS,  # noqa: F401
+                            density as _density, hours as _hours, num as _num, parse_qty as _parse_qty,
+                            sig as _sig, text as _text, unit as _unit)
+from gms.metrics import ecoscale as es
 
 PIPELINE_VERSION = "2026-10-12.1"
 DEFAULT_MODEL = "Qwen/Qwen2.5-VL-7B-Instruct"
@@ -307,269 +314,10 @@ def extract_document(pdf_bytes: bytes, page_indices: Iterable[int], base_url: st
     return out
 
 # ---------------------------------------------------------------------------
-# 3. Chemistry resolution: alias table -> OPSIN -> PubChem, then RDKit
+# 3. Role heuristics (chemistry helpers live in gms.chem)
 # ---------------------------------------------------------------------------
 
-ALIASES = {
-    "dmso": "CS(C)=O", "dimethyl sulfoxide": "CS(C)=O",
-    "dmap": "CN(C)c1ccncc1", "4-dimethylaminopyridine": "CN(C)c1ccncc1",
-    "dipea": "CCN(C(C)C)C(C)C", "etn(ipr)2": "CCN(C(C)C)C(C)C",
-    "n,n-diisopropylethylamine": "CCN(C(C)C)C(C)C", "diisopropylethylamine": "CCN(C(C)C)C(C)C",
-    "bz2o": "O=C(OC(=O)c1ccccc1)c1ccccc1", "benzoic anhydride": "O=C(OC(=O)c1ccccc1)c1ccccc1",
-    "dcm": "ClCCl", "dichloromethane": "ClCCl",
-    "thf": "C1CCOC1", "tetrahydrofuran": "C1CCOC1",
-    "etoac": "CCOC(C)=O", "ethyl acetate": "CCOC(C)=O",
-    "et2o": "CCOCC", "diethyl ether": "CCOCC",
-    "hexane": "CCCCCC", "hexanes": "CCCCCC",
-    "mecn": "CC#N", "acetonitrile": "CC#N", "meoh": "CO", "methanol": "CO",
-    "dmf": "CN(C)C=O", "toluene": "Cc1ccccc1",
-    "et3n": "CCN(CC)CC", "triethylamine": "CCN(CC)CC",
-    "formic acid": "OC=O", "hco2h": "OC=O",
-    "n,n-dimethylformamide": "CN(C)C=O", "dimethylformamide": "CN(C)C=O",
-    "hobt": "On1nnc2ccccc21", "1-hydroxybenzotriazole": "On1nnc2ccccc21",
-    "edc\u00b7hcl": "CCN=C=NCCCN(C)C.Cl", "edc.hcl": "CCN=C=NCCCN(C)C.Cl",
-    "edc hcl": "CCN=C=NCCCN(C)C.Cl", "edc-hcl": "CCN=C=NCCCN(C)C.Cl",
-    "edci": "CCN=C=NCCCN(C)C.Cl", "edc hydrochloride": "CCN=C=NCCCN(C)C.Cl",
-    # common solvents (so densities apply to any synonym that resolves to the same structure)
-    "water": "O", "h2o": "O", "ethanol": "CCO", "etoh": "CCO",
-    "isopropanol": "CC(C)O", "2-propanol": "CC(C)O", "ipa": "CC(C)O", "iproh": "CC(C)O",
-    "acetone": "CC(C)=O", "chloroform": "ClC(Cl)Cl", "chcl3": "ClC(Cl)Cl",
-    "1,2-dichloroethane": "ClCCCl", "dce": "ClCCCl", "1,4-dioxane": "C1COCCO1", "dioxane": "C1COCCO1",
-    "pyridine": "c1ccncc1", "benzene": "c1ccccc1", "heptane": "CCCCCCC", "n-heptane": "CCCCCCC",
-    "pentane": "CCCCC", "n-pentane": "CCCCC", "n-hexane": "CCCCCC", "cyclohexane": "C1CCCCC1",
-    "petroleum ether": "CCCCCC",
-    "dma": "CN(C)C(C)=O", "dmac": "CN(C)C(C)=O", "n,n-dimethylacetamide": "CN(C)C(C)=O",
-    "nmp": "CN1CCCC1=O", "n-methyl-2-pyrrolidone": "CN1CCCC1=O",
-    "mtbe": "COC(C)(C)C", "methyl tert-butyl ether": "COC(C)(C)C",
-    "2-methf": "CC1CCCO1", "2-methyltetrahydrofuran": "CC1CCCO1",
-    "acetic acid": "CC(=O)O", "acoh": "CC(=O)O", "hoac": "CC(=O)O",
-    "tfa": "OC(=O)C(F)(F)F", "trifluoroacetic acid": "OC(=O)C(F)(F)F",
-    "tfe": "OCC(F)(F)F", "2,2,2-trifluoroethanol": "OCC(F)(F)F",
-    "hfip": "OC(C(F)(F)F)C(F)(F)F", "hexafluoroisopropanol": "OC(C(F)(F)F)C(F)(F)F",
-    "carbon tetrachloride": "ClC(Cl)(Cl)Cl", "ccl4": "ClC(Cl)(Cl)Cl",
-    "chlorobenzene": "Clc1ccccc1", "phcl": "Clc1ccccc1", "xylene": "Cc1ccccc1C", "xylenes": "Cc1ccccc1C",
-    "o-xylene": "Cc1ccccc1C", "dme": "COCCOC", "1,2-dimethoxyethane": "COCCOC",
-    "t-buoh": "CC(C)(C)O", "tert-butanol": "CC(C)(C)O", "n-butanol": "CCCCO", "1-butanol": "CCCCO",
-    "nitromethane": "C[N+](=O)[O-]", "meno2": "C[N+](=O)[O-]",
-    "pyrrolidine": "C1CCNC1", "piperidine": "C1CCNCC1", "morpholine": "C1COCCN1",
-    # common inorganic / organometallic reagents (no IUPAC name, not parsable by OPSIN)
-    "nahco3": "[Na+].OC([O-])=O", "sodium bicarbonate": "[Na+].OC([O-])=O",
-    "sodium hydrogen carbonate": "[Na+].OC([O-])=O",
-    "na2co3": "[Na+].[Na+].[O-]C([O-])=O", "sodium carbonate": "[Na+].[Na+].[O-]C([O-])=O",
-    "k2co3": "[K+].[K+].[O-]C([O-])=O", "potassium carbonate": "[K+].[K+].[O-]C([O-])=O",
-    "cs2co3": "[Cs+].[Cs+].[O-]C([O-])=O", "cesium carbonate": "[Cs+].[Cs+].[O-]C([O-])=O",
-    "caesium carbonate": "[Cs+].[Cs+].[O-]C([O-])=O",
-    "k3po4": "[K+].[K+].[K+].[O-]P([O-])([O-])=O", "potassium phosphate": "[K+].[K+].[K+].[O-]P([O-])([O-])=O",
-    "naoh": "[Na+].[OH-]", "sodium hydroxide": "[Na+].[OH-]", "koh": "[K+].[OH-]",
-    "potassium hydroxide": "[K+].[OH-]", "lioh": "[Li+].[OH-]", "lithium hydroxide": "[Li+].[OH-]",
-    "nah": "[Na+].[H-]", "sodium hydride": "[Na+].[H-]",
-    "kotbu": "CC(C)(C)[O-].[K+]", "t-buok": "CC(C)(C)[O-].[K+]", "potassium tert-butoxide": "CC(C)(C)[O-].[K+]",
-    "naotbu": "CC(C)(C)[O-].[Na+]", "sodium tert-butoxide": "CC(C)(C)[O-].[Na+]",
-    "hcl": "Cl", "hydrochloric acid": "Cl", "hbr": "Br", "h2so4": "OS(=O)(=O)O", "sulfuric acid": "OS(=O)(=O)O",
-    "nacl": "[Na+].[Cl-]", "sodium chloride": "[Na+].[Cl-]", "nh4cl": "[NH4+].[Cl-]",
-    "ammonium chloride": "[NH4+].[Cl-]", "licl": "[Li+].[Cl-]", "lithium chloride": "[Li+].[Cl-]",
-    "na2so4": "[Na+].[Na+].[O-]S([O-])(=O)=O", "sodium sulfate": "[Na+].[Na+].[O-]S([O-])(=O)=O",
-    "mgso4": "[Mg+2].[O-]S([O-])(=O)=O", "magnesium sulfate": "[Mg+2].[O-]S([O-])(=O)=O",
-    "na2s2o3": "[Na+].[Na+].[O-]S([O-])(=O)=S", "sodium thiosulfate": "[Na+].[Na+].[O-]S([O-])(=O)=S",
-    "nabh4": "[Na+].[BH4-]", "sodium borohydride": "[Na+].[BH4-]",
-    "lialh4": "[Li+].[AlH4-]", "lithium aluminium hydride": "[Li+].[AlH4-]",
-    "lithium aluminum hydride": "[Li+].[AlH4-]",
-    "nabh(oac)3": "CC(=O)O[BH-](OC(C)=O)OC(C)=O.[Na+]", "stab": "CC(=O)O[BH-](OC(C)=O)OC(C)=O.[Na+]",
-    "sodium triacetoxyborohydride": "CC(=O)O[BH-](OC(C)=O)OC(C)=O.[Na+]",
-    "pd(oac)2": "CC(=O)[O-].CC(=O)[O-].[Pd+2]", "palladium(ii) acetate": "CC(=O)[O-].CC(=O)[O-].[Pd+2]",
-    "palladium acetate": "CC(=O)[O-].CC(=O)[O-].[Pd+2]",
-    "pd(pph3)4": "c1ccc(P(c2ccccc2)c2ccccc2)cc1.c1ccc(P(c2ccccc2)c2ccccc2)cc1."
-                 "c1ccc(P(c2ccccc2)c2ccccc2)cc1.c1ccc(P(c2ccccc2)c2ccccc2)cc1.[Pd]",
-    "pdcl2": "Cl[Pd]Cl", "pd/c": "[Pd]", "pd(dppf)cl2": "Cl[Pd]Cl.[Fe].c1ccc(P(c2ccccc2)[c-]2cccc2)cc1."
-                                                        "c1ccc(P(c2ccccc2)[c-]2cccc2)cc1",
-    "pph3": "c1ccc(P(c2ccccc2)c2ccccc2)cc1", "triphenylphosphine": "c1ccc(P(c2ccccc2)c2ccccc2)cc1",
-    "cui": "[Cu]I", "copper(i) iodide": "[Cu]I", "cucl": "[Cu]Cl", "cubr": "[Cu]Br",
-    "cu(oac)2": "CC(=O)[O-].CC(=O)[O-].[Cu+2]", "cuso4": "[Cu+2].[O-]S([O-])(=O)=O",
-    "zncl2": "Cl[Zn]Cl", "fecl3": "Cl[Fe](Cl)Cl", "alcl3": "Cl[Al](Cl)Cl", "ticl4": "Cl[Ti](Cl)(Cl)Cl",
-    "bf3·oet2": "B(F)(F)F.CCOCC", "bf3.oet2": "B(F)(F)F.CCOCC", "bf3 oet2": "B(F)(F)F.CCOCC",
-    "nbs": "O=C1CCC(=O)N1Br", "n-bromosuccinimide": "O=C1CCC(=O)N1Br",
-    "nis": "O=C1CCC(=O)N1I", "ncs": "O=C1CCC(=O)N1Cl", "i2": "II", "iodine": "II", "br2": "BrBr",
-    "mcpba": "O=C(OO)c1cccc(Cl)c1", "m-cpba": "O=C(OO)c1cccc(Cl)c1",
-    "dbu": "C1CCC2=NCCCN2CC1", "dabco": "C1CN2CCN1CC2", "tbab": "CCCC[N+](CCCC)(CCCC)CCCC.[Br-]",
-    "tbaf": "CCCC[N+](CCCC)(CCCC)CCCC.[F-]",
-    "boc2o": "CC(C)(C)OC(=O)OC(=O)OC(C)(C)C", "di-tert-butyl dicarbonate": "CC(C)(C)OC(=O)OC(=O)OC(C)(C)C",
-    "ac2o": "CC(=O)OC(C)=O", "acetic anhydride": "CC(=O)OC(C)=O",
-    "tscl": "Cc1ccc(S(=O)(=O)Cl)cc1", "mscl": "CS(=O)(=O)Cl",
-    "dcc": "C1CCC(N=C=NC2CCCCC2)CC1", "hatu": "CN(C)C(=[N+](C)C)On1nnc2cccnc21.F[P-](F)(F)(F)(F)F",
-    "tempo": "CC1(C)CCCC(C)(C)N1[O]", "h2o2": "OO", "hydrogen peroxide": "OO",
-    "aibn": "CC(C)(C#N)N=NC(C)(C)C#N",
-}
-
-
-def _norm(name: str) -> str:
-    return re.sub(r"\s+", " ", name.lower()).strip()
-
-
-_QUALIFIER = re.compile(
-    r"\s*\((?:product|products|extraction|solvent|reagent|substrate|catalyst|base|crude|"
-    r"anhydrous[^()]*|\d+[a-z]?|[^()]*%[^()]*|[^()]*\d{2,7}-\d{2}-\d[^()]*|"
-    r"[^()]*(?:received|combi|sigma|aldrich|purified)[^()]*)\)\s*$", re.I)
-
-_GENERIC = {"product", "products", "compound", "compounds", "substrate", "substrates",
-            "reagent", "reagents", "solvent", "catalyst", "base", "additive", "crude product",
-            "starting material", "mixture", "residue"}
-
-_SYNONYMS = [(r"\bp-toluene", "4-toluene"), (r"toluenesulfonate", "methylbenzenesulfonate"),
-             (r"toluenesulfonyl", "methylbenzenesulfonyl"), (r"toluenesulfonic", "methylbenzenesulfonic")]
-
-
-def _clean(name: str) -> str:
-    """Strip trailing qualifiers: '(product)', '(3a)', '(99.5%)', '(extraction)', CAS, vendor..."""
-    n, prev = name.strip(), None
-    while prev != n:
-        prev = n
-        n = _QUALIFIER.sub("", n).strip(" ;,")
-    return re.sub(r"\s+", " ", n)
-
-
-def _variants(name: str) -> list[str]:
-    c = _clean(name)
-    s = c
-    for pat, rep in _SYNONYMS:
-        s = re.sub(pat, rep, s, flags=re.I)
-    return list(dict.fromkeys(x for x in (name, c, s) if x))
-
-
-def _opsin(name: str) -> Optional[str]:
-    try:
-        from py2opsin import py2opsin  # pip install py2opsin (needs a Java runtime)
-        with warnings.catch_warnings():         # OPSIN warns on every name it cannot parse
-            warnings.simplefilter("ignore")
-            s = py2opsin(name)
-        return s or None
-    except Exception:
-        return None
-
-
-class _LookupFailed(Exception):
-    """Transient failure (network, rate limit): the result must not be cached."""
-
-
-def _pubchem(name: str) -> Optional[str]:
-    # POST keeps names with '/', '#', '?' or ',' intact (they break a URL path).
-    url = ("https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/property/"
-           "SMILES,ConnectivitySMILES,CanonicalSMILES/JSON")
-    try:
-        r = requests.post(url, data={"name": name}, timeout=10)
-    except requests.RequestException as e:
-        raise _LookupFailed(str(e)) from e
-    if r.status_code in (400, 404):             # PubChem does not know this name
-        return None
-    if not r.ok:
-        raise _LookupFailed(f"HTTP {r.status_code}")
-    try:
-        p = r.json()["PropertyTable"]["Properties"][0]
-    except (ValueError, KeyError, IndexError):
-        return None
-    return p.get("SMILES") or p.get("CanonicalSMILES") or p.get("ConnectivitySMILES")
-
-
-_SMILES_CACHE: dict[str, Optional[str]] = {}
-
-
-def resolve_smiles(name: str) -> Optional[str]:
-    """Name -> SMILES via the alias table, OPSIN, then PubChem. Results are cached, except
-    lookups that failed for a transient reason (so they are retried on the next run)."""
-    name = str(name or "").strip()
-    if not name:
-        return None
-    if name in _SMILES_CACHE:
-        return _SMILES_CACHE[name]
-    transient = False
-    result = None
-    for cand in _variants(name):
-        key = _norm(cand)
-        if key in ALIASES:
-            result = ALIASES[key]
-            break
-    if result is None:
-        for cand in _variants(name):
-            result = _opsin(cand)
-            if result:
-                break
-            try:
-                result = _pubchem(cand)
-            except _LookupFailed:
-                transient = True
-            if result:
-                break
-    if result or not transient:
-        _SMILES_CACHE[name] = result
-    return result
-
-
-def _rdkit():
-    from rdkit import Chem, RDLogger
-    RDLogger.DisableLog("rdApp.*")          # unparsable SMILES are handled, not logged
-    return Chem
-
-
-def _canon(smiles: Optional[str]) -> Optional[str]:
-    if not smiles or not isinstance(smiles, str):
-        return None
-    Chem = _rdkit()
-    m = Chem.MolFromSmiles(smiles.strip())
-    return Chem.MolToSmiles(m) if m else None
-
-
-def _mol_props(smiles: Optional[str]) -> tuple[Optional[float], Optional[int]]:
-    """Average molecular weight (what MW in the calculator means) and carbon count."""
-    if not smiles or not isinstance(smiles, str):
-        return None, None
-    Chem = _rdkit()
-    from rdkit.Chem import Descriptors
-    m = Chem.MolFromSmiles(smiles.strip())
-    if not m:
-        return None, None
-    return round(Descriptors.MolWt(m), 2), sum(1 for a in m.GetAtoms() if a.GetAtomicNum() == 6)
-
-# ---------------------------------------------------------------------------
-# 4. Units, densities, role heuristics
-# ---------------------------------------------------------------------------
-
-MASS_UNITS = {"g": 1.0, "mg": 1e-3, "kg": 1e3, "µg": 1e-6, "ng": 1e-9}
-VOL_UNITS = {"ml": 1.0, "l": 1e3, "µl": 1e-3, "nl": 1e-6}          # -> mL
-MOL_UNITS = {"mol": 1.0, "mmol": 1e-3, "µmol": 1e-6, "nmol": 1e-9, "kmol": 1e3}
-EQUIV_UNITS = {"equiv", "equiv.", "eq", "eq.", "equivalent", "equivalents", "equiv(s)", "eqv", "mol%"}
-_UNIT_ALIASES = {"grams": "g", "gram": "g", "gr": "g", "milligrams": "mg", "milligram": "mg",
-                 "kilograms": "kg", "micrograms": "µg", "ug": "µg", "mcg": "µg",
-                 "milliliters": "ml", "millilitres": "ml", "milliliter": "ml", "millilitre": "ml",
-                 "mls": "ml", "cm3": "ml", "cc": "ml", "liters": "l", "litres": "l", "liter": "l",
-                 "litre": "l", "ul": "µl", "microliters": "µl", "microlitres": "µl",
-                 "millimoles": "mmol", "millimole": "mmol", "mmole": "mmol", "mmols": "mmol",
-                 "moles": "mol", "mole": "mol", "mols": "mol", "umol": "µmol", "micromoles": "µmol",
-                 "mol-%": "mol%", "%mol": "mol%", "mole%": "mol%", "mol.%": "mol%", "mmol%": "mol%",
-                 "equivs": "equiv", "equivalents": "equiv", "eq.": "equiv", "eq": "equiv"}
-
-_SOLVENT_DENSITY = {  # SMILES -> g/mL (20-25 degC)
-    "O": 0.997, "CS(C)=O": 1.10, "ClCCl": 1.33, "CCOCC": 0.713, "CCCCCC": 0.655,
-    "CCOC(C)=O": 0.902, "Cc1ccccc1": 0.867, "C1CCOC1": 0.889, "CC#N": 0.786, "CO": 0.792,
-    "CN(C)C=O": 0.944, "CCN(CC)CC": 0.726, "CCN(C(C)C)C(C)C": 0.742, "OC=O": 1.22,
-    "CCO": 0.789, "CC(C)O": 0.786, "CC(C)=O": 0.784, "ClC(Cl)Cl": 1.49, "ClCCCl": 1.25,
-    "C1COCCO1": 1.03, "c1ccncc1": 0.982, "c1ccccc1": 0.876, "CCCCCCC": 0.684, "CCCCC": 0.626,
-    "C1CCCCC1": 0.779, "CN(C)C(C)=O": 0.937, "CN1CCCC1=O": 1.03, "COC(C)(C)C": 0.740,
-    "CC1CCCO1": 0.854, "CC(=O)O": 1.049, "OC(=O)C(F)(F)F": 1.49, "OCC(F)(F)F": 1.38,
-    "OC(C(F)(F)F)C(F)(F)F": 1.596, "ClC(Cl)(Cl)Cl": 1.59, "Clc1ccccc1": 1.11, "Cc1ccccc1C": 0.88,
-    "COCCOC": 0.868, "CC(C)(C)O": 0.775, "CCCCO": 0.81, "C[N+](=O)[O-]": 1.137,
-    "C1CCNC1": 0.866, "C1CCNCC1": 0.862, "C1COCCN1": 1.0, "CC(=O)OC(C)=O": 1.08,
-    "C1CCC2=NCCCN2CC1": 1.018, "CS(=O)(=O)Cl": 1.48, "BrBr": 3.10, "OO": 1.11,
-    "Cl": 1.0, "OS(=O)(=O)O": 1.83, "B(F)(F)F.CCOCC": 1.15, "Cl[Ti](Cl)(Cl)Cl": 1.73,
-    "OCc1ccccc1": 1.044, "O=Cc1ccccc1": 1.044, "Nc1ccccc1": 1.022,
-}
-DENSITY = {  # name -> g/mL, for names that do not resolve to a structure
-    "hexanes": 0.655, "petroleum ether": 0.65, "petrol ether": 0.65, "pet. ether": 0.65,
-    "ligroin": 0.656, "brine": 1.2, "sat. brine": 1.2, "saturated brine": 1.2,
-    "xylenes": 0.86, "mixed xylenes": 0.86,
-}
-_WATER_RE = re.compile(r"\b(water|brine|h2o|d2o|di water|deionized water|distilled water)\b", re.I)
-_AQUEOUS_RE = re.compile(r"\b(aqueous|aq\.?|sat(urated|d)?\.?)(?=\W|$)", re.I)
 _IGNORE_RE = re.compile(r"\b(silica|silica gel|cartridge|celite|tlc|sand|cotton|filter paper)\b", re.I)
-_DRYING_RE = re.compile(r"\b(sodium sulfate|magnesium sulfate|na2so4|mgso4|calcium chloride|cacl2)\b", re.I)
 _ROLE_MAP = {"reagent": "reactant", "substrate": "reactant", "starting material": "reactant",
              "reactant": "reactant", "limiting reagent": "reactant", "oxidant": "reactant",
              "reductant": "reactant", "reducing agent": "reactant", "oxidizing agent": "reactant",
@@ -587,63 +335,6 @@ _ROLE_MAP = {"reagent": "reactant", "substrate": "reactant", "starting material"
              "extraction": "workup", "drying agent": "workup", "chromatography": "workup",
              "quench": "workup", "purification": "workup", "wash": "workup", "work-up": "workup",
              "work up": "workup", "support": "ignore", "stationary phase": "ignore", "water": "water"}
-
-_SUBS = str.maketrans("\u2080\u2081\u2082\u2083\u2084\u2085\u2086\u2087\u2088\u2089"
-                      "\u2212\u2013\u2014\u00a0\u202f",
-                      "0123456789---  ")
-_NUM_RE = r"[-+]?(?:\d+(?:[.,]\d+)*|\.\d+)(?:[eE][-+]?\d+)?"
-
-
-def _to_float(tok: str) -> float:
-    t = tok.replace(" ", "")
-    if "," in t and "." not in t and re.fullmatch(r"[-+]?\d{1,3}(,\d{3})+", t) is None:
-        t = t.replace(",", ".")                    # decimal comma: 1,5 -> 1.5
-    return float(t.replace(",", ""))               # thousands separator: 1,250 -> 1250
-
-
-def _parse_qty(x) -> tuple[Optional[float], str]:
-    """Number (and unit, if one is written next to it) from a model value.
-    Handles 20, '20', '20 mg', '2 x 20 mL', '−78', '1,5', '85%', '20-25' (mean)."""
-    if isinstance(x, bool) or x is None:
-        return None, ""
-    if isinstance(x, (int, float)):
-        return (float(x), "") if x == x else (None, "")    # NaN -> None
-    if isinstance(x, (list, tuple)):               # [20, 20] -> 40 (e.g. two portions)
-        vals = [_parse_qty(v) for v in x]
-        nums = [v for v, _ in vals if v is not None]
-        units = {u for _, u in vals if u}
-        return (sum(nums), units.pop() if len(units) == 1 else "") if nums else (None, "")
-    if isinstance(x, dict):
-        return _parse_qty(x.get("value", x.get("quantity")))[0], _unit(x.get("unit"))
-    t = str(x).translate(_SUBS).strip()
-    if not t:
-        return None, ""
-    m = re.match(rf"^~?\s*({_NUM_RE})\s*[*\u00d7xX]\s*({_NUM_RE})\s*(.*)$", t)
-    if m:
-        return _to_float(m.group(1)) * _to_float(m.group(2)), _unit(m.group(3))
-    m = re.match(rf"^~?\s*({_NUM_RE})\s*(-|to|–)\s*({_NUM_RE})\s*(.*)$", t)
-    if m and (m.group(2) != "-" or not m.group(1).startswith("-")):   # ranges: take the mean
-        return (_to_float(m.group(1)) + _to_float(m.group(3))) / 2, _unit(m.group(4))
-    m = re.match(rf"^[~<>≈≤≥]?\s*({_NUM_RE})\s*(.*)$", t)
-    if m:
-        try:
-            return _to_float(m.group(1)), _unit(m.group(2))
-        except ValueError:
-            return None, ""
-    return None, ""
-
-
-def _num(x) -> Optional[float]:
-    return _parse_qty(x)[0]
-
-
-def _unit(u) -> str:
-    u = str(u or "").strip().lower().replace("μ", "µ").replace("\u00b0", "")
-    u = re.sub(r"\s+", "", u)                      # 'mol %' -> 'mol%'
-    u = re.sub(r"^\((.*)\)$", r"\1", u)            # '(mmol)' -> 'mmol'
-    if u in ("null", "none", "n/a", "-"):
-        return ""
-    return _UNIT_ALIASES.get(u, u)
 
 
 def _role(raw, name: str, unit: str = "") -> str:
@@ -665,24 +356,6 @@ def _role(raw, name: str, unit: str = "") -> str:
     return "additive"
 
 
-@lru_cache(maxsize=1)
-def _smiles_density() -> dict:
-    return {c: v for k, v in _SOLVENT_DENSITY.items() if (c := _canon(k))}
-
-
-def _density(name: str, role: str, smiles: Optional[str] = None) -> Optional[float]:
-    if role == "water":
-        n = _norm(_clean(name))
-        return DENSITY.get(n, 1.2 if "brine" in n else 1.0)
-    if smiles and smiles in _smiles_density():          # any name that resolves to a known liquid
-        return _smiles_density()[smiles]
-    n = _norm(_clean(name))
-    if n in DENSITY:
-        return DENSITY[n]
-    key = ALIASES.get(n)
-    return _smiles_density().get(_canon(key)) if key else None
-
-
 # ---------------------------------------------------------------------------
 # 5. Merge pages -> one validated review table
 # ---------------------------------------------------------------------------
@@ -691,9 +364,6 @@ NUMERIC_COLUMNS = ["Mass (g)", "Moles (mol)", "MW (g/mol)", "Carbons"]
 _SUMMABLE_ROLES = {"solvent", "workup", "water"}   # e.g. "extract with EtOAc (3 x 20 mL), wash with EtOAc"
 
 
-def _sig(x: Optional[float], digits: int = 4) -> Optional[float]:
-    """Round to significant figures, so 1.2e-6 mol of a catalyst does not become 0."""
-    return None if x is None else float(f"{x:.{digits}g}")
 
 
 def _typed(df: pd.DataFrame) -> pd.DataFrame:
@@ -881,29 +551,6 @@ def build_review_table(pages: list[dict]) -> pd.DataFrame:
              .drop(columns="_o").reset_index(drop=True)
 
 
-def _hours(x) -> Optional[float]:
-    """'30 min' -> 0.5, '2 d' -> 48, '16 h' -> 16, 'overnight' -> 16, 3 -> 3 (already hours)."""
-    if isinstance(x, str) and re.search(r"overnight|o/n", x, re.I):
-        return 16.0
-    v, u = _parse_qty(x)
-    if v is None:
-        return None
-    if u.startswith("min"):
-        return v / 60
-    if u.startswith(("s", "sec")):
-        return v / 3600
-    if u.startswith(("d", "day")):
-        return v * 24
-    if u.startswith(("w", "week")):
-        return v * 168
-    return v
-
-
-def _text(v) -> Optional[str]:
-    if v is None or isinstance(v, (dict, list)):
-        return None
-    v = str(v).strip()
-    return None if v.lower() in ("", "null", "none", "n/a") else v
 
 
 def merge_meta(pages: list[dict]) -> dict:

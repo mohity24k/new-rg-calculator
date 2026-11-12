@@ -23,10 +23,10 @@ from dataclasses import asdict
 from pathlib import Path
 from typing import Callable, Iterable, Optional
 
-from modules import pdf_extraction as px
-from modules.extraction import schema as sc
-from modules.extraction.engines import TRANSPORT, HttpEngine, Result, ServerUnavailable, build_request
-from modules.extraction.pages import paper_id_for, plan_paper
+from gms.extraction import classic as px
+from gms.extraction import schema as sc
+from gms.extraction.engines import TRANSPORT, HttpEngine, Result, ServerUnavailable, build_request
+from gms.extraction.pages import paper_id_for, plan_paper
 
 PIPELINE_VERSION = "dataset-2026-10-22.1"
 

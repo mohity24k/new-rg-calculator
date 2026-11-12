@@ -21,7 +21,7 @@ import re
 from dataclasses import dataclass, field
 from typing import Iterable, Optional
 
-from modules import pdf_extraction as px
+from gms.extraction import classic as px
 
 PROCEDURE_PATTERNS = [
     r"\bmmol\b", r"\bm[lL]\b|\bµ[lL]\b|\bu[lL]\b", r"\bequiv\b|\beq\.", r"mol\s?%",

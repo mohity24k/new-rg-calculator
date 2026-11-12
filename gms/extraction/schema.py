@@ -26,7 +26,7 @@ import copy
 import re
 from typing import Optional
 
-from modules import pdf_extraction as px
+from gms.chem import names, structure, units
 
 SCHEMA_VERSION = "1"
 
@@ -213,8 +213,8 @@ _GENERIC_RE = re.compile(
 
 
 def is_generic(name: str) -> bool:
-    n = px._norm(name)
-    return n in px._GENERIC or bool(_GENERIC_RE.search(n))
+    n = names.norm(name)
+    return n in names.GENERIC or bool(_GENERIC_RE.search(n))
 
 
 def _role(raw, name: str) -> tuple[str, str]:
@@ -226,20 +226,20 @@ def _role(raw, name: str) -> tuple[str, str]:
     stage = "reaction" if role in REACTION_STAGE_ROLES else ("purification" if role == "purification" else "workup")
     if role == "ignore":
         stage = "none"
-    if px._WATER_RE.search(name) or (px._AQUEOUS_RE.search(name)
+    if names.WATER_RE.search(name) or (names.AQUEOUS_RE.search(name)
                                       and role in ("workup", "reaction_solvent", "water")):
         return "water", stage if stage != "none" else "workup"
     if _PURE_IGNORE_RE.search(name):
         return "ignore", "none"
     if _SILICA_RE.search(name):
         return "purification", "purification"
-    if _FILTER_AID_RE.search(name) or (px._DRYING_RE.search(name) and role not in ("reactant", "reagent", "additive")):
+    if _FILTER_AID_RE.search(name) or (names.DRYING_RE.search(name) and role not in ("reactant", "reagent", "additive")):
         return "workup", "workup"
     return role, stage
 
 
 def _label(x) -> Optional[str]:
-    v = px._text(x)
+    v = units.text(x)
     return v.strip() if v else None
 
 
@@ -256,25 +256,25 @@ def procedure_key(label: Optional[str]) -> Optional[str]:
 def normalize_component(c) -> Optional[dict]:
     if not isinstance(c, dict):
         return None
-    name = px._clean(str(c.get("name") or "").translate(px._SUBS))
+    name = names.clean(str(c.get("name") or "").translate(units.SUBS))
     if not name:
         return None
-    qty, unit_in_qty = px._parse_qty(c.get("quantity", c.get("amount")))
-    unit = px._unit(c.get("unit")) or unit_in_qty
-    equiv = px._num(c.get("equivalents", c.get("equiv")))
-    mmol = px._num(c.get("mmol"))
+    qty, unit_in_qty = units.parse_qty(c.get("quantity", c.get("amount")))
+    unit = units.unit(c.get("unit")) or unit_in_qty
+    equiv = units.num(c.get("equivalents", c.get("equiv")))
+    mmol = units.num(c.get("mmol"))
     role, stage = _role(c.get("role"), name)
     flags = []
     if unit == "%" and role in ("catalyst", "base", "additive", "reactant", "reagent"):
         unit = "mol%"
     if unit == "mol%" and qty is not None:
         equiv, qty, unit = qty / 100, None, ""
-    elif unit in px.EQUIV_UNITS and qty is not None:
+    elif unit in units.EQUIV_UNITS and qty is not None:
         equiv, qty, unit = qty, None, ""
     if qty is None and mmol is not None:
         qty, unit = mmol, "mmol"
-    if qty is not None and unit and unit not in px.MASS_UNITS and unit not in px.VOL_UNITS \
-            and unit not in px.MOL_UNITS:
+    if qty is not None and unit and unit not in units.MASS_UNITS and unit not in units.VOL_UNITS \
+            and unit not in units.MOL_UNITS:
         flags.append(f"unit '{unit}' not understood")
     return {"name": name, "role": role, "stage": stage, "quantity": qty, "unit": unit or None,
             "mmol": mmol, "equiv": equiv, "generic": is_generic(name), "flags": flags}
@@ -287,7 +287,7 @@ def _merge_components(comps: list[dict]) -> list[dict]:
     """Same name + role twice in one reaction: portions of a solvent are summed, conflicts flagged."""
     out: dict[tuple, dict] = {}
     for c in comps:
-        k = (px._norm(c["name"]), c["role"], c["stage"])
+        k = (names.norm(c["name"]), c["role"], c["stage"])
         if k not in out:
             out[k] = c
             continue
@@ -309,17 +309,17 @@ def _conditions(raw) -> dict:
     t = cond.get("temperature_c", cond.get("temperature"))
     reflux = cond.get("reflux") is True or (isinstance(t, str) and bool(re.search(r"reflux", t, re.I)))
     return {
-        "temperature_c": px._num(t),
+        "temperature_c": units.num(t),
         "reflux": bool(reflux),
-        "time_h": px._hours(cond.get("time_h", cond.get("time"))),
-        "atmosphere": px._text(cond.get("atmosphere")),
-        "activation": px._text(cond.get("activation")),
+        "time_h": units.hours(cond.get("time_h", cond.get("time"))),
+        "atmosphere": units.text(cond.get("atmosphere")),
+        "activation": units.text(cond.get("activation")),
     }
 
 
 def _steps(x) -> list[str]:
     items = [x] if isinstance(x, str) else x if isinstance(x, list) else []
-    return [s for s in (px._text(i) for i in items) if s]
+    return [s for s in (units.text(i) for i in items) if s]
 
 
 def normalize_reaction(raw: dict) -> Optional[dict]:
@@ -329,11 +329,11 @@ def normalize_reaction(raw: dict) -> Optional[dict]:
     comps = _merge_components([c for c in (normalize_component(x) for x in raw.get("components") or []) if c])
     cond_raw = raw.get("conditions")
     workup = _steps(raw.get("workup", (cond_raw or {}).get("workup") if isinstance(cond_raw, dict) else None))
-    purification = px._text(raw.get("purification"))
+    purification = units.text(raw.get("purification"))
     if purification is None:   # older answers put chromatography in the workup list
         purif = [w for w in workup if re.search(r"chromatograph|column|recrystalli|flash", w, re.I)]
         purification = "; ".join(purif) or None
-    y = px._num(raw.get("yield_percent", raw.get("yield")))
+    y = units.num(raw.get("yield_percent", raw.get("yield")))
     rec = {
         "label": _label(raw.get("label")),
         "procedure_label": _label(raw.get("procedure_label")),
@@ -373,20 +373,20 @@ def tables_from_answer(data) -> list[dict]:
         for e in t.get("entries") or []:
             if not isinstance(e, dict):
                 continue
-            y = px._num(e.get("yield_percent"))
+            y = units.num(e.get("yield_percent"))
             entries.append({
                 "entry": _label(e.get("entry")),
-                **{k: px._text(e.get(k)) for k in ("solvent", "catalyst", "base", "reagent", "additive")},
-                "temperature_c": px._num(e.get("temperature_c")),
-                "time_h": px._hours(e.get("time_h")),
+                **{k: units.text(e.get(k)) for k in ("solvent", "catalyst", "base", "reagent", "additive")},
+                "temperature_c": units.num(e.get("temperature_c")),
+                "time_h": units.hours(e.get("time_h")),
                 "yield_percent": y if y is not None and 0 <= y <= 100 else None,
-                "notes": px._text(e.get("notes")),
+                "notes": units.text(e.get("notes")),
             })
         if not entries:
             continue
         out.append({
-            "title": px._text(t.get("title")),
-            "standard_conditions": px._text(t.get("standard_conditions")),
+            "title": units.text(t.get("title")),
+            "standard_conditions": units.text(t.get("standard_conditions")),
             "components": _merge_components([c for c in (normalize_component(x)
                                                          for x in t.get("components") or []) if c]),
             "entries": entries,
@@ -426,14 +426,14 @@ def apply_general_procedure(rxn: dict, gp: dict) -> dict:
                 c.update(quantity=g["quantity"], unit=g["unit"], mmol=g["mmol"], equiv=g["equiv"])
                 c["flags"].append(f"amount inherited from general procedure ({g['name']})")
                 inherited.append(f"amount of {c['name']}")
-        own_names = {px._norm(c["name"]) for c in own}
+        own_names = {names.norm(c["name"]) for c in own}
         missing = max(0, len(gp_list) - len(own))
         for g in gp_list:
             if missing <= 0:
                 break
             if g["generic"] and own:
                 continue        # its specific replacement is listed (or cannot be identified)
-            if px._norm(g["name"]) in own_names:
+            if names.norm(g["name"]) in own_names:
                 continue
             g["flags"].append("inherited from general procedure: check")
             out["components"].append(g)
@@ -485,7 +485,7 @@ def resolve_general_procedures(reactions: list[dict]) -> list[dict]:
 def _amount_sig(r: dict) -> tuple:
     prod = [c for c in r["components"] if c["role"] == "product"]
     p = prod[0] if prod else {}
-    return (px._norm(p.get("name") or ""), p.get("quantity"), p.get("unit"), r["yield_percent"])
+    return (names.norm(p.get("name") or ""), p.get("quantity"), p.get("unit"), r["yield_percent"])
 
 
 def dedupe_reactions(reactions: list[dict]) -> list[dict]:
