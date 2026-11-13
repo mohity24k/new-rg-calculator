@@ -1,0 +1,125 @@
+# CHEM21 solvent scoring rules (Safety / Health / Environment, 1-10, 10 = worst).
+# Colour code used by the guide: 1-3 green, 4-6 yellow, 7-10 red.
+source:
+  citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada, P. J. Dunn, CHEM21 selection guide of classical- and less classical-solvents, Green Chem., 2016, 18, 288-296"
+  doi: "10.1039/C5GC01008J"
+  license: "CC BY 3.0"
+  read_from: "ACS GCI Pharmaceutical Roundtable reproduction of the paper's tables, https://learning.acsgcipr.org/guides-and-metrics/solvent-selection-guides/the-chem21-solvent-selection-guide/ (read 2026-11-12)"
+verified: partial
+verification_notes: >-
+  The four rule tables (safety, health, environment, ranking by default) and the accompanying
+  text were read from the ACS GCI PR reproduction, which states that it reproduces the paper's
+  tables with RSC permission. The RSC article page itself could not be read (bot check), so the
+  rules were NOT compared against the original paper. As a consistency test, the health,
+  environment and ranking-by-default rules below were replayed against all 77 solvent rows of the
+  same reproduction and gave the tabulated score in every case (HMPA excepted only because its BP
+  is given as ">200"); every safety score is its flash-point base score plus 0-3, or 10.
+score_colours: {green: [1, 3], yellow: [4, 6], red: [7, 10]}
+health:
+  # Score of the most stringent H3xx statement (worst statement wins), before the boiling-point penalty.
+  h_codes:
+    # CMR category 2
+    H341: 6
+    H351: 6
+    H361: 6
+    # CMR category 1
+    H340: 9
+    H350: 9
+    H360: 9
+    # STOT
+    H304: 2
+    H371: 2
+    H373: 2
+    H334: 4
+    H370: 6
+    H372: 6
+    # Acute toxicity
+    H302: 2
+    H312: 2
+    H332: 2
+    H336: 2
+    EUH070: 2
+    H301: 6
+    H311: 6
+    H331: 6
+    H300: 9
+    H310: 9
+    H330: 9
+    # Irritation
+    H315: 2
+    H317: 2
+    H319: 2
+    H335: 2
+    EUH066: 2
+    H318: 4
+    H314: 7
+  bp_below_85c_penalty: 1
+  default_score_no_h3xx: 1          # no H3xx statement after full REACH registration
+  default_score_incomplete_reach:   # REACH registration not complete, unless the supplier attributes a more stringent H3xx
+    bp_85c_or_higher: 5
+    bp_below_85c: 6
+  notes: >-
+    Health score = score of the highest-scoring H3xx statement, plus 1 if the boiling point is
+    below 85 degC. The table has columns 2, 4, 6, 7, 9 only, so 10 is reached only as 9 + 1
+    (e.g. benzene, 1,2-dichloroethane); H340/H350/H360 map to 9, not 10. Water is scored 1.
+    Sub-category suffixes (H360D, H361d, H360FD ...) are not listed separately in the table read;
+    treating them as their parent code is an assumption, NOT VERIFIED. The guide notes that a
+    score based only on GHS statements has limits (chloroform and pyridine were re-ranked because
+    of very low occupational exposure limits).
+safety:
+  # Base score from flash point (degC, bounds inclusive as printed: ">60", "23 to 60", "22 to 0", "-1 to -20", "< -20").
+  flash_point_bands:
+    - {min_c: null, max_c: -20, max_exclusive: true, score: 7, ghs: "H225 or H224"}
+    - {min_c: -20, max_c: -1, score: 5, ghs: "H225 or H224"}
+    - {min_c: 0, max_c: 22, score: 4, ghs: "H225 or H224"}
+    - {min_c: 23, max_c: 60, score: 3, ghs: "H226"}
+    - {min_c: 60, max_c: null, min_exclusive: true, score: 1, ghs: "none"}
+  additional_penalties:
+    - {condition: "auto-ignition temperature < 200 degC", penalty: 1}
+    - {condition: "resistivity > 10^8 ohm.m", penalty: 1}
+    - {condition: "ability to form peroxides (EUH019)", penalty: 1}
+  override:
+    - {condition: "high energy of decomposition (> 500 J/g), e.g. nitromethane", score: 10}
+  notes: >-
+    Safety score = flash-point base score + 1 for each additional property that applies
+    (worked example in the guide: diethyl ether, FP -45 degC, AIT 160 degC, resistivity
+    3x10^11 ohm.m, EUH019 -> 7+1+1+1 = 10). The bands are printed in whole degC; flash points
+    falling between printed bounds (e.g. 22.5) are not defined by the guide. Solvents with no
+    flash point (tabulated "n.a.": water, dichloromethane, chloroform, carbon tetrachloride)
+    have base score 1 in the solvent table; that this is an explicit rule of the paper is
+    NOT VERIFIED (inferred from the tabulated scores). AIT and resistivity values per solvent
+    are not given in the tables read, so individual safety penalties could not be itemised.
+environment:
+  # Score from boiling point (degC, whole degrees, bounds inclusive as printed).
+  bp_bands:
+    - {min_c: null, max_c: 50, max_exclusive: true, score: 7}
+    - {min_c: 50, max_c: 69, score: 5}
+    - {min_c: 70, max_c: 139, score: 3}
+    - {min_c: 140, max_c: 200, score: 5}
+    - {min_c: 200, max_c: null, min_exclusive: true, score: 7}
+  h_codes:
+    H400: 7
+    H410: 7
+    H411: 7
+    H412: 5
+    H413: 5
+    EUH420: 10
+  no_h4xx_after_full_reach_score: 3
+  default_score_incomplete_reach: 5   # no or partial REACH registration and no H4xx attributed by the supplier
+  water_score: 1
+  notes: >-
+    Environment score = the most stringent (highest) of the boiling-point score and the H4xx
+    score (e.g. heptane 7 because of H410; dichloromethane 7 because of its low boiling point).
+    Boiling point stands for both volatility (VOC) and energy demand for recycling. If REACH
+    registration is not full and no H4xx is attributed by the supplier, the score is at least 5.
+    The rule table prints the ozone-layer statement as "EUH420"; the solvent table prints "H420"
+    for carbon tetrachloride (current CLP code is H420) - treat both as score 10. Boiling points
+    between printed bounds (e.g. 69.5 or 139.5) are not defined by the guide.
+ranking_rules: >-
+  Ranking by default, from the S, H and E scores; the most stringent combination imposes the
+  ranking. One score >= 8 -> hazardous. Two "red" scores (7-10) -> hazardous. One score = 7 ->
+  problematic. Two "yellow" scores (4-6) -> problematic. Other -> recommended. The ranking by
+  default does not distinguish "hazardous" from "highly hazardous"; that decision, and any other
+  change, is made by discussion ("ranking after discussion"), and the guide stresses that the
+  default ranking is only a model to be critically assessed by occupational hygienists and other
+  experts.

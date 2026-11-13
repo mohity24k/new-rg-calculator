@@ -1,0 +1,3288 @@
+{
+ "meta": {
+  "built": "2026-11-13",
+  "note": "Reference data for screening. Always check the supplier's safety data sheet.",
+  "selection": {
+   "min_report_share_pct": 50,
+   "source_priority": [
+    "Regulation (EC) No 1272/2008",
+    "European Chemicals Agency (ECHA)"
+   ]
+  },
+  "source": "PubChem (https://pubchem.ncbi.nlm.nih.gov), GHS Classification section of each compound record. EU harmonised classification (Regulation (EC) No 1272/2008) where present, otherwise ECHA C&L Inventory aggregated notifications or another listed source."
+ },
+ "names": {
+  "(3-bromophenyl)methanamine hydrochloride": "NCc1cccc(Br)c1",
+  "1,1'-carbonyldiimidazole (cdi)": "O=C(n1ccnc1)n1ccnc1",
+  "1,2-dichloroethane": "ClCCCl",
+  "1,2-dimethoxyethane": "COCCOC",
+  "1,3-propanediol": "OCCCO",
+  "1,4-dioxane": "C1COCCO1",
+  "1-aminocyclohexanecarboxylic acid methyl ester hydrochloride": "COC(=O)C1(N)CCCCC1.Cl",
+  "1-boc-4-piperidone": "CC(C)(C)OC(=O)N1CCC(=O)CC1",
+  "1-butanol": "CCCCO",
+  "1-hydroxy-7-azabenzotriazole (hoat)": "On1nnc2cccnc21",
+  "1-hydroxybenzotriazole": "On1nnc2ccccc21",
+  "1-hydroxybenzotriazole (hobt)": "On1nnc2ccccc21",
+  "2,2,2-trifluoroethanol": "OCC(F)(F)F",
+  "2-methf": "CC1CCCO1",
+  "2-methoxyethanol": "COCCO",
+  "2-methyltetrahydrofuran": "CC1CCCO1",
+  "2-picoline borane": "[BH3-][n+]1ccccc1C",
+  "2-propanol": "CC(C)O",
+  "3,5-dibromo-pyrazin-2-ylamine": "Nc1ncc(Br)nc1Br",
+  "3-[(4-boc-piperazin-1-yl)methyl]phenylboronic acid": "CC(C)(C)OC(=O)N1CCN(Cc2cccc(B(O)O)c2)CC1",
+  "3-cyclopentylamino-propanoic acid ethyl ester": "CCOC(=O)CCNC1CCCC1",
+  "3-furancarboxylic acid": "O=C(O)c1ccoc1",
+  "4-(3-methylbutanoyl)benzoic acid": "CC(C)CC(=O)c1ccc(C(=O)O)cc1",
+  "4-bromoanisole": "COc1ccc(Br)cc1",
+  "4-bromotoluene": "Cc1ccc(Br)cc1",
+  "4-dimethylaminopyridine": "CN(C)c1ccncc1",
+  "4-fluorophenylboronic acid": "OB(O)c1ccc(F)cc1",
+  "4-methoxybenzoic acid": "COc1ccc(C(=O)O)cc1",
+  "4-methoxybiphenyl": "COc1ccc(-c2ccccc2)cc1",
+  "5-bromo-3-(4-fluorophenyl)pyrazin-2-amine": "Nc1ncc(Br)nc1-c1ccc(F)cc1",
+  "ac2o": "CC(=O)OC(C)=O",
+  "acetic acid": "CC(=O)O",
+  "acetic anhydride": "CC(=O)OC(C)=O",
+  "acetone": "CC(C)=O",
+  "acetonitrile": "CC#N",
+  "acetophenone": "CC(=O)c1ccccc1",
+  "acetyl chloride": "CC(=O)Cl",
+  "acoh": "CC(=O)O",
+  "aibn": "CC(C)(C#N)N=NC(C)(C)C#N",
+  "alcl3": "[Cl][Al]([Cl])[Cl]",
+  "ammonium chloride": "[Cl-].[NH4+]",
+  "ammonium formate": "O=C[O-].[NH4+]",
+  "aniline": "Nc1ccccc1",
+  "anisole": "COc1ccccc1",
+  "benzaldehyde": "O=Cc1ccccc1",
+  "benzene": "c1ccccc1",
+  "benzoic acid": "O=C(O)c1ccccc1",
+  "benzoic anhydride": "O=C(OC(=O)c1ccccc1)c1ccccc1",
+  "benzyl alcohol": "OCc1ccccc1",
+  "benzylamine": "NCc1ccccc1",
+  "beta-alanine ethyl ester hydrochloride": "CCOC(=O)CCN.Cl",
+  "bf3 oet2": "CCOCC.FB(F)F",
+  "bf3.oet2": "CCOCC.FB(F)F",
+  "bf3·oet2": "CCOCC.FB(F)F",
+  "boc2o": "CC(C)(C)OC(=O)OC(=O)OC(C)(C)C",
+  "bop reagent": "CN(C)[P+](On1nnc2ccccc21)(N(C)C)N(C)C.F[P-](F)(F)(F)(F)F",
+  "boric acid (catalytic)": "OB(O)O",
+  "br2": "BrBr",
+  "bromobenzene": "Brc1ccccc1",
+  "bz2o": "O=C(OC(=O)c1ccccc1)c1ccccc1",
+  "caesium carbonate": "O=C([O-])[O-].[Cs+].[Cs+]",
+  "calcium chloride": "[Ca+2].[Cl-].[Cl-]",
+  "carbon disulfide": "S=C=S",
+  "carbon monoxide": "[C-]#[O+]",
+  "carbon tetrachloride": "ClC(Cl)(Cl)Cl",
+  "ccl4": "ClC(Cl)(Cl)Cl",
+  "celite": "O=[Si]=O",
+  "cesium carbonate": "O=C([O-])[O-].[Cs+].[Cs+]",
+  "chcl3": "ClC(Cl)Cl",
+  "chlorobenzene": "Clc1ccccc1",
+  "chloroform": "ClC(Cl)Cl",
+  "copper(i) iodide": "[Cu][I]",
+  "cs2co3": "O=C([O-])[O-].[Cs+].[Cs+]",
+  "cu(oac)2": "CC(=O)[O-].CC(=O)[O-].[Cu+2]",
+  "cubr": "[Cu][Br]",
+  "cucl": "[Cl][Cu]",
+  "cui": "[Cu][I]",
+  "cuso4": "O=S(=O)([O-])[O-].[Cu+2]",
+  "cyclohexane": "C1CCCCC1",
+  "cyclohexanone": "O=C1CCCCC1",
+  "cyclopentanone": "O=C1CCCC1",
+  "cyclopentyl methyl ether": "COC1CCCC1",
+  "cyrene": "O=C1CC[C@H]2CO[C@@H]1O2",
+  "d-limonene": "C=C(C)[C@H]1CC=C(C)CC1",
+  "dabco": "C1CN2CCN1CC2",
+  "dbu": "C1CCC2=NCCCN2CC1",
+  "dcc": "C(=NC1CCCCC1)=NC1CCCCC1",
+  "dce": "ClCCCl",
+  "dcm": "ClCCl",
+  "di-tert-butyl dicarbonate": "CC(C)(C)OC(=O)OC(=O)OC(C)(C)C",
+  "dichloromethane": "ClCCl",
+  "diethyl ether": "CCOCC",
+  "diethyl succinate": "CCOC(=O)CCC(=O)OCC",
+  "diisopropyl ether": "CC(C)OC(C)C",
+  "diisopropylethylamine": "CCN(C(C)C)C(C)C",
+  "dimethyl carbonate": "COC(=O)OC",
+  "dimethyl sulfoxide": "CS(C)=O",
+  "dimethylacetamide": "CC(=O)N(C)C",
+  "dimethylformamide": "CN(C)C=O",
+  "dimethylpropyleneurea": "CN1CCCN(C)C1=O",
+  "dioxane": "C1COCCO1",
+  "dipea": "CCN(C(C)C)C(C)C",
+  "dma": "CC(=O)N(C)C",
+  "dmac": "CC(=O)N(C)C",
+  "dmap": "CN(C)c1ccncc1",
+  "dme": "COCCOC",
+  "dmf": "CN(C)C=O",
+  "dmso": "CS(C)=O",
+  "edc hcl": "CCN=C=NCCCN(C)C.Cl",
+  "edc hydrochloride": "CCN=C=NCCCN(C)C.Cl",
+  "edc hydrochloride (edc.hcl)": "CCN=C=NCCCN(C)C.Cl",
+  "edc-hcl": "CCN=C=NCCCN(C)C.Cl",
+  "edc.hcl": "CCN=C=NCCCN(C)C.Cl",
+  "edci": "CCN=C=NCCCN(C)C.Cl",
+  "edc·hcl": "CCN=C=NCCCN(C)C.Cl",
+  "et2o": "CCOCC",
+  "et3n": "CCN(CC)CC",
+  "ethanol": "CCO",
+  "ethyl acetate": "CCOC(C)=O",
+  "ethyl chloroacetate": "CCOC(=O)CCl",
+  "ethyl cyano(hydroxyimino)acetate (oxyma)": "CCOC(=O)C(C#N)=NO",
+  "ethyl lactate": "CCOC(=O)[C@H](C)O",
+  "ethyl n-(1-boc-piperidin-4-yl)glycinate": "CCOC(=O)CNC1CCN(C(=O)OC(C)(C)C)CC1",
+  "ethyl tert-butyl ether": "CCOC(C)(C)C",
+  "ethylene carbonate": "O=C1OCCO1",
+  "ethylene glycol": "OCCO",
+  "etn(ipr)2": "CCN(C(C)C)C(C)C",
+  "etoac": "CCOC(C)=O",
+  "etoh": "CCO",
+  "fecl3": "[Cl][Fe]([Cl])[Cl]",
+  "formic acid": "O=CO",
+  "gamma-valerolactone": "CC1CCC(=O)O1",
+  "glycerol": "OCC(O)CO",
+  "glycine ethyl ester hydrochloride": "CCOC(=O)CN.Cl",
+  "glycol diacetate": "CC(=O)OCCOC(C)=O",
+  "h2o": "O",
+  "h2o2": "OO",
+  "h2so4": "O=S(=O)(O)O",
+  "hatu": "CN(C)C(On1nnc2cccnc21)=[N+](C)C.F[P-](F)(F)(F)(F)F",
+  "hbr": "Br",
+  "hbtu": "CN(C)C(On1nnc2ccccc21)=[N+](C)C.F[P-](F)(F)(F)(F)F",
+  "hcl": "Cl",
+  "hco2h": "O=CO",
+  "heptane": "CCCCCCC",
+  "hexafluoroisopropanol": "OC(C(F)(F)F)C(F)(F)F",
+  "hexamethylphosphoramide": "CN(C)P(=O)(N(C)C)N(C)C",
+  "hexane": "CCCCCC",
+  "hexanes": "CCCCCC",
+  "hfip": "OC(C(F)(F)F)C(F)(F)F",
+  "hoac": "CC(=O)O",
+  "hobt": "On1nnc2ccccc21",
+  "hydrochloric acid": "Cl",
+  "hydrogen": "[HH]",
+  "hydrogen peroxide": "OO",
+  "hydronium": "[OH3+]",
+  "hydroxylamine": "NO",
+  "i2": "II",
+  "iodine": "II",
+  "iodobenzene": "Ic1ccccc1",
+  "ipa": "CC(C)O",
+  "iproh": "CC(C)O",
+  "isoamyl acetate": "CC(=O)OCCC(C)C",
+  "isoamyl alcohol": "CC(C)CCO",
+  "isobutanol": "CC(C)CO",
+  "isobutyl acetate": "CC(=O)OCC(C)C",
+  "isobutylbenzene": "CC(C)Cc1ccccc1",
+  "isopropanol": "CC(C)O",
+  "isopropyl acetate": "CC(=O)OC(C)C",
+  "k2co3": "O=C([O-])[O-].[K+].[K+]",
+  "k3po4": "O=P([O-])([O-])[O-].[K+].[K+].[K+]",
+  "koh": "[K+].[OH-]",
+  "kotbu": "CC(C)(C)[O-].[K+]",
+  "lactic acid": "CC(O)C(=O)O",
+  "lialh4": "[AlH4-].[Li+]",
+  "licl": "[Cl-].[Li+]",
+  "lioh": "[Li+].[OH-]",
+  "lithium aluminium hydride": "[AlH4-].[Li+]",
+  "lithium aluminum hydride": "[AlH4-].[Li+]",
+  "lithium chloride": "[Cl-].[Li+]",
+  "lithium hydroxide": "[Li+].[OH-]",
+  "m-cpba": "O=C(OO)c1cccc(Cl)c1",
+  "magnesium sulfate": "O=S(=O)([O-])[O-].[Mg+2]",
+  "mcpba": "O=C(OO)c1cccc(Cl)c1",
+  "mecn": "CC#N",
+  "meno2": "C[N+](=O)[O-]",
+  "meoh": "CO",
+  "methanol": "CO",
+  "methyl 1-(furan-3-carboxamido)cyclohexanecarboxylate": "COC(=O)C1(NC(=O)c2ccoc2)CCCCC1",
+  "methyl 3-(4-(3-methylbutanoyl)benzamido)propanoate": "COC(=O)CCNC(=O)c1ccc(C(=O)CC(C)C)cc1",
+  "methyl 3-aminopropanoate hydrochloride": "COC(=O)CCN.Cl",
+  "methyl acetate": "COC(C)=O",
+  "methyl ethyl ketone": "CCC(C)=O",
+  "methyl isobutyl ketone": "CC(=O)CC(C)C",
+  "methyl tert-butyl ether": "COC(C)(C)C",
+  "methylcyclohexane": "CC1CCCCC1",
+  "methylene chloride": "ClCCl",
+  "mgso4": "O=S(=O)([O-])[O-].[Mg+2]",
+  "morpholine": "C1COCCN1",
+  "mscl": "CS(=O)(=O)Cl",
+  "mtbe": "COC(C)(C)C",
+  "n,n'-dicyclohexylcarbodiimide (dcc)": "C(=NC1CCCCC1)=NC1CCCCC1",
+  "n,n-diisopropylethylamine": "CCN(C(C)C)C(C)C",
+  "n,n-dimethylacetamide": "CC(=O)N(C)C",
+  "n,n-dimethylformamide": "CN(C)C=O",
+  "n-benzyl-4-methoxybenzamide": "COc1ccc(C(=O)NCc2ccccc2)cc1",
+  "n-benzylmorpholine": "c1ccc(CN2CCOCC2)cc1",
+  "n-bromosuccinimide": "O=C1CCC(=O)N1Br",
+  "n-butanol": "CCCCO",
+  "n-butyl acetate": "CCCCOC(C)=O",
+  "n-heptane": "CCCCCCC",
+  "n-hexane": "CCCCCC",
+  "n-methyl-2-pyrrolidone": "CN1CCCC1=O",
+  "n-methylmorpholine": "CN1CCOCC1",
+  "n-pentane": "CCCCC",
+  "n-propanol": "CCCO",
+  "n-propyl acetate": "CCCOC(C)=O",
+  "na2co3": "O=C([O-])[O-].[Na+].[Na+]",
+  "na2s2o3": "O=S([O-])([O-])=S.[Na+].[Na+]",
+  "na2so4": "O=S(=O)([O-])[O-].[Na+].[Na+]",
+  "nabh(oac)3": "CC(=O)O[BH-](OC(C)=O)OC(C)=O.[Na+]",
+  "nabh4": "[BH4-].[Na+]",
+  "nacl": "[Cl-].[Na+]",
+  "nah": "[H-].[Na+]",
+  "nahco3": "O=C([O-])O.[Na+]",
+  "naoh": "[Na+].[OH-]",
+  "naotbu": "CC(C)(C)[O-].[Na+]",
+  "nbs": "O=C1CCC(=O)N1Br",
+  "ncs": "O=C1CCC(=O)N1Cl",
+  "nh4cl": "[Cl-].[NH4+]",
+  "nis": "O=C1CCC(=O)N1I",
+  "nitromethane": "C[N+](=O)[O-]",
+  "nmp": "CN1CCCC1=O",
+  "o-xylene": "Cc1ccccc1C",
+  "oxalyl chloride": "O=C(Cl)C(=O)Cl",
+  "p-cymene": "Cc1ccc(C(C)C)cc1",
+  "palladium acetate": "CC(=O)[O-].CC(=O)[O-].[Pd+2]",
+  "palladium on carbon (pd/c)": "[Pd]",
+  "palladium(ii) acetate": "CC(=O)[O-].CC(=O)[O-].[Pd+2]",
+  "palladium(ii) acetate with sphos ligand": "CC(=O)[O-].CC(=O)[O-].[Pd+2]",
+  "pd(oac)2": "CC(=O)[O-].CC(=O)[O-].[Pd+2]",
+  "pd(pph3)4": "[Pd].c1ccc(P(c2ccccc2)c2ccccc2)cc1.c1ccc(P(c2ccccc2)c2ccccc2)cc1.c1ccc(P(c2ccccc2)c2ccccc2)cc1.c1ccc(P(c2ccccc2)c2ccccc2)cc1",
+  "pd/c": "[Pd]",
+  "pdcl2": "[Cl][Pd][Cl]",
+  "pentane": "CCCCC",
+  "petroleum ether": "CCCCCC",
+  "phcl": "Clc1ccccc1",
+  "phenylboronic acid": "OB(O)c1ccccc1",
+  "piperidine": "C1CCNCC1",
+  "potassium carbonate": "O=C([O-])[O-].[K+].[K+]",
+  "potassium fluoride": "[F-].[K+]",
+  "potassium hydroxide": "[K+].[OH-]",
+  "potassium phosphate": "O=P([O-])([O-])[O-].[K+].[K+].[K+]",
+  "potassium tert-butoxide": "CC(C)(C)[O-].[K+]",
+  "pph3": "c1ccc(P(c2ccccc2)c2ccccc2)cc1",
+  "propanephosphonic anhydride": "CCCP1(=O)OP(=O)(CCC)OP(=O)(CCC)O1",
+  "propylene carbonate": "CC1COC(=O)O1",
+  "pybop": "F[P-](F)(F)(F)(F)F.c1ccc2c(c1)nnn2O[P+](N1CCCC1)(N1CCCC1)N1CCCC1",
+  "pyridine": "c1ccncc1",
+  "pyrrolidine": "C1CCNC1",
+  "silica gel": "O=[Si]=O",
+  "sodium acetate": "CC(=O)[O-].[Na+]",
+  "sodium bicarbonate": "O=C([O-])O.[Na+]",
+  "sodium borohydride": "[BH4-].[Na+]",
+  "sodium carbonate": "O=C([O-])[O-].[Na+].[Na+]",
+  "sodium chloride": "[Cl-].[Na+]",
+  "sodium cyanoborohydride": "[BH3-]C#N.[Na+]",
+  "sodium ethoxide": "CC[O-].[Na+]",
+  "sodium hydride": "[H-].[Na+]",
+  "sodium hydrogen carbonate": "O=C([O-])O.[Na+]",
+  "sodium hydroxide": "[Na+].[OH-]",
+  "sodium sulfate": "O=S(=O)([O-])[O-].[Na+].[Na+]",
+  "sodium tert-butoxide": "CC(C)(C)[O-].[Na+]",
+  "sodium thiosulfate": "O=S([O-])([O-])=S.[Na+].[Na+]",
+  "sodium triacetoxyborohydride": "CC(=O)O[BH-](OC(C)=O)OC(C)=O.[Na+]",
+  "sphos (2-dicyclohexylphosphino-2',6'-dimethoxybiphenyl)": "COc1cccc(OC)c1-c1ccccc1P(C1CCCCC1)C1CCCCC1",
+  "stab": "CC(=O)O[BH-](OC(C)=O)OC(C)=O.[Na+]",
+  "sulfolane": "O=S1(=O)CCCC1",
+  "sulfuric acid": "O=S(=O)(O)O",
+  "t-buoh": "CC(C)(C)O",
+  "t-buok": "CC(C)(C)[O-].[K+]",
+  "tbab": "CCCC[N+](CCCC)(CCCC)CCCC.[Br-]",
+  "tbaf": "CCCC[N+](CCCC)(CCCC)CCCC.[F-]",
+  "tbtu": "CN(C)C(On1nnc2ccccc21)=[N+](C)C.F[B-](F)(F)F",
+  "tempo": "CC1(C)CCCC(C)(C)N1[O]",
+  "tert-amyl methyl ether": "CCC(C)(C)OC",
+  "tert-butanol": "CC(C)(C)O",
+  "tert-butyl 3-ethoxy-4-oxopiperidine-1-carboxylate": "CCOC1CN(C(=O)OC(C)(C)C)CCC1=O",
+  "tert-butyl 4-(benzylamino)-3-ethoxypiperidine-1-carboxylate": "CCO[C@@H]1CN(C(=O)OC(C)(C)C)CC[C@@H]1NCc1ccccc1",
+  "tert-butyl 4-[[3'-(aminomethyl)biphenyl-3-yl]methyl]piperazine-1-carboxylate": "CC(C)(C)OC(=O)N1CCN(Cc2cccc(-c3cccc(CN)c3)c2)CC1",
+  "tetrahydrofuran": "C1CCOC1",
+  "tetrahydrofurfuryl alcohol": "OCC1CCCO1",
+  "tetrakis(triphenylphosphine) palladium": "[Pd].c1ccc(P(c2ccccc2)c2ccccc2)cc1.c1ccc(P(c2ccccc2)c2ccccc2)cc1.c1ccc(P(c2ccccc2)c2ccccc2)cc1.c1ccc(P(c2ccccc2)c2ccccc2)cc1",
+  "tetrakis(triphenylphosphine)palladium": "[Pd].c1ccc(P(c2ccccc2)c2ccccc2)cc1.c1ccc(P(c2ccccc2)c2ccccc2)cc1.c1ccc(P(c2ccccc2)c2ccccc2)cc1.c1ccc(P(c2ccccc2)c2ccccc2)cc1",
+  "tfa": "O=C(O)C(F)(F)F",
+  "tfe": "OCC(F)(F)F",
+  "thf": "C1CCOC1",
+  "thionyl chloride": "O=S(Cl)Cl",
+  "ticl4": "[Cl][Ti]([Cl])([Cl])[Cl]",
+  "titanium(iv) isopropoxide": "CC(C)[O][Ti]([O]C(C)C)([O]C(C)C)[O]C(C)C",
+  "toluene": "Cc1ccccc1",
+  "triethylamine": "CCN(CC)CC",
+  "trifluoroacetic acid": "O=C(O)C(F)(F)F",
+  "triphenylphosphine": "c1ccc(P(c2ccccc2)c2ccccc2)cc1",
+  "tripotassium phosphate": "O=P([O-])([O-])[O-].[K+].[K+].[K+]",
+  "tscl": "Cc1ccc(S(=O)(=O)Cl)cc1",
+  "turpentine": "CC1=CCC2CC1C2(C)C",
+  "water": "O",
+  "water containing 2 wt% tpgs-750-m surfactant (micellar)": "O",
+  "xylene": "Cc1ccccc1C",
+  "xylenes": "Cc1ccccc1C",
+  "zncl2": "[Cl][Zn][Cl]"
+ },
+ "records": {
+  "Br": {
+   "cid": 260,
+   "h_codes": [
+    "H314",
+    "H335"
+   ],
+   "names": [
+    "hbr"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "BrBr": {
+   "cid": 24408,
+   "h_codes": [
+    "H314",
+    "H330",
+    "H400"
+   ],
+   "names": [
+    "br2"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "Brc1ccccc1": {
+   "cid": 7961,
+   "h_codes": [
+    "H226",
+    "H315",
+    "H411"
+   ],
+   "names": [
+    "bromobenzene"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "C(=NC1CCCCC1)=NC1CCCCC1": {
+   "cid": 10868,
+   "h_codes": [
+    "H302",
+    "H311",
+    "H317",
+    "H318"
+   ],
+   "names": [
+    "N,N'-dicyclohexylcarbodiimide (DCC)",
+    "dcc"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "C1CCC2=NCCCN2CC1": {
+   "cid": 81184,
+   "h_codes": [
+    "H301",
+    "H314",
+    "H318"
+   ],
+   "names": [
+    "dbu"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "C1CCCCC1": {
+   "cid": 8078,
+   "h_codes": [
+    "H225",
+    "H304",
+    "H315",
+    "H336",
+    "H400",
+    "H410"
+   ],
+   "names": [
+    "cyclohexane"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "C1CCNC1": {
+   "cid": 31268,
+   "h_codes": [
+    "H302",
+    "H314",
+    "H332"
+   ],
+   "names": [
+    "pyrrolidine"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "C1CCNCC1": {
+   "cid": 8082,
+   "h_codes": [
+    "H225",
+    "H311",
+    "H314",
+    "H331"
+   ],
+   "names": [
+    "piperidine"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "C1CCOC1": {
+   "cid": 8028,
+   "h_codes": [
+    "H225",
+    "H319",
+    "H335",
+    "H351"
+   ],
+   "names": [
+    "tetrahydrofuran",
+    "thf"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "C1CN2CCN1CC2": {
+   "cid": 9237,
+   "h_codes": [
+    "H228",
+    "H302",
+    "H315",
+    "H318"
+   ],
+   "names": [
+    "dabco"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "C1COCCN1": {
+   "cid": 8083,
+   "h_codes": [
+    "H226",
+    "H302",
+    "H312",
+    "H314",
+    "H332"
+   ],
+   "names": [
+    "morpholine"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "C1COCCO1": {
+   "cid": 31275,
+   "h_codes": [
+    "H225",
+    "H319",
+    "H335",
+    "H350"
+   ],
+   "names": [
+    "1,4-dioxane",
+    "dioxane"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "C=C(C)[C@H]1CC=C(C)CC1": {
+   "cid": 440917,
+   "h_codes": [
+    "H226",
+    "H304",
+    "H315",
+    "H317",
+    "H400",
+    "H412"
+   ],
+   "names": [
+    "d-limonene"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CC#N": {
+   "cid": 6342,
+   "h_codes": [
+    "H225",
+    "H302",
+    "H312",
+    "H319",
+    "H332"
+   ],
+   "names": [
+    "acetonitrile",
+    "mecn"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CC(=O)CC(C)C": {
+   "cid": 7909,
+   "h_codes": [
+    "H225",
+    "H319",
+    "H332",
+    "H336",
+    "H351"
+   ],
+   "names": [
+    "methyl isobutyl ketone"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CC(=O)Cl": {
+   "cid": 6367,
+   "h_codes": [
+    "H225",
+    "H314"
+   ],
+   "names": [
+    "acetyl chloride"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CC(=O)N(C)C": {
+   "cid": 31374,
+   "h_codes": [
+    "H312",
+    "H332",
+    "H360D"
+   ],
+   "names": [
+    "N,N-dimethylacetamide",
+    "dimethylacetamide",
+    "dma",
+    "dmac",
+    "n,n-dimethylacetamide"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CC(=O)O": {
+   "cid": 176,
+   "h_codes": [
+    "H226",
+    "H314"
+   ],
+   "names": [
+    "acetic acid",
+    "acoh",
+    "hoac"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CC(=O)OC(C)=O": {
+   "cid": 7918,
+   "h_codes": [
+    "H226",
+    "H302",
+    "H314",
+    "H332"
+   ],
+   "names": [
+    "ac2o",
+    "acetic anhydride"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CC(=O)OC(C)C": {
+   "cid": 7915,
+   "h_codes": [
+    "H225",
+    "H319",
+    "H336"
+   ],
+   "names": [
+    "isopropyl acetate"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CC(=O)OCC(C)C": {
+   "cid": 8038,
+   "h_codes": [
+    "H225"
+   ],
+   "names": [
+    "isobutyl acetate"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CC(=O)OCCC(C)C": {
+   "cid": 31276,
+   "h_codes": [
+    "H226"
+   ],
+   "names": [
+    "isoamyl acetate"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CC(=O)OCCOC(C)=O": {
+   "cid": 8121,
+   "h_codes": [],
+   "names": [
+    "glycol diacetate"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "not_classified"
+  },
+  "CC(=O)O[BH-](OC(C)=O)OC(C)=O.[Na+]": {
+   "cid": 5049666,
+   "h_codes": [
+    "H260",
+    "H315",
+    "H318",
+    "H360"
+   ],
+   "names": [
+    "nabh(oac)3",
+    "sodium triacetoxyborohydride",
+    "stab"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CC(=O)[O-].CC(=O)[O-].[Cu+2]": {
+   "cid": 8895,
+   "h_codes": [
+    "H302"
+   ],
+   "names": [
+    "cu(oac)2"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CC(=O)[O-].CC(=O)[O-].[Pd+2]": {
+   "cid": 167845,
+   "h_codes": [
+    "H317",
+    "H318",
+    "H400",
+    "H410"
+   ],
+   "names": [
+    "palladium acetate",
+    "palladium(II) acetate with SPhos ligand",
+    "palladium(ii) acetate",
+    "pd(oac)2"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CC(=O)[O-].[Na+]": {
+   "cid": 517045,
+   "h_codes": [],
+   "names": [
+    "sodium acetate"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "not_classified"
+  },
+  "CC(=O)c1ccccc1": {
+   "cid": 7410,
+   "h_codes": [
+    "H302",
+    "H319"
+   ],
+   "names": [
+    "acetophenone"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CC(C)(C#N)N=NC(C)(C)C#N": {
+   "cid": 6547,
+   "h_codes": [
+    "H242",
+    "H302",
+    "H332",
+    "H412"
+   ],
+   "names": [
+    "aibn"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CC(C)(C)O": {
+   "cid": 6386,
+   "h_codes": [
+    "H225",
+    "H319",
+    "H332",
+    "H335"
+   ],
+   "names": [
+    "t-buoh",
+    "tert-butanol"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CC(C)(C)OC(=O)N1CCC(=O)CC1": {
+   "cid": 735900,
+   "h_codes": [
+    "H315",
+    "H319"
+   ],
+   "names": [
+    "1-boc-4-piperidone"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CC(C)(C)OC(=O)N1CCN(Cc2cccc(-c3cccc(CN)c3)c2)CC1": {
+   "cid": 57736713,
+   "h_codes": [],
+   "names": [
+    "tert-butyl 4-[[3'-(aminomethyl)biphenyl-3-yl]methyl]piperazine-1-carboxylate"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem: no GHS classification",
+   "status": "no_data"
+  },
+  "CC(C)(C)OC(=O)N1CCN(Cc2cccc(B(O)O)c2)CC1": {
+   "cid": 42609723,
+   "h_codes": [],
+   "names": [
+    "3-[(4-Boc-piperazin-1-yl)methyl]phenylboronic acid"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem: no GHS classification",
+   "status": "no_data"
+  },
+  "CC(C)(C)OC(=O)OC(=O)OC(C)(C)C": {
+   "cid": 90495,
+   "h_codes": [
+    "H226",
+    "H315",
+    "H317",
+    "H319",
+    "H330",
+    "H335"
+   ],
+   "names": [
+    "boc2o",
+    "di-tert-butyl dicarbonate"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CC(C)(C)[O-].[K+]": {
+   "cid": 23665647,
+   "h_codes": [],
+   "names": [
+    "kotbu",
+    "potassium tert-butoxide",
+    "t-buok"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem: no GHS classification",
+   "status": "no_data"
+  },
+  "CC(C)(C)[O-].[Na+]": {
+   "cid": 45051916,
+   "h_codes": [
+    "H314",
+    "H318",
+    "H335"
+   ],
+   "names": [
+    "naotbu",
+    "sodium tert-butoxide"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CC(C)=O": {
+   "cid": 180,
+   "h_codes": [
+    "H225",
+    "H319",
+    "H336"
+   ],
+   "names": [
+    "acetone"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CC(C)CC(=O)c1ccc(C(=O)O)cc1": {
+   "cid": 68156790,
+   "h_codes": [],
+   "names": [
+    "4-(3-methylbutanoyl)benzoic acid"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem: no GHS classification",
+   "status": "no_data"
+  },
+  "CC(C)CCO": {
+   "cid": 31260,
+   "h_codes": [
+    "H226",
+    "H315",
+    "H319",
+    "H332",
+    "H335"
+   ],
+   "names": [
+    "isoamyl alcohol"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CC(C)CO": {
+   "cid": 6560,
+   "h_codes": [
+    "H226",
+    "H315",
+    "H318",
+    "H335",
+    "H336"
+   ],
+   "names": [
+    "isobutanol"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CC(C)Cc1ccccc1": {
+   "cid": 10870,
+   "h_codes": [
+    "H226",
+    "H400",
+    "H410"
+   ],
+   "names": [
+    "isobutylbenzene"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CC(C)O": {
+   "cid": 3776,
+   "h_codes": [
+    "H225",
+    "H319",
+    "H336"
+   ],
+   "names": [
+    "2-propanol",
+    "ipa",
+    "iproh",
+    "isopropanol"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CC(C)OC(C)C": {
+   "cid": 7914,
+   "h_codes": [
+    "H225",
+    "H336"
+   ],
+   "names": [
+    "diisopropyl ether"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CC(C)[O][Ti]([O]C(C)C)([O]C(C)C)[O]C(C)C": {
+   "cid": 11026,
+   "h_codes": [
+    "H226",
+    "H319"
+   ],
+   "names": [
+    "titanium(IV) isopropoxide"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CC(O)C(=O)O": {
+   "cid": 612,
+   "h_codes": [
+    "H315",
+    "H318"
+   ],
+   "names": [
+    "lactic acid"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CC1(C)CCCC(C)(C)N1[O]": {
+   "cid": 549976,
+   "h_codes": [
+    "H302",
+    "H315",
+    "H319",
+    "H335"
+   ],
+   "names": [
+    "tempo"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CC1=CCC2CC1C2(C)C": {
+   "cid": 6654,
+   "h_codes": [
+    "H226",
+    "H304",
+    "H315",
+    "H317",
+    "H400",
+    "H410"
+   ],
+   "names": [
+    "turpentine"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CC1CCC(=O)O1": {
+   "cid": 7921,
+   "h_codes": [],
+   "names": [
+    "gamma-valerolactone"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "not_classified"
+  },
+  "CC1CCCCC1": {
+   "cid": 7962,
+   "h_codes": [
+    "H225",
+    "H304",
+    "H315",
+    "H336",
+    "H411"
+   ],
+   "names": [
+    "methylcyclohexane"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CC1CCCO1": {
+   "cid": 7301,
+   "h_codes": [
+    "H225",
+    "H302",
+    "H315",
+    "H318"
+   ],
+   "names": [
+    "2-methf",
+    "2-methyltetrahydrofuran"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CC1COC(=O)O1": {
+   "cid": 7924,
+   "h_codes": [
+    "H319"
+   ],
+   "names": [
+    "propylene carbonate"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CCC(C)(C)OC": {
+   "cid": 61247,
+   "h_codes": [
+    "H225",
+    "H302",
+    "H336"
+   ],
+   "names": [
+    "tert-amyl methyl ether"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CCC(C)=O": {
+   "cid": 6569,
+   "h_codes": [
+    "H225",
+    "H319",
+    "H336"
+   ],
+   "names": [
+    "methyl ethyl ketone"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CCCCC": {
+   "cid": 8003,
+   "h_codes": [
+    "H225",
+    "H304",
+    "H336",
+    "H411"
+   ],
+   "names": [
+    "n-pentane",
+    "pentane"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CCCCCC": {
+   "cid": 8058,
+   "h_codes": [
+    "H225",
+    "H304",
+    "H315",
+    "H336",
+    "H361F",
+    "H372",
+    "H411"
+   ],
+   "names": [
+    "hexane",
+    "hexanes",
+    "n-hexane",
+    "petroleum ether"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CCCCCCC": {
+   "cid": 8900,
+   "h_codes": [
+    "H225",
+    "H304",
+    "H315",
+    "H336",
+    "H400",
+    "H410"
+   ],
+   "names": [
+    "heptane",
+    "n-heptane"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CCCCO": {
+   "cid": 263,
+   "h_codes": [
+    "H226",
+    "H302",
+    "H315",
+    "H318",
+    "H335",
+    "H336"
+   ],
+   "names": [
+    "1-butanol",
+    "n-butanol"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CCCCOC(C)=O": {
+   "cid": 31272,
+   "h_codes": [
+    "H226",
+    "H336"
+   ],
+   "names": [
+    "n-butyl acetate"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CCCC[N+](CCCC)(CCCC)CCCC.[Br-]": {
+   "cid": 74236,
+   "h_codes": [
+    "H315",
+    "H319"
+   ],
+   "names": [
+    "tbab"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CCCC[N+](CCCC)(CCCC)CCCC.[F-]": {
+   "cid": 2724141,
+   "h_codes": [
+    "H314"
+   ],
+   "names": [
+    "tbaf"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CCCO": {
+   "cid": 1031,
+   "h_codes": [
+    "H225",
+    "H318",
+    "H336"
+   ],
+   "names": [
+    "n-propanol"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CCCOC(C)=O": {
+   "cid": 7997,
+   "h_codes": [
+    "H225",
+    "H319",
+    "H336"
+   ],
+   "names": [
+    "n-propyl acetate"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CCCP1(=O)OP(=O)(CCC)OP(=O)(CCC)O1": {
+   "cid": 111923,
+   "h_codes": [
+    "H314"
+   ],
+   "names": [
+    "propanephosphonic anhydride (T3P, supplied as a 50 wt% solution)"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CCN(C(C)C)C(C)C": {
+   "cid": 81531,
+   "h_codes": [
+    "H225",
+    "H302",
+    "H318",
+    "H331",
+    "H335"
+   ],
+   "names": [
+    "diisopropylethylamine",
+    "dipea",
+    "etn(ipr)2",
+    "n,n-diisopropylethylamine"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CCN(CC)CC": {
+   "cid": 8471,
+   "h_codes": [
+    "H225",
+    "H301",
+    "H311",
+    "H314",
+    "H318",
+    "H331"
+   ],
+   "names": [
+    "et3n",
+    "triethylamine"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CCN=C=NCCCN(C)C.Cl": {
+   "cid": 2723939,
+   "h_codes": [
+    "H302",
+    "H311",
+    "H315",
+    "H317",
+    "H319",
+    "H373",
+    "H400",
+    "H410"
+   ],
+   "names": [
+    "EDC hydrochloride",
+    "EDC hydrochloride (EDC.HCl)",
+    "edc hcl",
+    "edc hydrochloride",
+    "edc-hcl",
+    "edc.hcl",
+    "edci",
+    "edc·hcl"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CCO": {
+   "cid": 702,
+   "h_codes": [
+    "H225"
+   ],
+   "names": [
+    "ethanol",
+    "etoh"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CCOC(=O)C(C#N)=NO": {
+   "cid": 6399078,
+   "h_codes": [
+    "H302",
+    "H315"
+   ],
+   "names": [
+    "ethyl cyano(hydroxyimino)acetate (Oxyma)"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CCOC(=O)CCC(=O)OCC": {
+   "cid": 31249,
+   "h_codes": [],
+   "names": [
+    "diethyl succinate"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "not_classified"
+  },
+  "CCOC(=O)CCN.Cl": {
+   "cid": 458475,
+   "h_codes": [
+    "H315",
+    "H319",
+    "H335"
+   ],
+   "names": [
+    "beta-alanine ethyl ester hydrochloride"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CCOC(=O)CCNC1CCCC1": {
+   "cid": 23053028,
+   "h_codes": [],
+   "names": [
+    "3-cyclopentylamino-propanoic acid ethyl ester"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem: no GHS classification",
+   "status": "no_data"
+  },
+  "CCOC(=O)CCl": {
+   "cid": 7751,
+   "h_codes": [
+    "H301",
+    "H311",
+    "H331",
+    "H400"
+   ],
+   "names": [
+    "ethyl chloroacetate"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CCOC(=O)CN.Cl": {
+   "cid": 2723640,
+   "h_codes": [
+    "H318"
+   ],
+   "names": [
+    "glycine ethyl ester hydrochloride"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CCOC(=O)CNC1CCN(C(=O)OC(C)(C)C)CC1": {
+   "cid": 15380724,
+   "h_codes": [],
+   "names": [
+    "ethyl N-(1-Boc-piperidin-4-yl)glycinate"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem: no GHS classification",
+   "status": "no_data"
+  },
+  "CCOC(=O)[C@H](C)O": {
+   "cid": 92831,
+   "h_codes": [
+    "H226",
+    "H318",
+    "H335"
+   ],
+   "names": [
+    "ethyl lactate"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CCOC(C)(C)C": {
+   "cid": 12512,
+   "h_codes": [
+    "H225",
+    "H336"
+   ],
+   "names": [
+    "ethyl tert-butyl ether"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CCOC(C)=O": {
+   "cid": 8857,
+   "h_codes": [
+    "H225",
+    "H319",
+    "H336"
+   ],
+   "names": [
+    "ethyl acetate",
+    "etoac"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CCOC1CN(C(=O)OC(C)(C)C)CCC1=O": {
+   "cid": 68406177,
+   "h_codes": [],
+   "names": [
+    "tert-butyl 3-ethoxy-4-oxopiperidine-1-carboxylate"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem: no GHS classification",
+   "status": "no_data"
+  },
+  "CCOCC": {
+   "cid": 3283,
+   "h_codes": [
+    "H224",
+    "H302",
+    "H336"
+   ],
+   "names": [
+    "diethyl ether",
+    "et2o"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CCOCC.FB(F)F": {
+   "cid": 8000,
+   "h_codes": [],
+   "names": [
+    "bf3 oet2",
+    "bf3.oet2",
+    "bf3·oet2"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem: no GHS classification",
+   "status": "no_data"
+  },
+  "CCO[C@@H]1CN(C(=O)OC(C)(C)C)CC[C@@H]1NCc1ccccc1": {
+   "cid": 86648597,
+   "h_codes": [],
+   "names": [
+    "tert-butyl 4-(benzylamino)-3-ethoxypiperidine-1-carboxylate"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem: no GHS classification",
+   "status": "no_data"
+  },
+  "CC[O-].[Na+]": {
+   "cid": 2723922,
+   "h_codes": [
+    "H251",
+    "H314"
+   ],
+   "names": [
+    "sodium ethoxide"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CN(C)C(On1nnc2ccccc21)=[N+](C)C.F[B-](F)(F)F": {
+   "cid": 2733207,
+   "h_codes": [
+    "H315",
+    "H317",
+    "H319",
+    "H335"
+   ],
+   "names": [
+    "TBTU"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CN(C)C(On1nnc2ccccc21)=[N+](C)C.F[P-](F)(F)(F)(F)F": {
+   "cid": 2733084,
+   "h_codes": [],
+   "names": [
+    "HBTU"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem: no GHS classification",
+   "status": "no_data"
+  },
+  "CN(C)C(On1nnc2cccnc21)=[N+](C)C.F[P-](F)(F)(F)(F)F": {
+   "cid": 6409673,
+   "h_codes": [
+    "H317"
+   ],
+   "names": [
+    "HATU",
+    "hatu"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CN(C)C=O": {
+   "cid": 6228,
+   "h_codes": [
+    "H312",
+    "H319",
+    "H332",
+    "H360D"
+   ],
+   "names": [
+    "N,N-dimethylformamide",
+    "dimethylformamide",
+    "dmf",
+    "n,n-dimethylformamide"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CN(C)P(=O)(N(C)C)N(C)C": {
+   "cid": 12679,
+   "h_codes": [
+    "H340",
+    "H350"
+   ],
+   "names": [
+    "hexamethylphosphoramide"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CN(C)[P+](On1nnc2ccccc21)(N(C)C)N(C)C.F[P-](F)(F)(F)(F)F": {
+   "cid": 151348,
+   "h_codes": [
+    "H228",
+    "H315",
+    "H335"
+   ],
+   "names": [
+    "BOP reagent"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CN(C)c1ccncc1": {
+   "cid": 14284,
+   "h_codes": [
+    "H301",
+    "H310",
+    "H315"
+   ],
+   "names": [
+    "4-dimethylaminopyridine",
+    "dmap"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CN1CCCC1=O": {
+   "cid": 13387,
+   "h_codes": [
+    "H315",
+    "H319",
+    "H335",
+    "H360D"
+   ],
+   "names": [
+    "N-methyl-2-pyrrolidone",
+    "n-methyl-2-pyrrolidone",
+    "nmp"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CN1CCCN(C)C1=O": {
+   "cid": 81646,
+   "h_codes": [
+    "H302",
+    "H318",
+    "H361F"
+   ],
+   "names": [
+    "dimethylpropyleneurea"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "CN1CCOCC1": {
+   "cid": 7972,
+   "h_codes": [
+    "H225",
+    "H302",
+    "H312",
+    "H314"
+   ],
+   "names": [
+    "N-methylmorpholine"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CO": {
+   "cid": 887,
+   "h_codes": [
+    "H225",
+    "H301",
+    "H311",
+    "H331",
+    "H370"
+   ],
+   "names": [
+    "meoh",
+    "methanol"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "COC(=O)C1(N)CCCCC1.Cl": {
+   "cid": 22645079,
+   "h_codes": [
+    "H302",
+    "H315",
+    "H319",
+    "H335"
+   ],
+   "names": [
+    "1-aminocyclohexanecarboxylic acid methyl ester hydrochloride"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "COC(=O)C1(NC(=O)c2ccoc2)CCCCC1": {
+   "cid": 32474010,
+   "h_codes": [],
+   "names": [
+    "methyl 1-(furan-3-carboxamido)cyclohexanecarboxylate"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem: no GHS classification",
+   "status": "no_data"
+  },
+  "COC(=O)CCN.Cl": {
+   "cid": 2734767,
+   "h_codes": [
+    "H315",
+    "H319",
+    "H335"
+   ],
+   "names": [
+    "Methyl 3-aminopropanoate hydrochloride"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "COC(=O)CCNC(=O)c1ccc(C(=O)CC(C)C)cc1": {
+   "cid": 68157349,
+   "h_codes": [],
+   "names": [
+    "methyl 3-(4-(3-methylbutanoyl)benzamido)propanoate"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem: no GHS classification",
+   "status": "no_data"
+  },
+  "COC(=O)OC": {
+   "cid": 12021,
+   "h_codes": [
+    "H225"
+   ],
+   "names": [
+    "dimethyl carbonate"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "COC(C)(C)C": {
+   "cid": 15413,
+   "h_codes": [
+    "H225",
+    "H315"
+   ],
+   "names": [
+    "methyl tert-butyl ether",
+    "mtbe"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "COC(C)=O": {
+   "cid": 6584,
+   "h_codes": [
+    "H225",
+    "H319",
+    "H336"
+   ],
+   "names": [
+    "methyl acetate"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "COC1CCCC1": {
+   "cid": 138539,
+   "h_codes": [
+    "H225",
+    "H302",
+    "H315",
+    "H319"
+   ],
+   "names": [
+    "cyclopentyl methyl ether"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "COCCO": {
+   "cid": 8019,
+   "h_codes": [
+    "H226",
+    "H302",
+    "H312",
+    "H332",
+    "H360FD"
+   ],
+   "names": [
+    "2-methoxyethanol"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "COCCOC": {
+   "cid": 8071,
+   "h_codes": [
+    "H225",
+    "H332",
+    "H360FD"
+   ],
+   "names": [
+    "1,2-dimethoxyethane",
+    "dme"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "COc1ccc(-c2ccccc2)cc1": {
+   "cid": 11943,
+   "h_codes": [],
+   "names": [
+    "4-methoxybiphenyl"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem: no GHS classification",
+   "status": "no_data"
+  },
+  "COc1ccc(Br)cc1": {
+   "cid": 7730,
+   "h_codes": [
+    "H373",
+    "H412"
+   ],
+   "names": [
+    "4-bromoanisole"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "COc1ccc(C(=O)NCc2ccccc2)cc1": {
+   "cid": 346035,
+   "h_codes": [
+    "H302",
+    "H400"
+   ],
+   "names": [
+    "N-benzyl-4-methoxybenzamide"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "COc1ccc(C(=O)O)cc1": {
+   "cid": 7478,
+   "h_codes": [],
+   "names": [
+    "4-methoxybenzoic acid"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "not_classified"
+  },
+  "COc1cccc(OC)c1-c1ccccc1P(C1CCCCC1)C1CCCCC1": {
+   "cid": 11269872,
+   "h_codes": [
+    "H302",
+    "H315",
+    "H319",
+    "H335"
+   ],
+   "names": [
+    "SPhos (2-dicyclohexylphosphino-2',6'-dimethoxybiphenyl)"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "COc1ccccc1": {
+   "cid": 7519,
+   "h_codes": [
+    "H226",
+    "H315",
+    "H319"
+   ],
+   "names": [
+    "anisole"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CS(=O)(=O)Cl": {
+   "cid": 31297,
+   "h_codes": [
+    "H301",
+    "H311",
+    "H314",
+    "H318",
+    "H330",
+    "H335"
+   ],
+   "names": [
+    "mscl"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "CS(C)=O": {
+   "cid": 679,
+   "h_codes": [],
+   "names": [
+    "dimethyl sulfoxide",
+    "dmso"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "not_classified"
+  },
+  "C[N+](=O)[O-]": {
+   "cid": 6375,
+   "h_codes": [
+    "H226",
+    "H302"
+   ],
+   "names": [
+    "meno2",
+    "nitromethane"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "Cc1ccc(Br)cc1": {
+   "cid": 7805,
+   "h_codes": [
+    "H302",
+    "H315"
+   ],
+   "names": [
+    "4-bromotoluene"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "Cc1ccc(C(C)C)cc1": {
+   "cid": 7463,
+   "h_codes": [
+    "H226",
+    "H304",
+    "H331",
+    "H411"
+   ],
+   "names": [
+    "p-cymene"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "Cc1ccc(S(=O)(=O)Cl)cc1": {
+   "cid": 7397,
+   "h_codes": [
+    "H314",
+    "H318",
+    "H335"
+   ],
+   "names": [
+    "tscl"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "Cc1cccc(C)c1": {
+   "cid": 7929,
+   "h_codes": [
+    "H226",
+    "H312",
+    "H315",
+    "H332"
+   ],
+   "names": [
+    "xylenes"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "Cc1ccccc1": {
+   "cid": 1140,
+   "h_codes": [
+    "H225",
+    "H304",
+    "H315",
+    "H336",
+    "H361D",
+    "H373"
+   ],
+   "names": [
+    "toluene"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "Cc1ccccc1C": {
+   "cid": 7237,
+   "h_codes": [
+    "H226",
+    "H312",
+    "H315",
+    "H332"
+   ],
+   "names": [
+    "o-xylene",
+    "xylene",
+    "xylenes"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "Cl": {
+   "cid": 313,
+   "h_codes": [
+    "H314",
+    "H331"
+   ],
+   "names": [
+    "hcl",
+    "hydrochloric acid"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "ClC(Cl)(Cl)Cl": {
+   "cid": 5943,
+   "h_codes": [
+    "H301",
+    "H311",
+    "H331",
+    "H351",
+    "H372",
+    "H412",
+    "H420"
+   ],
+   "names": [
+    "carbon tetrachloride",
+    "ccl4"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "ClC(Cl)Cl": {
+   "cid": 6212,
+   "h_codes": [
+    "H302",
+    "H315",
+    "H319",
+    "H331",
+    "H351",
+    "H361D",
+    "H372"
+   ],
+   "names": [
+    "chcl3",
+    "chloroform"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "ClCCCl": {
+   "cid": 11,
+   "h_codes": [
+    "H225",
+    "H302",
+    "H315",
+    "H319",
+    "H335",
+    "H350"
+   ],
+   "names": [
+    "1,2-dichloroethane",
+    "dce"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "ClCCl": {
+   "cid": 6344,
+   "h_codes": [
+    "H351"
+   ],
+   "names": [
+    "dcm",
+    "dichloromethane",
+    "methylene chloride"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "Clc1ccccc1": {
+   "cid": 7964,
+   "h_codes": [
+    "H226",
+    "H315",
+    "H332",
+    "H411"
+   ],
+   "names": [
+    "chlorobenzene",
+    "phcl"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "F[P-](F)(F)(F)(F)F.c1ccc2c(c1)nnn2O[P+](N1CCCC1)(N1CCCC1)N1CCCC1": {
+   "cid": 2724699,
+   "h_codes": [
+    "H315",
+    "H319",
+    "H335"
+   ],
+   "names": [
+    "PyBOP"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "II": {
+   "cid": 807,
+   "h_codes": [
+    "H312",
+    "H332",
+    "H400"
+   ],
+   "names": [
+    "i2",
+    "iodine"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "Ic1ccccc1": {
+   "cid": 11575,
+   "h_codes": [
+    "H302",
+    "H319"
+   ],
+   "names": [
+    "iodobenzene"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "NCc1cccc(Br)c1": {
+   "cid": 457587,
+   "h_codes": [
+    "H314"
+   ],
+   "names": [
+    "(3-bromophenyl)methanamine hydrochloride"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "NCc1ccccc1": {
+   "cid": 7504,
+   "h_codes": [
+    "H302",
+    "H312",
+    "H314"
+   ],
+   "names": [
+    "benzylamine"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "NO": {
+   "cid": 787,
+   "h_codes": [
+    "H200",
+    "H290",
+    "H302",
+    "H312",
+    "H315",
+    "H317",
+    "H318",
+    "H335",
+    "H351",
+    "H373",
+    "H400"
+   ],
+   "names": [
+    "hydroxylamine"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "Nc1ccccc1": {
+   "cid": 6115,
+   "h_codes": [
+    "H301",
+    "H311",
+    "H317",
+    "H318",
+    "H331",
+    "H341",
+    "H351",
+    "H372",
+    "H400"
+   ],
+   "names": [
+    "aniline"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "Nc1ncc(Br)nc1-c1ccc(F)cc1": {
+   "cid": 71463989,
+   "h_codes": [],
+   "names": [
+    "5-bromo-3-(4-fluorophenyl)pyrazin-2-amine"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem: no GHS classification",
+   "status": "no_data"
+  },
+  "Nc1ncc(Br)nc1Br": {
+   "cid": 620004,
+   "h_codes": [
+    "H301",
+    "H315",
+    "H318",
+    "H335"
+   ],
+   "names": [
+    "3,5-dibromo-pyrazin-2-ylamine"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "O": {
+   "cid": 962,
+   "h_codes": [],
+   "names": [
+    "H2O",
+    "h2o",
+    "water",
+    "water containing 2 wt% TPGS-750-M surfactant (micellar)"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "not_classified"
+  },
+  "O=C(Cl)C(=O)Cl": {
+   "cid": 65578,
+   "h_codes": [
+    "H260",
+    "H314",
+    "H318",
+    "H331",
+    "H335"
+   ],
+   "names": [
+    "oxalyl chloride"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "O=C(O)C(F)(F)F": {
+   "cid": 6422,
+   "h_codes": [
+    "H314",
+    "H332",
+    "H412"
+   ],
+   "names": [
+    "tfa",
+    "trifluoroacetic acid"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "O=C(O)c1ccccc1": {
+   "cid": 243,
+   "h_codes": [
+    "H315",
+    "H318",
+    "H372"
+   ],
+   "names": [
+    "benzoic acid"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "O=C(O)c1ccoc1": {
+   "cid": 10268,
+   "h_codes": [
+    "H315",
+    "H319",
+    "H335"
+   ],
+   "names": [
+    "3-furancarboxylic acid"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "O=C(OC(=O)c1ccccc1)c1ccccc1": {
+   "cid": 7167,
+   "h_codes": [
+    "H315"
+   ],
+   "names": [
+    "benzoic anhydride",
+    "bz2o"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "O=C(OO)c1cccc(Cl)c1": {
+   "cid": 70297,
+   "h_codes": [
+    "H226",
+    "H314",
+    "H318"
+   ],
+   "names": [
+    "m-cpba",
+    "mcpba"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "O=C([O-])O.[Na+]": {
+   "cid": 516892,
+   "h_codes": [],
+   "names": [
+    "nahco3",
+    "sodium bicarbonate",
+    "sodium hydrogen carbonate"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "not_classified"
+  },
+  "O=C([O-])[O-].[Cs+].[Cs+]": {
+   "cid": 10796,
+   "h_codes": [
+    "H318",
+    "H361F",
+    "H373"
+   ],
+   "names": [
+    "caesium carbonate",
+    "cesium carbonate",
+    "cs2co3"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "O=C([O-])[O-].[K+].[K+]": {
+   "cid": 11430,
+   "h_codes": [
+    "H319"
+   ],
+   "names": [
+    "K2CO3",
+    "k2co3",
+    "potassium carbonate"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "O=C([O-])[O-].[Na+].[Na+]": {
+   "cid": 10340,
+   "h_codes": [
+    "H319"
+   ],
+   "names": [
+    "na2co3",
+    "sodium carbonate"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "O=C(n1ccnc1)n1ccnc1": {
+   "cid": 68263,
+   "h_codes": [
+    "H302",
+    "H314"
+   ],
+   "names": [
+    "1,1'-carbonyldiimidazole (CDI)"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "O=C1CCC(=O)N1Br": {
+   "cid": 67184,
+   "h_codes": [
+    "H302",
+    "H319"
+   ],
+   "names": [
+    "n-bromosuccinimide",
+    "nbs"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "O=C1CCC(=O)N1Cl": {
+   "cid": 31398,
+   "h_codes": [
+    "H302",
+    "H314",
+    "H318",
+    "H335",
+    "H400",
+    "H410"
+   ],
+   "names": [
+    "ncs"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "O=C1CCC(=O)N1I": {
+   "cid": 120273,
+   "h_codes": [
+    "H302",
+    "H315",
+    "H319",
+    "H335"
+   ],
+   "names": [
+    "nis"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "O=C1CCCC1": {
+   "cid": 8452,
+   "h_codes": [
+    "H226",
+    "H315",
+    "H319"
+   ],
+   "names": [
+    "cyclopentanone"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "O=C1CCCCC1": {
+   "cid": 7967,
+   "h_codes": [
+    "H226",
+    "H332"
+   ],
+   "names": [
+    "cyclohexanone"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "O=C1CC[C@H]2CO[C@@H]1O2": {
+   "cid": 10975499,
+   "h_codes": [
+    "H319"
+   ],
+   "names": [
+    "cyrene"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "O=C1OCCO1": {
+   "cid": 7303,
+   "h_codes": [
+    "H302",
+    "H319",
+    "H373"
+   ],
+   "names": [
+    "ethylene carbonate"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "O=CO": {
+   "cid": 284,
+   "h_codes": [
+    "H226",
+    "H290",
+    "H302",
+    "H314",
+    "H318",
+    "H331"
+   ],
+   "names": [
+    "formic acid",
+    "hco2h"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "O=C[O-].[NH4+]": {
+   "cid": 2723923,
+   "h_codes": [
+    "H315",
+    "H319",
+    "H335"
+   ],
+   "names": [
+    "ammonium formate"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "O=Cc1ccccc1": {
+   "cid": 240,
+   "h_codes": [
+    "H302"
+   ],
+   "names": [
+    "benzaldehyde"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "O=P([O-])([O-])[O-].[K+].[K+].[K+]": {
+   "cid": 62657,
+   "h_codes": [
+    "H315",
+    "H319",
+    "H335"
+   ],
+   "names": [
+    "k3po4",
+    "potassium phosphate",
+    "tripotassium phosphate"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "O=S(=O)(O)O": {
+   "cid": 1118,
+   "h_codes": [
+    "H314"
+   ],
+   "names": [
+    "h2so4",
+    "sulfuric acid"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "O=S(=O)([O-])[O-].[Cu+2]": {
+   "cid": 24462,
+   "h_codes": [
+    "H302",
+    "H315",
+    "H319",
+    "H400",
+    "H410"
+   ],
+   "names": [
+    "cuso4"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "O=S(=O)([O-])[O-].[Mg+2]": {
+   "cid": 24083,
+   "h_codes": [
+    "H302",
+    "H312",
+    "H332"
+   ],
+   "names": [
+    "magnesium sulfate",
+    "mgso4"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "O=S(=O)([O-])[O-].[Na+].[Na+]": {
+   "cid": 24436,
+   "h_codes": [],
+   "names": [
+    "na2so4",
+    "sodium sulfate"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "not_classified"
+  },
+  "O=S(Cl)Cl": {
+   "cid": 24386,
+   "h_codes": [
+    "H302",
+    "H314",
+    "H332"
+   ],
+   "names": [
+    "thionyl chloride"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "O=S([O-])([O-])=S.[Na+].[Na+]": {
+   "cid": 24477,
+   "h_codes": [],
+   "names": [
+    "na2s2o3",
+    "sodium thiosulfate"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "not_classified"
+  },
+  "O=S1(=O)CCCC1": {
+   "cid": 31347,
+   "h_codes": [
+    "H302"
+   ],
+   "names": [
+    "sulfolane"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "O=[Si]=O": {
+   "cid": 24261,
+   "h_codes": [],
+   "names": [
+    "celite",
+    "silica gel"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "not_classified"
+  },
+  "OB(O)O": {
+   "cid": 7628,
+   "h_codes": [
+    "H360FD"
+   ],
+   "names": [
+    "boric acid (catalytic)"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "OB(O)c1ccc(F)cc1": {
+   "cid": 285645,
+   "h_codes": [
+    "H302",
+    "H315",
+    "H319",
+    "H335"
+   ],
+   "names": [
+    "4-fluorophenylboronic acid"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "OB(O)c1ccccc1": {
+   "cid": 66827,
+   "h_codes": [
+    "H302"
+   ],
+   "names": [
+    "phenylboronic acid"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "OC(C(F)(F)F)C(F)(F)F": {
+   "cid": 13529,
+   "h_codes": [
+    "H302",
+    "H314",
+    "H332",
+    "H335"
+   ],
+   "names": [
+    "hexafluoroisopropanol",
+    "hfip"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "OCC(F)(F)F": {
+   "cid": 6409,
+   "h_codes": [
+    "H226",
+    "H301",
+    "H312",
+    "H315",
+    "H318",
+    "H331",
+    "H373"
+   ],
+   "names": [
+    "2,2,2-trifluoroethanol",
+    "tfe"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "OCC(O)CO": {
+   "cid": 753,
+   "h_codes": [],
+   "names": [
+    "glycerol"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "not_classified"
+  },
+  "OCC1CCCO1": {
+   "cid": 7360,
+   "h_codes": [
+    "H319",
+    "H360DF"
+   ],
+   "names": [
+    "tetrahydrofurfuryl alcohol"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "OCCCO": {
+   "cid": 10442,
+   "h_codes": [],
+   "names": [
+    "1,3-propanediol"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "not_classified"
+  },
+  "OCCO": {
+   "cid": 174,
+   "h_codes": [
+    "H302"
+   ],
+   "names": [
+    "ethylene glycol"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "OCc1ccccc1": {
+   "cid": 244,
+   "h_codes": [
+    "H302",
+    "H317",
+    "H319"
+   ],
+   "names": [
+    "benzyl alcohol"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "OO": {
+   "cid": 784,
+   "h_codes": [
+    "H271",
+    "H302",
+    "H314",
+    "H332"
+   ],
+   "names": [
+    "h2o2",
+    "hydrogen peroxide"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "On1nnc2ccccc21": {
+   "cid": 75771,
+   "h_codes": [
+    "H203"
+   ],
+   "names": [
+    "1-hydroxybenzotriazole",
+    "1-hydroxybenzotriazole (HOBt)",
+    "hobt"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "On1nnc2cccnc21": {
+   "cid": 181649,
+   "h_codes": [
+    "H204",
+    "H302",
+    "H315",
+    "H319"
+   ],
+   "names": [
+    "1-hydroxy-7-azabenzotriazole (HOAt)"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "S=C=S": {
+   "cid": 6348,
+   "h_codes": [
+    "H225",
+    "H315",
+    "H319",
+    "H361FD",
+    "H372"
+   ],
+   "names": [
+    "carbon disulfide"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "[AlH4-].[Li+]": {
+   "cid": 28112,
+   "h_codes": [
+    "H260",
+    "H314"
+   ],
+   "names": [
+    "lialh4",
+    "lithium aluminium hydride",
+    "lithium aluminum hydride"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "[BH3-]C#N.[Na+]": {
+   "cid": 5003444,
+   "h_codes": [
+    "H228",
+    "H300",
+    "H310",
+    "H314",
+    "H330",
+    "H400",
+    "H410"
+   ],
+   "names": [
+    "Sodium cyanoborohydride",
+    "sodium cyanoborohydride"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "[BH3-][n+]1ccccc1C": {
+   "cid": 11320914,
+   "h_codes": [
+    "H228",
+    "H301",
+    "H311",
+    "H330"
+   ],
+   "names": [
+    "2-picoline borane"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "[BH4-].[Na+]": {
+   "cid": 4311764,
+   "h_codes": [
+    "H260",
+    "H301",
+    "H314",
+    "H318"
+   ],
+   "names": [
+    "nabh4",
+    "sodium borohydride"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "[C-]#[O+]": {
+   "cid": 281,
+   "h_codes": [
+    "H220",
+    "H331",
+    "H360D",
+    "H372"
+   ],
+   "names": [
+    "carbon monoxide"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "[Ca+2].[Cl-].[Cl-]": {
+   "cid": 5284359,
+   "h_codes": [
+    "H319"
+   ],
+   "names": [
+    "calcium chloride"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "[Cl-].[Li+]": {
+   "cid": 433294,
+   "h_codes": [
+    "H302",
+    "H315",
+    "H319"
+   ],
+   "names": [
+    "licl",
+    "lithium chloride"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "[Cl-].[NH4+]": {
+   "cid": 25517,
+   "h_codes": [
+    "H302",
+    "H319"
+   ],
+   "names": [
+    "ammonium chloride",
+    "nh4cl"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "[Cl-].[Na+]": {
+   "cid": 5234,
+   "h_codes": [
+    "H318",
+    "H412"
+   ],
+   "names": [
+    "nacl",
+    "sodium chloride"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "[Cl][Al]([Cl])[Cl]": {
+   "cid": 24012,
+   "h_codes": [
+    "H314"
+   ],
+   "names": [
+    "alcl3"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "[Cl][Cu]": {
+   "cid": 62652,
+   "h_codes": [
+    "H302",
+    "H400",
+    "H410"
+   ],
+   "names": [
+    "cucl"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "[Cl][Fe]([Cl])[Cl]": {
+   "cid": 24380,
+   "h_codes": [
+    "H302",
+    "H314",
+    "H412"
+   ],
+   "names": [
+    "fecl3"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "[Cl][Pd][Cl]": {
+   "cid": 24290,
+   "h_codes": [
+    "H290",
+    "H302",
+    "H317",
+    "H318",
+    "H400",
+    "H410"
+   ],
+   "names": [
+    "pdcl2"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "[Cl][Ti]([Cl])([Cl])[Cl]": {
+   "cid": 24193,
+   "h_codes": [
+    "H314"
+   ],
+   "names": [
+    "ticl4"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "[Cl][Zn][Cl]": {
+   "cid": 5727,
+   "h_codes": [
+    "H302",
+    "H314",
+    "H400",
+    "H410"
+   ],
+   "names": [
+    "zncl2"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "[Cu][Br]": {
+   "cid": 24593,
+   "h_codes": [
+    "H302",
+    "H315",
+    "H318",
+    "H400",
+    "H410"
+   ],
+   "names": [
+    "cubr"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "[Cu][I]": {
+   "cid": 24350,
+   "h_codes": [],
+   "names": [
+    "copper(i) iodide",
+    "cui"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem: no GHS classification",
+   "status": "no_data"
+  },
+  "[F-].[K+]": {
+   "cid": 522689,
+   "h_codes": [
+    "H301",
+    "H311",
+    "H331"
+   ],
+   "names": [
+    "potassium fluoride"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "[H-].[Na+]": {
+   "cid": 24758,
+   "h_codes": [],
+   "names": [
+    "nah",
+    "sodium hydride"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem: no GHS classification",
+   "status": "no_data"
+  },
+  "[HH]": {
+   "cid": 783,
+   "h_codes": [
+    "H220"
+   ],
+   "names": [
+    "hydrogen"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "[K+].[OH-]": {
+   "cid": 14797,
+   "h_codes": [
+    "H302",
+    "H314"
+   ],
+   "names": [
+    "koh",
+    "potassium hydroxide"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "[Li+].[OH-]": {
+   "cid": 3939,
+   "h_codes": [
+    "H302",
+    "H314",
+    "H318"
+   ],
+   "names": [
+    "lioh",
+    "lithium hydroxide"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "[Na+].[OH-]": {
+   "cid": 14798,
+   "h_codes": [
+    "H314"
+   ],
+   "names": [
+    "naoh",
+    "sodium hydroxide"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "[OH3+]": {
+   "cid": 123332,
+   "h_codes": [],
+   "names": [
+    "hydronium"
+   ],
+   "retrieved": "2026-11-13",
+   "source": "PubChem: no GHS classification",
+   "status": "no_data"
+  },
+  "[Pd]": {
+   "cid": 23938,
+   "h_codes": [],
+   "names": [
+    "palladium on carbon (Pd/C)",
+    "pd/c"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "not_classified"
+  },
+  "[Pd].c1ccc(P(c2ccccc2)c2ccccc2)cc1.c1ccc(P(c2ccccc2)c2ccccc2)cc1.c1ccc(P(c2ccccc2)c2ccccc2)cc1.c1ccc(P(c2ccccc2)c2ccccc2)cc1": {
+   "cid": 11979704,
+   "h_codes": [
+    "H302",
+    "H317",
+    "H413"
+   ],
+   "names": [
+    "Pd(PPh3)4",
+    "pd(pph3)4",
+    "tetrakis(triphenylphosphine) palladium (0)",
+    "tetrakis(triphenylphosphine)palladium(0)"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "c1ccc(CN2CCOCC2)cc1": {
+   "cid": 249546,
+   "h_codes": [
+    "H315",
+    "H319"
+   ],
+   "names": [
+    "N-benzylmorpholine"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "c1ccc(P(c2ccccc2)c2ccccc2)cc1": {
+   "cid": 11776,
+   "h_codes": [
+    "H302",
+    "H317",
+    "H413"
+   ],
+   "names": [
+    "pph3",
+    "triphenylphosphine"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (European Chemicals Agency (ECHA))",
+   "status": "classified"
+  },
+  "c1ccccc1": {
+   "cid": 241,
+   "h_codes": [
+    "H225",
+    "H304",
+    "H315",
+    "H319",
+    "H340",
+    "H350",
+    "H372"
+   ],
+   "names": [
+    "benzene"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  },
+  "c1ccncc1": {
+   "cid": 1049,
+   "h_codes": [
+    "H225",
+    "H302",
+    "H312",
+    "H332"
+   ],
+   "names": [
+    "pyridine"
+   ],
+   "retrieved": "2026-11-12",
+   "source": "PubChem GHS Classification (Regulation (EC) No 1272/2008 of the European Parliament and of the Council)",
+   "status": "classified"
+  }
+ }
+}

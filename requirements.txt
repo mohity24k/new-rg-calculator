@@ -1,8 +1,11 @@
-streamlit>=1.50
-plotly>=5.18
-pandas>=2.0
-requests
-pymupdf
-rdkit
-py2opsin
-pyyaml
+# Runtime dependencies of the app (pinned). Java (a JRE) is also needed for OPSIN name parsing.
+streamlit==1.67.0
+plotly==7.1.0
+pandas==3.0.5
+numpy==2.5.3
+requests==2.34.2
+pymupdf==2.1
+rdkit==2026.9.2
+py2opsin==1.2.0
+pyyaml==6.0.3
+reportlab==5.0.1

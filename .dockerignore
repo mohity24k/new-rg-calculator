@@ -1,0 +1,17 @@
+.git
+.github
+.devcontainer
+__pycache__
+*.pyc
+.pytest_cache
+data
+docs
+tests
+notebooks
+docling
+benchmarks
+scripts/*
+!scripts/export_feedback.py
+gms/data/precedent_reactions.jsonl.gz
+.streamlit/secrets.toml
+.env

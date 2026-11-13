@@ -5,8 +5,8 @@ import math
 
 import pytest
 
-from modules import data_export as dx
-from modules import mass_metrics as mm
+from gms import report
+from gms.metrics import mass as mm
 
 
 def curzons():
@@ -94,8 +94,8 @@ def test_zero_product_mass_is_infinite_but_exportable():
     r = mm.compute_all_mass_metrics(reactants, 262.32, 0.0, None, aux)
     assert math.isinf(r["Process Mass Intensity (PMI, kg/kg)"])
     assert r["Mass Productivity (MP, %)"] == 0.0
-    json.loads(dx.to_json_bytes([dx.build_combined_report("Route A", mass_metrics=r)]))  # valid JSON
-    assert "infinite" in dx.build_summary_dataframe(r)["Value"].tolist()
+    cleaned = report._clean(r)                                   # infinity is not valid JSON
+    assert json.loads(json.dumps(cleaned, allow_nan=False))["Process Mass Intensity (PMI, kg/kg)"] == "infinite"
 
 
 def test_no_reactants_does_not_crash():

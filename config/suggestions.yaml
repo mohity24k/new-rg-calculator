@@ -1,0 +1,35 @@
+# Suggestions: confidence levels and the built-in (non-table) candidates.
+
+confidence:
+  # "high" needs a study of this swap on this reaction class, a verified reference AND
+  # precedents in the dataset. "moderate" needs one of the two kinds of support.
+  precedents_for_high: 20
+  precedents_for_moderate: 5
+
+precedents:
+  examples_shown: 5
+
+stoichiometry:
+  min_equiv: 1.5                # suggest cutting a reactant or reagent used at or above this
+  target_equiv: 1.2             # used when the dataset gives no typical value for the class
+  min_precedents: 20            # precedents needed before the dataset's median is used as the target
+
+concentration:
+  max_ml_per_mmol: 10
+  target_ml_per_mmol: 5
+
+# The no-regression check compares these metrics (tolerances: config/metrics.yaml).
+checked_metrics: [ae, rme, ce, erf, pmi, mi, e_factor, mp, emy, ecoscale, hazmat]
+
+# Cost check: relative increase of the material cost that is still accepted.
+cost_tolerance_rel: 0.0
+
+# Hazard check: accepted increase of the mass-weighted CHEM21 solvent class (1-4).
+solvent_class_tolerance: 0.01
+
+# "Crystallisation instead of chromatography": the amount of crystallisation solvent is not
+# known, so this assumed amount is added to the candidate and marked as an estimate.
+crystallisation:
+  solvent: ethanol
+  smiles: "CCO"
+  ml_per_g_product: 10

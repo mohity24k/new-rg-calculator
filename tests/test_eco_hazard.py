@@ -4,8 +4,8 @@ import math
 
 import pytest
 
-from modules import eco_scale as es
-from modules import hazard_metrics as hz
+from gms.metrics import ecoscale as es
+from gms.metrics import hazard_ratios as hz
 
 LLE = "Liquid-liquid extraction (incl. drying/filtration of desiccant)"
 RM = "Removal of solvent (bp < 150 degC)"

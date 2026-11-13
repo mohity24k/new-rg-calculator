@@ -1,0 +1,66 @@
+id: redam-nabh3cn-methanol
+title: Reductive amination with sodium cyanoborohydride in methanol
+source:
+  description: Procedure from a US patent, as recorded in the Open Reaction Database (CC BY-SA 4.0). Amounts are
+    those stated in the procedure; workup amounts that the patent does not state are not included.
+  patent: US07491713B2
+  ord_reaction_id: ord-71934f819a8c472dab808ddb4f6eba3f
+  procedure_text: Sodium cyanoborohydride (189 mg, 3.01 mmol) was added to a solution of 1-boc-4-piperidone (500
+    mg, 2.51 mmol) and glycine ethyl ester hydrochloride (350 mg, 2.51 mmol) in methanol (12.5 mL). After 16 h,
+    the mixture was quenched with saturated ammonium chloride solution, concentrated, and partitioned between dichloromethane
+    and saturated sodium bicarbonate solution. The organic layer was washed with brine, dried over magnesium sulfate,
+    filtered, and concentrated. Purification by silica gel chromatography [100% dichloromethane→95% dichloromethane/5%
+    (10% ammonium hydroxide/methanol)] gave the title compound (600 mg).
+reaction:
+  name: ethyl N-(1-Boc-piperidin-4-yl)glycinate (US07491713B2)
+  reaction_class: reductive_amination
+  reported_yield_percent: 83.5
+  temperature_c: 22
+  time_h: 16
+  workup_steps:
+  - Liquid-liquid extraction (incl. drying/filtration of desiccant)
+  - Classical chromatography
+  source:
+    entry: benchmark
+    ord_reaction_id: ord-71934f819a8c472dab808ddb4f6eba3f
+    patent: US07491713B2
+  components:
+  - name: Sodium cyanoborohydride
+    role: reagent
+    smiles: '[BH3-]C#N.[Na+]'
+    mass_g: 0.189
+  - name: 1-boc-4-piperidone
+    role: reactant
+    smiles: CC(C)(C)OC(=O)N1CCC(=O)CC1
+    mass_g: 0.5
+  - name: glycine ethyl ester hydrochloride
+    role: reactant
+    smiles: CCOC(=O)CN.Cl
+    mass_g: 0.35
+  - name: methanol
+    role: reaction_solvent
+    smiles: CO
+    volume_ml: 12.5
+  - name: ethyl N-(1-Boc-piperidin-4-yl)glycinate
+    role: product
+    smiles: CCOC(=O)CNC1CCN(C(=O)OC(C)(C)C)CC1
+    mass_g: 0.6
+known_greener:
+- description: Sodium triacetoxyborohydride in place of sodium cyanoborohydride (no cyanide by-products)
+  kind: reagent
+  target: Sodium cyanoborohydride
+  replacement_smiles:
+  - '[Na+].CC(=O)O[BH-](OC(C)=O)OC(C)=O'
+  source:
+    citation: A. F. Abdel-Magid, K. G. Carson, B. D. Harris, C. A. Maryanoff and R. D. Shah, J. Org. Chem., 1996,
+      61, 3849-3862
+    doi: 10.1021/jo960057x
+- description: 2-Picoline borane in place of sodium cyanoborohydride
+  kind: reagent
+  target: Sodium cyanoborohydride
+  replacement_smiles:
+  - Cc1ccccn1.B
+  - '[BH3-][n+]1ccccc1C'
+  source:
+    citation: S. Sato, T. Sakamoto, E. Miyazawa and Y. Kikugawa, Tetrahedron, 2004, 60, 7899-7906
+    doi: 10.1016/j.tet.2004.06.045

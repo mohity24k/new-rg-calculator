@@ -1,0 +1,182 @@
+# Metric registry: one entry per metric the application reports.
+#
+#   label / short / unit   how the metric is shown
+#   direction              "higher" or "lower" = which way is better
+#   good / moderate        colour thresholds (green / amber / red). For "higher": value >= good is
+#                          green, >= moderate is amber. For "lower": value <= good is green,
+#                          <= moderate is amber. These are the thresholds the app used before v1.
+#   tolerance_rel/_abs     no-regression check: a candidate may be worse than the original by at
+#                          most max(tolerance_rel x |original|, tolerance_abs) before it is rejected.
+#                          The mass-intensity metrics have 5%: a solvent swap at equal volume
+#                          changes the mass by the density ratio (hexane -> heptane: +4%), and lab
+#                          amounts are not known more precisely than that.
+#   yield_dependent        true if the value changes with the isolated yield
+#   legacy_label           the label used in exports before v1 (kept in the CSV/JSON reports)
+#   reference              formula source
+#
+# Change a threshold here; no code change is needed.
+
+metrics:
+  ae:
+    label: Atom economy
+    short: AE
+    unit: "%"
+    direction: higher
+    good: 80
+    moderate: 60
+    tolerance_rel: 0.0
+    tolerance_abs: 0.5
+    yield_dependent: false
+    legacy_label: "Atom Economy (AE, %)"
+    reference: "Trost 1991; Tamargo et al. 2024, Eq. 10.4"
+    help: "Share of the reactant mass that can end up in the product at 100% yield and exact stoichiometry."
+  rme:
+    label: Reaction mass efficiency
+    short: RME
+    unit: "%"
+    direction: higher
+    good: 70
+    moderate: 50
+    tolerance_rel: 0.02
+    tolerance_abs: 0.5
+    yield_dependent: true
+    legacy_label: "Reaction Mass Efficiency (RME, %)"
+    reference: "Curzons et al. 2001; Tamargo et al. 2024, Eq. 10.10"
+    help: "Isolated product mass divided by the mass of all reactants and stoichiometric reagents charged."
+  pmi:
+    label: Process mass intensity
+    short: PMI
+    unit: "kg/kg"
+    direction: lower
+    good: 5
+    moderate: 20
+    tolerance_rel: 0.05
+    tolerance_abs: 0.05
+    yield_dependent: true
+    legacy_label: "Process Mass Intensity (PMI, kg/kg)"
+    reference: "Jimenez-Gonzalez et al. 2011; Tamargo et al. 2024, Sec. 10.1.1.6"
+    help: "Total mass of everything used, including water, per mass of isolated product. 1 is the ideal."
+  mi:
+    label: Mass intensity (without water)
+    short: MI
+    unit: "kg/kg"
+    direction: lower
+    good: 5
+    moderate: 20
+    tolerance_rel: 0.05
+    tolerance_abs: 0.05
+    yield_dependent: true
+    legacy_label: "Mass Intensity excl. water (MI, kg/kg)"
+    reference: "Tamargo et al. 2024, Eq. 10.25"
+    help: "Like PMI, but water is not counted."
+  e_factor:
+    label: E-factor
+    short: E
+    unit: "kg/kg"
+    direction: lower
+    good: 5
+    moderate: 20
+    tolerance_rel: 0.05
+    tolerance_abs: 0.05
+    yield_dependent: true
+    legacy_label: "E-Factor (kg waste/kg product)"
+    reference: "Sheldon; Tamargo et al. 2024, Eq. 10.27 (E = PMI - 1)"
+    help: "Mass of waste per mass of product. 0 is the ideal."
+  mp:
+    label: Mass productivity
+    short: MP
+    unit: "%"
+    direction: higher
+    good: 20
+    moderate: 5
+    tolerance_rel: 0.05
+    tolerance_abs: 0.05
+    yield_dependent: true
+    legacy_label: "Mass Productivity (MP, %)"
+    reference: "Tamargo et al. 2024, Eq. 10.28 (100 / MI)"
+    help: "Share of the input mass (without water) that ends up as product."
+  emy:
+    label: Effective mass yield
+    short: EMY
+    unit: "%"
+    direction: higher
+    good: 50
+    moderate: 20
+    tolerance_rel: 0.05
+    tolerance_abs: 0.05
+    yield_dependent: true
+    legacy_label: "Effective Mass Yield (EMY, %)"
+    reference: "Hudlicky et al. 1999; Tamargo et al. 2024, Eq. 10.9"
+    help: "Product mass divided by the mass of the non-benign materials. Water is always benign."
+  erf:
+    label: Excess reactant factor
+    short: ERF
+    unit: ""
+    direction: lower
+    good: 1.1
+    moderate: 1.5
+    tolerance_rel: 0.0
+    tolerance_abs: 0.01
+    yield_dependent: false
+    legacy_label: "Excess Reactant Factor (ERF)"
+    reference: "Tamargo et al. 2024, Eq. 10.18 (stoichiometric factor)"
+    help: "Reactant mass charged divided by the stoichiometric mass. 1 means no excess."
+  yield:
+    label: Yield
+    short: Yield
+    unit: "%"
+    direction: higher
+    good: 80
+    moderate: 50
+    tolerance_rel: 0.0
+    tolerance_abs: 0.0
+    yield_dependent: true
+    legacy_label: "Percentage Yield (%)"
+    reference: "Tamargo et al. 2024, Eqs. 10.1-10.2"
+    help: "Isolated product mass divided by the theoretical product mass."
+  ce:
+    label: Carbon efficiency
+    short: CE
+    unit: "%"
+    direction: higher
+    good: 80
+    moderate: 60
+    tolerance_rel: 0.02
+    tolerance_abs: 0.5
+    yield_dependent: true
+    legacy_label: "Carbon Efficiency (CE, %)"
+    reference: "Tamargo et al. 2024, Eq. 10.33"
+    help: "Share of the carbon in the reactants that ends up in the isolated product."
+  ecoscale:
+    label: EcoScale
+    short: EcoScale
+    unit: "points"
+    direction: higher
+    good: 75
+    moderate: 50
+    # 5 points = one EcoScale hazard symbol. The EcoScale gives "highly flammable" the same
+    # penalty as "toxic", so a swap from a non-flammable hazardous solvent (dichloromethane)
+    # to a recommended flammable one (ethyl acetate) loses 5 points. With a smaller tolerance
+    # the check rejects every such swap. A loss inside the tolerance is shown as a trade-off.
+    tolerance_rel: 0.0
+    tolerance_abs: 5.0
+    yield_dependent: true
+    legacy_label: "Eco-Scale Score"
+    reference: "Van Aken, Strekowski, Patiny 2006; Tamargo et al. 2024, Table 10.3"
+    help: "100 minus penalty points for yield, price, safety, set-up, temperature/time and workup."
+  hazmat:
+    label: High-hazard mass intensity
+    short: HazMI
+    unit: "kg/kg"
+    direction: lower
+    good: 0.5
+    moderate: 5
+    tolerance_rel: 0.05
+    tolerance_abs: 0.01
+    yield_dependent: true
+    legacy_label: null
+    reference: "This tool: mass of materials with a high hazard score (config/hazard.yaml) per mass of product"
+    help: "Mass of high-hazard materials (for example CMR or highly toxic substances) used per mass of product."
+
+# Metrics shown on the score card, in this order.
+display_order: [yield, ae, rme, ce, erf, pmi, mi, e_factor, mp, emy, ecoscale, hazmat]

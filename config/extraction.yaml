@@ -1,4 +1,4 @@
-# Settings for the dataset extraction pipeline (modules/extraction).
+# Settings for the dataset extraction pipeline (gms/extraction).
 # Every threshold the pipeline uses lives here. Edit and re-run; no code changes needed.
 
 page_filter:

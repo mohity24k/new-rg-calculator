@@ -1,0 +1,571 @@
+{
+ "compound_hazards": {
+  "E": [
+   "E - Explosive"
+  ],
+  "F|F+": [
+   "F+ - Extremely flammable"
+  ],
+  "N|N": [
+   "N - Dangerous to environment"
+  ],
+  "T|T+|N": [
+   "N - Dangerous to environment",
+   "T+ - Extremely toxic"
+  ],
+  "x|": []
+ },
+ "eco": {
+  "floor_at_zero": {
+   "inputs": {
+    "price_category": "Very expensive (> $50 for 10 mmol product)",
+    "route_name": "r",
+    "safety_hazards": [
+     "E - Explosive",
+     "E - Explosive",
+     "E - Explosive",
+     "E - Explosive",
+     "E - Explosive",
+     "E - Explosive"
+    ],
+    "workup_steps": [
+     "Classical chromatography",
+     "Classical chromatography",
+     "Classical chromatography"
+    ],
+    "yield_pct": 0.0
+   },
+   "outputs": {
+    "Eco-Scale Score": 0.0,
+    "Price Penalty": 5,
+    "Route": "r",
+    "Safety Penalty": 60,
+    "Technical Setup Penalty": 0,
+    "Temperature/Time Penalty": 0,
+    "Total Penalty": 145.0,
+    "Workup Penalty": 30,
+    "Yield Penalty": 50.0
+   }
+  },
+  "harsh": {
+   "inputs": {
+    "price_category": "Very expensive (> $50 for 10 mmol product)",
+    "route_name": "r",
+    "safety_hazards": [
+     "T+ - Extremely toxic",
+     "F+ - Extremely flammable",
+     "E - Explosive"
+    ],
+    "technical_setups": [
+     "Inert gas atmosphere",
+     "Glove box",
+     "Inert gas atmosphere",
+     "Pressure equipment (> 1 atm)"
+    ],
+    "temp_time_category": "Cooling, < 0 degC",
+    "workup_steps": [
+     "Classical chromatography",
+     "Distillation"
+    ],
+    "yield_pct": 42.5
+   },
+   "outputs": {
+    "Eco-Scale Score": 11.25,
+    "Price Penalty": 5,
+    "Route": "r",
+    "Safety Penalty": 30,
+    "Technical Setup Penalty": 7,
+    "Temperature/Time Penalty": 5,
+    "Total Penalty": 88.75,
+    "Workup Penalty": 13,
+    "Yield Penalty": 28.75
+   }
+  },
+  "ideal": {
+   "inputs": {
+    "price_category": "Inexpensive (< $10 for 10 mmol product)",
+    "route_name": "r",
+    "yield_pct": 100.0
+   },
+   "outputs": {
+    "Eco-Scale Score": 100.0,
+    "Price Penalty": 0,
+    "Route": "r",
+    "Safety Penalty": 0,
+    "Technical Setup Penalty": 0,
+    "Temperature/Time Penalty": 0,
+    "Total Penalty": 0.0,
+    "Workup Penalty": 0,
+    "Yield Penalty": 0.0
+   }
+  },
+  "single_workup_category": {
+   "inputs": {
+    "price_category": "Expensive ($10 - $50 for 10 mmol product)",
+    "route_name": "r",
+    "temp_time_category": "Room temperature, < 24 h",
+    "workup_category": "Classical chromatography",
+    "yield_pct": 90.0
+   },
+   "outputs": {
+    "Eco-Scale Score": 81.0,
+    "Price Penalty": 3,
+    "Route": "r",
+    "Safety Penalty": 0,
+    "Technical Setup Penalty": 0,
+    "Temperature/Time Penalty": 1,
+    "Total Penalty": 19.0,
+    "Workup Penalty": 10,
+    "Yield Penalty": 5.0
+   }
+  },
+  "table_10_4_like": {
+   "inputs": {
+    "price_category": "Inexpensive (< $10 for 10 mmol product)",
+    "route_name": "r",
+    "safety_hazards": [
+     "T - Toxic",
+     "N - Dangerous to environment",
+     "T - Toxic",
+     "F - Highly flammable"
+    ],
+    "technical_setups": [
+     "Common setup"
+    ],
+    "temp_time_category": "Heating, > 1 h",
+    "workup_steps": [
+     "Liquid-liquid extraction (incl. drying/filtration of desiccant)",
+     "Liquid-liquid extraction (incl. drying/filtration of desiccant)",
+     "Crystallization and filtration"
+    ],
+    "yield_pct": 87.0
+   },
+   "outputs": {
+    "Eco-Scale Score": 63.5,
+    "Price Penalty": 0,
+    "Route": "r",
+    "Safety Penalty": 20,
+    "Technical Setup Penalty": 0,
+    "Temperature/Time Penalty": 3,
+    "Total Penalty": 36.5,
+    "Workup Penalty": 7,
+    "Yield Penalty": 6.5
+   }
+  }
+ },
+ "hazard": {
+  "0.0|0.0": {
+   "burden_ratio": 0.0,
+   "hazard_ratio": {
+    "__float__": "nan"
+   }
+  },
+  "0.0|1.0": {
+   "burden_ratio": 0.0,
+   "hazard_ratio": {
+    "__float__": "inf"
+   }
+  },
+  "0.0|3.0": {
+   "burden_ratio": 0.0,
+   "hazard_ratio": {
+    "__float__": "inf"
+   }
+  },
+  "0.5|0.0": {
+   "burden_ratio": {
+    "__float__": "inf"
+   },
+   "hazard_ratio": 0.0
+  },
+  "0.5|1.0": {
+   "burden_ratio": 0.5,
+   "hazard_ratio": 2.0
+  },
+  "0.5|3.0": {
+   "burden_ratio": 0.16666666666666666,
+   "hazard_ratio": 6.0
+  },
+  "2.0|0.0": {
+   "burden_ratio": {
+    "__float__": "inf"
+   },
+   "hazard_ratio": 0.0
+  },
+  "2.0|1.0": {
+   "burden_ratio": 2.0,
+   "hazard_ratio": 0.5
+  },
+  "2.0|3.0": {
+   "burden_ratio": 0.6666666666666666,
+   "hazard_ratio": 1.5
+  },
+  "suite": {
+   "Abiotic Depletion Potential (Y_ADP)": 1.1111111111111112,
+   "Acidification Potential (Y_AP)": 2.0,
+   "Global Warming Potential (Y_GWP)": 1.1428571428571428,
+   "Ozone Depletion Potential (Y_ODP)": 1.3333333333333333,
+   "Smog Formation Potential (Y_SFP)": 1.2
+  },
+  "tox": {
+   "bap": [
+    "Low",
+    "Moderate",
+    "Moderate",
+    "High"
+   ],
+   "boethling": 3.2209999999999996,
+   "ep": 15.0,
+   "ingtp": 0.006666666666666667,
+   "inhtp": 0.025
+  }
+ },
+ "mass": {
+  "curzons": {
+   "inputs": {
+    "aux": [
+     {
+      "mass": 500.0,
+      "name": "Toluene"
+     },
+     {
+      "mass": 15.0,
+      "name": "Triethylamine"
+     }
+    ],
+    "product_actual_mass": 23.6,
+    "product_carbons": 14,
+    "product_moles": 0.09,
+    "product_mw": 262.32,
+    "reactants": [
+     {
+      "carbons": 7,
+      "is_limiting": true,
+      "mass": 10.81,
+      "moles": 0.1,
+      "mw": 108.14,
+      "name": "Benzyl alcohol"
+     },
+     {
+      "carbons": 7,
+      "mass": 21.9,
+      "moles": 0.115,
+      "mw": 190.64,
+      "name": "p-Toluenesulfonyl chloride"
+     }
+    ]
+   },
+   "outputs": {
+    "Atom Economy (AE, %)": 87.79704130129193,
+    "Carbon Efficiency (CE, %)": 83.72093023255813,
+    "E-Factor (kg waste/kg product)": 22.208050847457628,
+    "Effective Mass Yield (EMY, %)": 4.308849573679502,
+    "Excess Reactant Factor (ERF)": 1.0957092174844367,
+    "Mass Intensity excl. water (MI, kg/kg)": 23.208050847457628,
+    "Mass Productivity (MP, %)": 4.308849573679502,
+    "Percentage Yield (%)": 89.96645318694725,
+    "Process Mass Intensity (PMI, kg/kg)": 23.208050847457628,
+    "Product Moles (mol)": 0.09,
+    "Reaction Mass Efficiency (RME, %)": 72.14918985019871,
+    "Theoretical Yield (g)": 26.232,
+    "Total Auxiliary Mass (g)": 515.0,
+    "Total Mass Input incl. water (g)": 547.71,
+    "Total Reactant Mass (g)": 32.71,
+    "Water Mass (g)": 0.0
+   }
+  },
+  "curzons_water_benign": {
+   "inputs": {
+    "aux": [
+     {
+      "mass": 500.0,
+      "name": "Toluene"
+     },
+     {
+      "benign": true,
+      "mass": 40.0,
+      "name": "Ethanol"
+     }
+    ],
+    "product_actual_mass": 23.6,
+    "product_carbons": 14,
+    "product_mw": 262.32,
+    "reactants": [
+     {
+      "carbons": 7,
+      "is_limiting": true,
+      "mass": 10.81,
+      "moles": 0.1,
+      "mw": 108.14,
+      "name": "Benzyl alcohol"
+     },
+     {
+      "carbons": 7,
+      "mass": 21.9,
+      "moles": 0.115,
+      "mw": 190.64,
+      "name": "p-Toluenesulfonyl chloride"
+     }
+    ],
+    "water_mass": 100.0
+   },
+   "outputs": {
+    "Atom Economy (AE, %)": 87.79704130129193,
+    "Carbon Efficiency (CE, %)": 83.68972389483464,
+    "E-Factor (kg waste/kg product)": 27.504661016949154,
+    "Effective Mass Yield (EMY, %)": 4.430177770269002,
+    "Excess Reactant Factor (ERF)": 1.0957092174844367,
+    "Mass Intensity excl. water (MI, kg/kg)": 24.267372881355932,
+    "Mass Productivity (MP, %)": 4.120759197499607,
+    "Percentage Yield (%)": 89.96645318694725,
+    "Process Mass Intensity (PMI, kg/kg)": 28.504661016949154,
+    "Product Moles (mol)": 0.08996645318694725,
+    "Reaction Mass Efficiency (RME, %)": 72.14918985019871,
+    "Theoretical Yield (g)": 26.232,
+    "Total Auxiliary Mass (g)": 540.0,
+    "Total Mass Input incl. water (g)": 672.71,
+    "Total Reactant Mass (g)": 32.71,
+    "Water Mass (g)": 100.0
+   }
+  },
+  "no_limiting_marked": {
+   "inputs": {
+    "aux": [
+     {
+      "mass": 18.9,
+      "name": "DMF"
+     },
+     {
+      "mass": 90.2,
+      "name": "EtOAc"
+     },
+     {
+      "mass": 50.0,
+      "name": "silica"
+     }
+    ],
+    "product_actual_mass": 3.9,
+    "product_carbons": 13,
+    "product_mw": 232.0,
+    "reactants": [
+     {
+      "carbons": 8,
+      "mass": 3.0,
+      "moles": 0.02,
+      "mw": 150.0,
+      "name": "A"
+     },
+     {
+      "benign": true,
+      "carbons": 5,
+      "mass": 3.0,
+      "moles": 0.03,
+      "mw": 100.0,
+      "name": "B"
+     }
+    ],
+    "water_mass": 60.0
+   },
+   "outputs": {
+    "Atom Economy (AE, %)": 92.80000000000001,
+    "Carbon Efficiency (CE, %)": 70.49499443826474,
+    "E-Factor (kg waste/kg product)": 56.717948717948715,
+    "Effective Mass Yield (EMY, %)": 2.405922270203578,
+    "Excess Reactant Factor (ERF)": 1.2,
+    "Mass Intensity excl. water (MI, kg/kg)": 42.333333333333336,
+    "Mass Productivity (MP, %)": 2.3622047244094486,
+    "Percentage Yield (%)": 84.05172413793103,
+    "Process Mass Intensity (PMI, kg/kg)": 57.717948717948715,
+    "Product Moles (mol)": 0.016810344827586206,
+    "Reaction Mass Efficiency (RME, %)": 65.0,
+    "Theoretical Yield (g)": 4.64,
+    "Total Auxiliary Mass (g)": 159.1,
+    "Total Mass Input incl. water (g)": 225.1,
+    "Total Reactant Mass (g)": 6.0,
+    "Water Mass (g)": 60.0
+   }
+  },
+  "no_reactants": {
+   "inputs": {
+    "aux": [
+     {
+      "mass": 10.0,
+      "name": "THF"
+     }
+    ],
+    "product_actual_mass": 1.0,
+    "product_mw": 150.0,
+    "reactants": []
+   },
+   "outputs": {
+    "Atom Economy (AE, %)": 0.0,
+    "E-Factor (kg waste/kg product)": 9.0,
+    "Effective Mass Yield (EMY, %)": 10.0,
+    "Mass Intensity excl. water (MI, kg/kg)": 10.0,
+    "Mass Productivity (MP, %)": 10.0,
+    "Process Mass Intensity (PMI, kg/kg)": 10.0,
+    "Product Moles (mol)": 0.006666666666666667,
+    "Reaction Mass Efficiency (RME, %)": 0.0,
+    "Total Auxiliary Mass (g)": 10.0,
+    "Total Mass Input incl. water (g)": 10.0,
+    "Total Reactant Mass (g)": 0,
+    "Water Mass (g)": 0.0
+   }
+  },
+  "suzuki_small_scale": {
+   "inputs": {
+    "aux": [
+     {
+      "mass": 0.05778,
+      "name": "Pd(PPh3)4"
+     },
+     {
+      "mass": 0.276,
+      "name": "K2CO3"
+     },
+     {
+      "mass": 4.12,
+      "name": "1,4-dioxane"
+     },
+     {
+      "mass": 27.06,
+      "name": "ethyl acetate"
+     }
+    ],
+    "product_actual_mass": 0.166,
+    "product_carbons": 13,
+    "product_mw": 184.24,
+    "reactants": [
+     {
+      "carbons": 7,
+      "is_limiting": true,
+      "mass": 0.18704,
+      "moles": 0.001,
+      "mw": 187.04,
+      "name": "4-bromoanisole"
+     },
+     {
+      "carbons": 6,
+      "mass": 0.182895,
+      "moles": 0.0015,
+      "mw": 121.93,
+      "name": "phenylboronic acid"
+     }
+    ],
+    "water_mass": 1.0
+   },
+   "outputs": {
+    "Atom Economy (AE, %)": 59.630384827005855,
+    "Carbon Efficiency (CE, %)": 73.20614415979156,
+    "E-Factor (kg waste/kg product)": 197.0946686746988,
+    "Effective Mass Yield (EMY, %)": 0.5206419640873091,
+    "Excess Reactant Factor (ERF)": 1.1973168916075994,
+    "Mass Intensity excl. water (MI, kg/kg)": 192.07057228915664,
+    "Mass Productivity (MP, %)": 0.5206419640873091,
+    "Percentage Yield (%)": 90.0998697351281,
+    "Process Mass Intensity (PMI, kg/kg)": 198.0946686746988,
+    "Product Moles (mol)": 0.000900998697351281,
+    "Reaction Mass Efficiency (RME, %)": 44.87274791517429,
+    "Theoretical Yield (g)": 0.18424000000000001,
+    "Total Auxiliary Mass (g)": 31.51378,
+    "Total Mass Input incl. water (g)": 32.883715,
+    "Total Reactant Mass (g)": 0.369935,
+    "Water Mass (g)": 1.0
+   }
+  },
+  "two_to_one": {
+   "inputs": {
+    "aux": [],
+    "product_actual_mass": 3.2,
+    "product_coefficient": 2.0,
+    "product_mw": 18.015,
+    "reactants": [
+     {
+      "mass": 0.504,
+      "moles": 0.25,
+      "mw": 2.016,
+      "name": "H2",
+      "stoich_ratio": 2
+     },
+     {
+      "is_limiting": true,
+      "mass": 3.1998,
+      "moles": 0.1,
+      "mw": 31.998,
+      "name": "O2",
+      "stoich_ratio": 1
+     }
+    ]
+   },
+   "outputs": {
+    "Atom Economy (AE, %)": 100.0,
+    "E-Factor (kg waste/kg product)": 0.1574374999999999,
+    "Effective Mass Yield (EMY, %)": 86.39775365840488,
+    "Excess Reactant Factor (ERF)": 1.0279766860949209,
+    "Mass Intensity excl. water (MI, kg/kg)": 1.1574375,
+    "Mass Productivity (MP, %)": 86.39775365840488,
+    "Percentage Yield (%)": 88.81487649181238,
+    "Process Mass Intensity (PMI, kg/kg)": 1.1574375,
+    "Product Moles (mol)": 0.17762975298362477,
+    "Reaction Mass Efficiency (RME, %)": 86.39775365840488,
+    "Theoretical Yield (g)": 3.603,
+    "Total Auxiliary Mass (g)": 0,
+    "Total Mass Input incl. water (g)": 3.7038,
+    "Total Reactant Mass (g)": 3.7038,
+    "Water Mass (g)": 0.0
+   }
+  },
+  "zero_product": {
+   "inputs": {
+    "aux": [
+     {
+      "mass": 10.0,
+      "name": "THF"
+     }
+    ],
+    "product_actual_mass": 0.0,
+    "product_mw": 150.0,
+    "reactants": [
+     {
+      "is_limiting": true,
+      "mass": 3.0,
+      "moles": 0.02,
+      "mw": 150.0,
+      "name": "A"
+     }
+    ]
+   },
+   "outputs": {
+    "Atom Economy (AE, %)": 100.0,
+    "E-Factor (kg waste/kg product)": {
+     "__float__": "inf"
+    },
+    "Effective Mass Yield (EMY, %)": 0.0,
+    "Excess Reactant Factor (ERF)": 1.0,
+    "Mass Intensity excl. water (MI, kg/kg)": {
+     "__float__": "inf"
+    },
+    "Mass Productivity (MP, %)": 0.0,
+    "Percentage Yield (%)": 0.0,
+    "Process Mass Intensity (PMI, kg/kg)": {
+     "__float__": "inf"
+    },
+    "Product Moles (mol)": 0.0,
+    "Reaction Mass Efficiency (RME, %)": 0.0,
+    "Theoretical Yield (g)": 3.0,
+    "Total Auxiliary Mass (g)": 10.0,
+    "Total Mass Input incl. water (g)": 13.0,
+    "Total Reactant Mass (g)": 3.0,
+    "Water Mass (g)": 0.0
+   }
+  }
+ },
+ "yield_penalty": {
+  "-5": 50.0,
+  "0": 50.0,
+  "100": 0.0,
+  "12.5": 43.75,
+  "140": 0.0,
+  "77": 11.5
+ }
+}

@@ -1,0 +1,65 @@
+id: redam-stab-dcm
+title: Reductive amination with sodium triacetoxyborohydride in dichloromethane
+source:
+  description: Procedure from a US patent, as recorded in the Open Reaction Database (CC BY-SA 4.0). Amounts are
+    those stated in the procedure; workup amounts that the patent does not state are not included.
+  patent: US07517873B2
+  ord_reaction_id: ord-593f7028fa3a491dba22058483a818fb
+  procedure_text: To a solution of 11.5 g (0.075 mole) of beta-alanine ethyl ester hydrochloride and 6.3 g (0.073
+    mole) of cyclopentanone in 200 mL of dichloromethane was added 6.5 g (0.082 mole) of sodium acetate and 22.5
+    g (0.107 mole) of sodium triacetoxyborohydride. The mixture was stirred 24 hours and then quenched by the addition
+    of 200 mL of saturated sodium bicarbonate solution. After 20 minutes, the organic layer was separated and the
+    aqueous layer was extracted twice with dichloromethane. The combined dichloromethane layers were dried over
+    anhydrous magnesium sulfate, filtered, and concentrated under reduced pressure to provide 12.0 g of 3-cyclopentylamino-propanoic
+    acid ethyl ester, which was used without further purification.
+reaction:
+  name: 3-cyclopentylamino-propanoic acid ethyl ester (US07517873B2)
+  reaction_class: reductive_amination
+  reported_yield_percent: 88.7
+  temperature_c: 22
+  time_h: 24.0
+  workup_steps:
+  - Liquid-liquid extraction (incl. drying/filtration of desiccant)
+  source:
+    entry: benchmark
+    ord_reaction_id: ord-593f7028fa3a491dba22058483a818fb
+    patent: US07517873B2
+  components:
+  - name: beta-alanine ethyl ester hydrochloride
+    role: reactant
+    smiles: CCOC(=O)CCN.Cl
+    mass_g: 11.5
+  - name: cyclopentanone
+    role: reactant
+    smiles: O=C1CCCC1
+    mass_g: 6.3
+  - name: sodium acetate
+    role: base
+    smiles: CC(=O)[O-].[Na+]
+    mass_g: 6.5
+  - name: sodium triacetoxyborohydride
+    role: reagent
+    smiles: CC(=O)O[BH-](OC(C)=O)OC(C)=O.[Na+]
+    mass_g: 22.5
+  - name: dichloromethane
+    role: reaction_solvent
+    smiles: ClCCl
+    volume_ml: 200.0
+  - name: sodium bicarbonate
+    role: workup
+    smiles: O=C([O-])O.[Na+]
+    volume_ml: 200.0
+  - name: 3-cyclopentylamino-propanoic acid ethyl ester
+    role: product
+    smiles: CCOC(=O)CCNC1CCCC1
+    mass_g: 12.0
+known_greener:
+- description: Ethyl acetate in place of dichloromethane as the reaction solvent
+  kind: reaction_solvent
+  target: dichloromethane
+  replacement_smiles:
+  - CCOC(C)=O
+  source:
+    citation: F. I. McGonagle, D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green
+      Chem., 2013, 15, 1159-1165
+    doi: 10.1039/C3GC40359A

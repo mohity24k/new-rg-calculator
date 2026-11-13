@@ -1,0 +1,6 @@
+# Only for scripts/build_precedents.py and scripts/ord_case.py (rebuilding the packaged
+# precedent data from the Open Reaction Database). Not needed to run or test the app.
+#   pip install -r requirements-data.txt
+#   pip install --no-deps ord-schema==0.9.6     (only its protobuf classes are used)
+protobuf==7.36.1
+pyarrow==26.0.1

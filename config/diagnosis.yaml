@@ -1,0 +1,33 @@
+# Diagnosis: when a finding is raised, and which fix is assumed for its "what if" gain.
+# The gain of every finding is computed by applying the fix to a copy of the reaction and
+# running the calculator again. The fixes are idealised targets, not suggestions.
+
+mass_hotspot:
+  min_share_of_input: 0.20      # a material is a mass hotspot at or above this share of the total input mass
+  what_if_factor: 0.5           # gain reported for using half the amount
+  max_findings: 3
+
+solvent_share:
+  min_share_of_input: 0.50      # reaction solvent, workup and purification materials together
+dilute_reaction:
+  max_ml_per_mmol: 10           # reaction solvent volume per mmol of limiting reactant above this = dilute
+  target_ml_per_mmol: 5         # what-if concentration (0.2 M)
+
+excess_reagent:
+  min_equiv: 1.5                # stoichiometric reactant or reagent used at or above this many equivalents
+  target_equiv: 1.1             # what-if amount
+
+low_yield:
+  below_percent: 70
+  target_percent: 90            # what-if yield
+
+wasteful_reagent:
+  ae_below: 60                  # atom economy below this, with a stoichiometric reagent in the list
+
+chromatography:
+  replace_with: "Crystallization and filtration"    # what-if purification
+
+harsh_conditions:
+  min_penalty: 3                # EcoScale temperature/time or set-up penalty points at or above this
+  what_if_temperature_c: 22     # what-if: room temperature
+  what_if_time_h: 0.5           # what-if: less than 1 h

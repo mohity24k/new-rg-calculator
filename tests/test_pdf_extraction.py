@@ -6,8 +6,8 @@ Structure lookups use the built-in alias table / OPSIN, so the tests run offline
 
 import pytest
 
-from modules import mass_metrics as mm
-from modules import pdf_extraction as px
+from gms.metrics import mass as mm
+from gms.extraction import classic as px
 
 
 def table(components, **extra):

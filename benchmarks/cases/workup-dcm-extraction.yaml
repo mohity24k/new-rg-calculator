@@ -1,0 +1,21 @@
+id: workup-dcm-extraction
+title: Extraction with dichloromethane and chromatography with hexane (class-independent rules)
+source:
+  description: >-
+    The two example procedures packaged with the app (gms/data/examples): representative laboratory
+    procedures written for this tool, not taken from one paper. Used here to test the workup and
+    chromatography rules, which do not depend on the reaction class.
+examples: [example-redam-dce, example-amide-hatu-dmf]
+known_greener:
+  - description: Ethyl acetate or 2-MeTHF in place of dichloromethane for the extraction
+    example: example-redam-dce
+    kind: workup_solvent
+    target: dichloromethane
+    replacement_smiles: ["CCOC(C)=O", "CC1CCCO1"]
+    source: {citation: "D. Prat et al., Green Chem., 2016, 18, 288-296 (CHEM21 solvent guide: dichloromethane is ranked hazardous)", doi: "10.1039/C5GC01008J"}
+  - description: Heptane in place of hexane as the chromatography eluent
+    example: example-amide-hatu-dmf
+    kind: purification_solvent
+    target: hexane
+    replacement_smiles: ["CCCCCCC"]
+    source: {citation: "D. Prat et al., Green Chem., 2016, 18, 288-296 (CHEM21 solvent guide: hexane is ranked hazardous, heptane problematic)", doi: "10.1039/C5GC01008J"}

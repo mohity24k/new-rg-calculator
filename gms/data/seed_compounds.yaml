@@ -1,0 +1,30 @@
+# Extra compounds for the bundled hazard seed (scripts/build_hazard_seed.py): the materials of
+# the example reactions and common laboratory materials that are not in the abbreviation table.
+- {name: "4-methoxybenzoic acid", smiles: "COc1ccc(cc1)C(=O)O"}
+- {name: "benzylamine", smiles: "NCc1ccccc1"}
+- {name: "N-benzyl-4-methoxybenzamide", smiles: "COc1ccc(cc1)C(=O)NCc1ccccc1"}
+- {name: "4-bromoanisole", smiles: "COc1ccc(Br)cc1"}
+- {name: "phenylboronic acid", smiles: "OB(O)c1ccccc1"}
+- {name: "4-methoxybiphenyl", smiles: "COc1ccc(cc1)-c1ccccc1"}
+- {name: "benzaldehyde", smiles: "O=Cc1ccccc1"}
+- {name: "N-benzylmorpholine", smiles: "C(c1ccccc1)N1CCOCC1"}
+- {name: "silica gel", smiles: "O=[Si]=O"}
+- {name: "aniline", smiles: "Nc1ccccc1"}
+- {name: "benzoic acid", smiles: "OC(=O)c1ccccc1"}
+- {name: "4-bromotoluene", smiles: "Cc1ccc(Br)cc1"}
+- {name: "bromobenzene", smiles: "Brc1ccccc1"}
+- {name: "iodobenzene", smiles: "Ic1ccccc1"}
+- {name: "cyclohexanone", smiles: "O=C1CCCCC1"}
+- {name: "acetophenone", smiles: "CC(=O)c1ccccc1"}
+- {name: "sodium cyanoborohydride", smiles: "[Na+].[BH3-]C#N"}
+- {name: "thionyl chloride", smiles: "ClS(Cl)=O"}
+- {name: "oxalyl chloride", smiles: "ClC(=O)C(Cl)=O"}
+- {name: "N-methylmorpholine", smiles: "CN1CCOCC1"}
+- {name: "calcium chloride", smiles: "[Ca+2].[Cl-].[Cl-]"}
+- {name: "celite", smiles: "O=[Si]=O"}
+- {name: "ammonium formate", smiles: "[NH4+].[O-]C=O"}
+- {name: "hydrogen", smiles: "[HH]"}
+- {name: "potassium fluoride", smiles: "[K+].[F-]"}
+- {name: "sodium acetate", smiles: "CC(=O)[O-].[Na+]"}
+- {name: "acetyl chloride", smiles: "CC(Cl)=O"}
+- {name: "titanium(IV) isopropoxide", smiles: "CC(C)O[Ti](OC(C)C)(OC(C)C)OC(C)C"}

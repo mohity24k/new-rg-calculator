@@ -1,0 +1,81 @@
+id: amide-edc-hobt-dcm
+title: Amide coupling with EDC hydrochloride and HOBt in dichloromethane
+source:
+  description: Procedure from a US patent, as recorded in the Open Reaction Database (CC BY-SA 4.0). Amounts are
+    those stated in the procedure; workup amounts that the patent does not state are not included.
+  patent: US08957205B2
+  ord_reaction_id: ord-d830c2c8505d490790fc2559465ca432
+  procedure_text: 105 g (550 mmol) of 1-ethyl-3-(3-dimethylaminopropyl)carbodiimide hydrochloride was added to a
+    solution of 98.8 g (500 mmol) of 1-aminocyclohexanecarboxylic acid methyl ester hydrochloride, 84.2 g (550 mmol)
+    of 1-hydroxybenzotriazole, 56.0 g (500 mmol) of 3-furancarboxylic acid and 152 g (1.5 mol) of triethylamine
+    in 1000 ml of methylene chloride under ice-cooling. After the mixture was stirred at room temperature overnight,
+    the reaction solution was concentrated under reduced pressure. Ethyl acetate was added to the residue and the
+    mixture was successively washed with water, a 10% aqueous potassium hydrogensulfate solution, a saturated aqueous
+    sodium hydrogencarbonate solution and saturated brine, followed by drying with anhydrous sodium sulfate. After
+    the solvent was distilled off under reduced pressure, the obtained crystal was washed with diisopropyl ether
+    to give 114 g (91%) of the title compound.
+reaction:
+  name: methyl 1-(furan-3-carboxamido)cyclohexanecarboxylate (US08957205B2)
+  reaction_class: amide_coupling
+  reported_yield_percent: 91.0
+  temperature_c: 0
+  time_h: 16
+  workup_steps:
+  - Liquid-liquid extraction (incl. drying/filtration of desiccant)
+  - Simple filtration
+  source:
+    entry: benchmark
+    ord_reaction_id: ord-d830c2c8505d490790fc2559465ca432
+    patent: US08957205B2
+  components:
+  - name: EDC hydrochloride
+    role: reagent
+    smiles: CCN=C=NCCCN(C)C.Cl
+    mass_g: 105.0
+  - name: 1-aminocyclohexanecarboxylic acid methyl ester hydrochloride
+    role: reactant
+    smiles: COC(=O)C1(N)CCCCC1.Cl
+    mass_g: 98.8
+  - name: 1-hydroxybenzotriazole
+    role: additive
+    smiles: On1nnc2ccccc21
+    mass_g: 84.2
+  - name: 3-furancarboxylic acid
+    role: reactant
+    smiles: O=C(O)c1ccoc1
+    mass_g: 56.0
+  - name: triethylamine
+    role: base
+    smiles: CCN(CC)CC
+    mass_g: 152.0
+  - name: methylene chloride
+    role: reaction_solvent
+    smiles: ClCCl
+    volume_ml: 1000.0
+  - name: methyl 1-(furan-3-carboxamido)cyclohexanecarboxylate
+    role: product
+    smiles: COC(=O)C1(NC(=O)c2ccoc2)CCCCC1
+    mass_g: 114.0
+known_greener:
+- description: Ethyl acetate, 2-MeTHF or dimethyl carbonate in place of dichloromethane as the reaction solvent
+  kind: reaction_solvent
+  target: methylene chloride
+  replacement_smiles:
+  - CCOC(C)=O
+  - CC1CCCO1
+  - COC(=O)OC
+  source:
+    citation: D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15,
+      596-600
+    doi: 10.1039/C2GC36900A
+- description: Oxyma in place of HOBt (explosion risk of HOBt)
+  kind: additive
+  target: 1-hydroxybenzotriazole
+  replacement_smiles:
+  - CCOC(=O)C(=NO)C#N
+  - CCOC(=O)/C(=N/O)C#N
+  - CCOC(=O)/C(=N\O)C#N
+  source:
+    citation: R. Subiros-Funosas, R. Prohens, R. Barbas, A. El-Faham and F. Albericio, Chem. Eur. J., 2009, 15,
+      9394-9403
+    doi: 10.1002/chem.200900614

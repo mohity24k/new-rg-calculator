@@ -1,0 +1,44 @@
+# Combined greenness score and verdict.
+#
+# The score is a weighted mean of "desirabilities". Each desirability maps one metric onto 0..1:
+# 0 at `worst` (or beyond), 1 at `best` (or beyond), linear in between (on a log axis if
+# scale: log). Nothing here is fitted by a model: the verdict follows from the deterministic
+# metrics and from the numbers in this file.
+#
+# THESE DEFAULTS ARE PROVISIONAL. They are sensible starting values, not a validated standard.
+# The project plan asks the team chemist to review them (proposal, week 3). The score card
+# shows how sensitive the verdict is to the weights.
+
+desirability:
+  ae:        {worst: 40, best: 90, weight: 1.0}
+  rme:       {worst: 20, best: 80, weight: 1.0}
+  pmi:       {worst: 500, best: 10, scale: log, weight: 2.0}
+  ecoscale:  {worst: 30, best: 80, weight: 2.0}
+  hazard:    {worst: 9, best: 3, weight: 2.0}      # worst hazard score (1-10) among the materials used
+  solvent:   {worst: 4, best: 1, weight: 1.0}      # mass-weighted CHEM21 class: 1 recommended ... 4 highly hazardous
+
+verdict:
+  green_min: 0.70        # score >= this: "green"
+  borderline_min: 0.45   # score >= this: "borderline"; below: "not green"
+
+# A reaction cannot be called "green" while one of these is true (the verdict is capped at
+# "borderline" and the reason is shown).
+caps:
+  hazard_score_at_least: 9          # a material with hazard score >= 9 (CMR cat. 1, acutely very toxic)
+  solvent_class_at_least: 4         # a CHEM21 "highly hazardous" solvent
+  min_mass_fraction: 0.001          # ignore materials below this share of the total input mass
+
+sensitivity:
+  samples: 500           # random weightings (fixed seed, so the result is reproducible)
+  seed: 20261112
+  spread: 0.5            # each weight is multiplied by a factor between (1 - spread) and (1 + spread)
+
+# Which parts of the score are listed as reasons on the score card.
+reasons:
+  against_below: 0.5     # desirability below this: listed under "main reasons against"
+  in_favour_from: 0.8    # desirability at or above this: listed under "in favour"
+
+# Checks of the entered amounts (warnings on the Reaction and Score card pages).
+input_checks:
+  max_yield_percent: 100.5              # a computed yield above this is flagged
+  reported_yield_mismatch_percent: 5    # reported vs computed yield (percentage points)

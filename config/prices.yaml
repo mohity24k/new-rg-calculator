@@ -1,0 +1,11 @@
+# Prices for the cost part of the no-regression check, in any ONE currency per kilogram.
+# The application ships WITHOUT price data: there is no free, licensed price source, and wrong
+# prices would make the cost check misleading. Add your own supplier prices here, by name as
+# written in the reaction or by SMILES. A cost comparison is made only when every material that
+# changes has a price; otherwise the check says "not compared".
+#
+# prices:
+#   - {name: "ethyl acetate", smiles: "CCOC(C)=O", per_kg: 12.0}
+#   - {name: "N,N-dimethylformamide", smiles: "CN(C)C=O", per_kg: 15.0}
+currency: ""
+prices: []
