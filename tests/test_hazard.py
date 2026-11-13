@@ -103,9 +103,23 @@ def test_store_fetches_once_caches_and_survives_an_outage(tmp_path, monkeypatch)
         raise names.LookupFailed("timeout")
 
     monkeypatch.setattr(pubchem, "_request", down)
+    attempts = []
+
+    def down_counted(*a, **k):
+        attempts.append(1)
+        raise names.LookupFailed("timeout")
+
+    monkeypatch.setattr(pubchem, "_request", down_counted)
     q = store.lookup("another compound", "CCCCCCCCN")
-    assert q.status == "unavailable"                                    # not cached: retried later
+    assert q.status == "unavailable"                                    # not written to the cache file
     assert "CCCCCCCCN" not in json.loads(path.read_text())
+    n_first = len(attempts)
+    for _ in range(50):                                                 # one analysis scores many times
+        assert store.lookup("another compound", "CCCCCCCCN").status == "unavailable"
+    assert len(attempts) == n_first                                     # the failed lookup is not repeated at once
+    store._failed.clear()                                               # after the waiting time it is tried again
+    store.lookup("another compound", "CCCCCCCCN")
+    assert len(attempts) > n_first
 
 
 def test_compound_without_ghs_data_is_no_data(monkeypatch):

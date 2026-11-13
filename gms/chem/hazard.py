@@ -17,6 +17,7 @@ import json
 import os
 import re
 import threading
+import time
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Optional
@@ -110,6 +111,7 @@ class HazardStore:
         self._lock = threading.Lock()
         self._seed: Optional[dict] = None
         self._cache: dict[str, dict] = {}
+        self._failed: dict[str, float] = {}          # key -> time of a failed lookup (not retried at once)
         if self.cache_path and self.cache_path.exists():
             try:
                 self._cache = json.loads(self.cache_path.read_text(encoding="utf-8"))
@@ -144,12 +146,17 @@ class HazardStore:
             return _profile(name, rec)
         if not online:
             return HazardProfile(name=name, status="unavailable")
+        key = self.key(name, smiles)
+        retry_after = config.load("hazard")["ghs"]["retry_failed_lookup_after_s"]
+        if time.monotonic() - self._failed.get(key, -1e9) < retry_after:
+            return HazardProfile(name=name, status="unavailable")     # failed a moment ago: do not ask again yet
         try:
             rec = fetch(name, smiles)
         except names.LookupFailed:
+            self._failed[key] = time.monotonic()
             return HazardProfile(name=name, status="unavailable")
         with self._lock:
-            self._cache[self.key(name, smiles)] = rec
+            self._cache[key] = rec
             self._save()
         return _profile(name, rec)
 

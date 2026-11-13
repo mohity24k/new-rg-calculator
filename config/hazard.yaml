@@ -8,6 +8,9 @@ ghs:
   # ECHA aggregated notifications: keep an H-statement only if at least this share of the
   # company reports includes it. Lower = more cautious, but more noise from impure grades.
   min_report_share_pct: 50
+  # A PubChem lookup that failed (timeout, server error) is not repeated for this many seconds.
+  # One analysis scores a reaction many times; without this, one slow compound blocks the app.
+  retry_failed_lookup_after_s: 600
 
 # EcoScale safety penalties use the old EU hazard symbols. This is the translation from GHS
 # hazard statements (after CLP Regulation Annex VII; approximate, because the two systems do

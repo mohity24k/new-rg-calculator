@@ -17,7 +17,7 @@ import requests
 from gms.chem.names import LookupFailed
 
 BASE = "https://pubchem.ncbi.nlm.nih.gov/rest"
-TIMEOUT = 15
+TIMEOUT = 10
 _MIN_INTERVAL = 0.25
 _lock = threading.Lock()
 _last = [0.0]
