@@ -17,7 +17,7 @@ if a is None:
     st.stop()
 r, score = a["reaction"], a["score"]
 g = score.greenness
-st.caption(f"{r.name or 'Unnamed reaction'} · {classify.CLASSES.get(r.reaction_class, 'class not recognised')}")
+st.caption(f"{ui.md(r.name or 'Unnamed reaction')} · {classify.CLASSES.get(r.reaction_class, 'class not recognised')}")
 
 # --- verdict ---------------------------------------------------------------------------------
 left, right = st.columns([1, 2])
@@ -34,17 +34,17 @@ with right:
     if g["caps"]:
         st.markdown("**Cannot be called green because**")
         for x in g["caps"]:
-            st.markdown(f"- {ui.esc(x)}")
+            st.markdown(f"- {ui.md(x)}")
     if g["reasons"]:
         st.markdown("**Main reasons against** (largest effect first)")
         for x in g["reasons"]:
-            st.markdown(f"- {ui.esc(x)}")
+            st.markdown(f"- {ui.md(x)}")
     if g["strengths"]:
         st.markdown("**In favour**")
         for x in g["strengths"]:
-            st.markdown(f"- {ui.esc(x)}")
+            st.markdown(f"- {ui.md(x)}")
     for x in g["notes"]:
-        st.caption(x)
+        st.caption(ui.md(x))
 
 # --- metrics ---------------------------------------------------------------------------------
 st.subheader("Metrics")
@@ -65,13 +65,13 @@ if score.estimates:
     st.subheader("Estimates and assumptions")
     st.markdown(ui.est_badge() + " marks every metric that depends on one of these.", unsafe_allow_html=True)
     for e in score.estimates:
-        st.markdown(f"- {ui.esc(e)}")
+        st.markdown(f"- {ui.md(e)}")
     if any(c.estimated and c.role != "product" for c in r.components):
         m_only = scoring.score(scoring.measured_only(r))
         st.caption("Without the estimated materials: " + ", ".join(
             f"{registry.get(k).short} {ui.fmt(m_only.metrics.get(k))}" for k in ("pmi", "e_factor", "mp")) + ".")
 for w in score.warnings:
-    st.warning(w)
+    st.warning(ui.md(w))
 
 # --- class benchmark --------------------------------------------------------------------------
 st.subheader("Compared with similar reactions")
@@ -126,7 +126,7 @@ else:
         st.plotly_chart(fig, width="stretch")
     if eco["safety_by_material"]:
         st.caption("Safety penalties, derived from the GHS hazard statements: " + "; ".join(
-            f"{n}: {', '.join(s.split(' - ')[0] for s in syms)}" for n, syms in eco["safety_by_material"].items()) + ".")
+            f"{ui.md(n)}: {', '.join(s.split(' - ')[0] for s in syms)}" for n, syms in eco["safety_by_material"].items()) + ".")
 
 # --- hazards ----------------------------------------------------------------------------------
 st.subheader("Hazard data of the materials")

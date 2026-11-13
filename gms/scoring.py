@@ -92,6 +92,7 @@ def mass_metrics(reaction: Reaction) -> tuple[dict, dict]:
     for key, m in registry.metrics().items():
         if m.legacy_label and key != "ecoscale":
             out[key] = legacy.get(m.legacy_label)
+    _blank_unknown(reaction, out)
     totals = {
         "product_mass_g": p.mass if p else 0.0,
         "product_moles": legacy["Product Moles (mol)"],
@@ -102,6 +103,32 @@ def mass_metrics(reaction: Reaction) -> tuple[dict, dict]:
         "theoretical_yield_g": legacy.get("Theoretical Yield (g)"),
     }
     return out, totals
+
+
+def _blank_unknown(reaction: Reaction, metrics: dict) -> None:
+    """Set to None every metric whose inputs are missing. The literature formulas return 0 (or
+    drop a term) when a molecular weight or a mass is absent; shown to a chemist, that 0 would
+    read as a result. "Missing" means not given: an entered product mass of 0 is kept."""
+    p = reaction.product
+    stoich = reaction.by_role(*STOICHIOMETRIC_ROLES)
+    lim = mm.limiting_reactant(_reactants(reaction))
+    blank = set()
+    if not stoich:
+        blank |= {"ae", "rme", "ce", "erf", "yield"}
+    if p is None or not p.mw or any(not c.mw for c in stoich):
+        blank |= {"ae", "ce"}
+    if any(c.mass_g is None for c in stoich):
+        blank |= {"rme", "ce", "erf"}
+    if any(c.moles is None for c in stoich):
+        blank |= {"ce", "erf"}
+    if p is None or not p.mw or lim is None or lim.moles <= 0:
+        blank |= {"yield", "ce"}
+    if p is None or p.mass_g is None:
+        blank |= {k for k, m in registry.metrics().items() if m.yield_dependent and k not in ("ecoscale", "hazmat")}
+    if sum(c.mass for c in reaction.inputs) <= 0:
+        blank |= {"pmi", "mi", "e_factor", "mp", "emy"}
+    for k in blank:
+        metrics[k] = None
 
 
 def hazard_rows(reaction: Reaction, store: Optional[hazard.HazardStore] = None) -> list[dict]:
@@ -186,10 +213,21 @@ def _warnings(reaction: Reaction, metrics: dict) -> list[str]:
     if p is None:
         w.insert(0, "No product in the reaction: the yield-based metrics cannot be computed.")
     y = metrics.get("yield")
-    if y is not None and y > 100.5:
+    checks = config.load("scoring")["input_checks"]
+    for c in reaction.by_role(*STOICHIOMETRIC_ROLES):
+        if not c.mw:
+            w.append(f"'{c.name}' has no molecular weight: atom economy and carbon efficiency are not computed.")
+    if p is not None and not p.mw:
+        w.append(f"The product '{p.name}' has no structure or molecular weight: yield, atom economy and carbon "
+                 "efficiency are not computed. Enter a SMILES or the molecular weight.")
+    if p is not None and p.mass_g is None:
+        w.append("The product has no mass: the yield-based metrics are not computed. Give the isolated mass, "
+                 "or the reported yield.")
+    if y is not None and y > checks["max_yield_percent"]:
         w.append(f"The computed yield is {y:.0f}%: more product than the limiting reactant allows. "
                  "Check the amounts, the limiting reactant and the coefficients.")
-    if y is not None and reaction.reported_yield_percent is not None and abs(y - reaction.reported_yield_percent) > 5:
+    if y is not None and reaction.reported_yield_percent is not None and \
+            abs(y - reaction.reported_yield_percent) > checks["reported_yield_mismatch_percent"]:
         w.append(f"The reported yield ({reaction.reported_yield_percent:g}%) differs from the yield computed "
                  f"from the amounts ({y:.1f}%).")
     for c in reaction.inputs:
@@ -207,7 +245,9 @@ def score(reaction: Reaction, store: Optional[hazard.HazardStore] = None) -> Sco
     rows = hazard_rows(reaction, store)
     summary = hazard_summary(rows, totals["product_mass_g"], totals["total_input_mass_g"])
     pm = totals["product_mass_g"]
-    metrics["hazmat"] = (summary["high_hazard_mass_g"] / pm) if pm > 0 else float("inf")
+    p = reaction.product
+    metrics["hazmat"] = None if p is None or p.mass_g is None else \
+        (summary["high_hazard_mass_g"] / pm) if pm > 0 else float("inf")
     y = metrics.get("yield")
     eco = ecoscale(reaction, y if y is not None else reaction.reported_yield_percent, rows)
     metrics["ecoscale"] = eco["score"] if eco else None

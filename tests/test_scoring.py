@@ -43,7 +43,11 @@ def test_score_reproduces_the_locked_mass_metrics(case):
         if not m.legacy_label or key == "ecoscale":
             continue
         expected = rec["outputs"].get(m.legacy_label)
-        if key == "ce" and "product_carbons" not in rec["inputs"]:
+        if case == "no_reactants" and key in ("ae", "rme"):
+            # Deliberate difference from the formulas: with no reactant in the reaction the
+            # formulas return 0; the score reports "not available" (see test_unknown_is_not_zero).
+            assert metrics[key] is None
+        elif key == "ce" and "product_carbons" not in rec["inputs"]:
             assert metrics[key] is None
         elif expected is None:
             assert metrics[key] is None, key
@@ -180,3 +184,66 @@ def test_unknown_hazard_is_not_treated_as_safe():
     assert "mystery additive XZ-1" in s.hazard_summary["unknown"]
     assert any("No hazard data" in e for e in s.estimates)
     assert any("Hazard unknown" in n for n in s.greenness["notes"])
+
+
+# --- unknown is "not available", never 0 ----------------------------------------------------------
+
+def test_unknown_is_not_zero():
+    """A missing molecular weight or mass must not turn into a 0 that reads as a result."""
+    # product without structure (a compound number)
+    r = examples.load("example-amide-hatu-dmf")
+    r.product.name, r.product.smiles = "compound 3a", None
+    r, s, issues = scoring.prepare_and_score(r, online=False)
+    assert s.metrics["yield"] is None and s.metrics["ae"] is None and s.metrics["ce"] is None
+    assert s.metrics["pmi"] == pytest.approx(sum(c.mass for c in r.inputs) / r.product.mass)    # masses are known
+    assert s.ecoscale is None and any("no structure or molecular weight" in w for w in s.warnings)
+    assert scoring.theoretical_product_mass(r) is None
+
+    # a stoichiometric reagent without structure: AE must not rise because the reagent is left out
+    base = scoring.prepare_and_score(examples.load("example-amide-hatu-dmf"), online=False)[1]
+    r = examples.load("example-amide-hatu-dmf")
+    hatu = r.find("HATU")
+    hatu.name, hatu.equiv, hatu.mass_g = "reagent Q-17", None, 0.4
+    r, s, _ = scoring.prepare_and_score(r, online=False)
+    assert s.metrics["ae"] is None and s.metrics["ce"] is None and base.metrics["ae"] == pytest.approx(37.7, abs=0.1)
+    assert s.metrics["rme"] is not None and s.metrics["yield"] == pytest.approx(base.metrics["yield"])
+    assert any("reagent Q-17" in w and "molecular weight" in w for w in s.warnings)
+
+    # no absolute amount anywhere: no impossible PMI of 0 or E-factor of -1
+    r = Reaction(components=[Component("benzoic acid", "reactant", equiv=1.0, limiting=True),
+                             Component("benzylamine", "reactant", equiv=1.2),
+                             Component("N-benzylbenzamide", "product", smiles="O=C(NCc1ccccc1)c1ccccc1")])
+    r, s, _ = scoring.prepare_and_score(r, online=False)
+    for key in ("pmi", "e_factor", "mi", "mp", "emy", "rme", "yield", "hazmat"):
+        assert s.metrics[key] is None, key
+    assert s.greenness["verdict"] == "unknown" and s.greenness["score"] is None
+
+
+def test_product_mass_from_the_reported_yield_is_an_estimate():
+    r = examples.load("example-suzuki-dioxane")
+    r.product.mass_g = None
+    r.reported_yield_percent = 90.0
+    r, s, _ = scoring.prepare_and_score(r, online=False)
+    assert r.product.estimated and "reported yield of 90%" in r.product.note
+    assert s.metrics["yield"] == pytest.approx(90.0)
+    assert {"pmi", "rme", "yield", "ecoscale"} <= set(s.estimated_metrics)
+    assert any("reported yield" in e for e in s.estimates)
+    # without a reported yield nothing is invented
+    r = examples.load("example-suzuki-dioxane")
+    r.product.mass_g = None
+    r, s, _ = scoring.prepare_and_score(r, online=False)
+    assert s.metrics["yield"] is None and s.metrics["pmi"] is None and s.ecoscale is None
+    assert any("product has no mass" in w for w in s.warnings)
+
+
+def test_one_equivalent_is_the_moles_of_the_limiting_reactant():
+    """Also when the limiting reactant has a coefficient other than 1."""
+    r = Reaction(components=[
+        Component("bromobenzene", "reactant", moles=0.002, coefficient=2, limiting=True),
+        Component("benzene-1,4-diboronic acid", "reactant", smiles="OB(O)c1ccc(B(O)O)cc1", equiv=0.75),
+        Component("p-terphenyl", "product", smiles="c1ccc(cc1)-c1ccc(cc1)-c1ccccc1", mass_g=0.2)])
+    amounts.complete(r, online=False)
+    b = r.find("benzene-1,4-diboronic acid")
+    assert b.moles == pytest.approx(0.0015) and r.find("bromobenzene").equiv == 1.0
+    lim = amounts.limiting(r)
+    assert amounts.excess_factor(b, lim) == pytest.approx(1.5)        # 0.75 equiv, 0.5 equiv needed

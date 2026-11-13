@@ -73,6 +73,7 @@ Written for chemists who use the tool. The same list is in the app on the page
   data does not have.
 - **Products given only as a compound number ("3a").** PDF extraction keeps the label. You
   enter the name or the SMILES in the review step.
+- **Equivalents** mean moles divided by the moles of the limiting reactant.
 - **Full equation balancing.** Coefficients are 1 unless you set them. The app proposes
   coefficients from a carbon balance and warns if the product has more carbon than the reactants.
 

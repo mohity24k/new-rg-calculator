@@ -107,11 +107,15 @@ def to_csv(report: dict) -> bytes:
     w.writerow(["Verdict", report["greenness"]["label"], "score", report["greenness"]["score"], "provisional weights"])
     w.writerow([])
     sugg = report["suggestions"]
-    w.writerow(["Metric", "Unit", "Original", "Original is estimated"]
-               + [f"Candidate at original yield: {s['title']}" for s in sugg])
+    head = ["Metric", "Unit", "Original", "Original is estimated"]
+    for s in sugg:
+        head += [f"Candidate at original yield: {s['title']}", "Candidate is estimated"]
+    w.writerow(head)
     for m in report["metrics"]:
-        w.writerow([m["metric"], m["unit"], m["value"], "estimated" if m["estimated"] else ""]
-                   + [(s["metrics"] or {}).get(m["key"]) for s in sugg])
+        row = [m["metric"], m["unit"], m["value"], "estimated" if m["estimated"] else ""]
+        for s in sugg:
+            row += [(s["metrics"] or {}).get(m["key"]), "estimated" if m["key"] in (s.get("estimated_metrics") or []) else ""]
+        w.writerow(row)
     w.writerow([])
     w.writerow(["Suggestion", "Kind", "Confidence", "Evidence", "Break-even yield (PMI)", "Break-even yield (RME)",
                 "Break-even yield (EcoScale)", "Decision", "Comment", "Assumptions (estimates)"])
@@ -247,9 +251,11 @@ def to_pdf(report: dict) -> bytes:
         if s.get("assumptions"):
             el.append(P("ESTIMATES in this candidate: " + "; ".join(s["assumptions"]), small))
         ch = s["changes_at_original_yield"]
-        el.append(P("Change at the original yield (not a claim that the yields are equal): " + ", ".join(
-            f"{registry.get(k).short} {v:+.3g}" for k, v in ch.items() if isinstance(v, (int, float)) and abs(v) > 1e-9)
-            or "Change at the original yield: none", small))
+        est = set(s.get("estimated_metrics") or [])
+        el.append(P("Change at the original yield (not a claim that the yields are equal; 'est.' = depends on an "
+                    "estimated amount): " + (", ".join(
+                        f"{registry.get(k).short} {v:+.3g}" + (" est." if k in est else "")
+                        for k, v in ch.items() if isinstance(v, (int, float)) and abs(v) > 1e-9) or "none"), small))
         be = s.get("breakeven") or {}
         txt = []
         for k, label in (("pmi", "PMI"), ("rme", "RME"), ("ecoscale", "EcoScale")):

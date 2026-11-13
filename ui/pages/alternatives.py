@@ -4,7 +4,7 @@ yield scenarios and the break-even yield, and can be accepted or rejected with a
 import pandas as pd
 import streamlit as st
 
-from gms import breakeven, feedback, suggest
+from gms import breakeven, feedback, scoring, suggest
 from gms.metrics import registry
 from ui import components as ui
 from ui import state
@@ -72,26 +72,26 @@ def _candidate(c, shown: bool) -> None:
     est = ui.est_badge() if c.assumptions else ""
     st.markdown(kind + conf + est, unsafe_allow_html=True)
     if c.problem:
-        st.markdown(f"**Why change it:** {ui.esc(c.problem)}")
+        st.markdown(f"**Why change it:** {ui.md(c.problem)}")
 
     st.markdown("**Evidence**")
-    st.markdown(f"- Origin: rule `{ui.esc(c.rule_id)}`; {suggest.EVIDENCE_LABEL.get(c.evidence_level, c.evidence_level)}.")
+    st.markdown(f"- Origin: rule `{ui.md(c.rule_id)}`; {suggest.EVIDENCE_LABEL.get(c.evidence_level, c.evidence_level)}.")
     for s in c.sources:
         link = f" [doi:{s['doi']}](https://doi.org/{s['doi']})" if s.get("doi") else ""
-        st.markdown(f"- Reference: {ui.esc(s.get('citation', ''))}{link}"
+        st.markdown(f"- Reference: {ui.md(s.get('citation', ''))}{link}"
                     + ("" if s.get("verified") else " (the content of this reference was not verified)"))
-    st.markdown(f"- Precedents: {ui.esc(_precedent_text(c.precedent))}")
+    st.markdown(f"- Precedents: {ui.md(_precedent_text(c.precedent))}")
     for ex in (c.precedent.get("examples") or [])[:3]:
-        st.caption(f"Example: {ex}")
-    st.markdown(f"- Confidence: **{c.confidence}** ({ui.esc(c.confidence_reason)}).")
+        st.caption(f"Example: {ui.md(ex)}")
+    st.markdown(f"- Confidence: **{c.confidence}** ({ui.md(c.confidence_reason)}).")
     if c.scope:
-        st.markdown(f"**Where it has worked:** {ui.esc(c.scope)}")
+        st.markdown(f"**Where it has worked:** {ui.md(c.scope)}")
     if c.caveats:
-        st.markdown(f"**Caveats:** {ui.esc(c.caveats)}")
+        st.markdown(f"**Caveats:** {ui.md(c.caveats)}")
     if c.assumptions:
         st.markdown("**Estimated amounts in this alternative** (" + ui.est_badge() + "):", unsafe_allow_html=True)
         for x in c.assumptions:
-            st.markdown(f"- {ui.esc(x)}")
+            st.markdown(f"- {ui.md(x)}")
 
     if c.check is None:
         return
@@ -109,6 +109,11 @@ def _candidate(c, shown: bool) -> None:
         return
 
     st.markdown("**Yield scenarios**")
+    if scoring.theoretical_product_mass(c.reaction) is None:
+        st.info("Yield scenarios and break-even yields need the molecular weight of the product and the amount "
+                "of the limiting reactant. Enter a SMILES or the molecular weight of the product on the Reaction page.")
+        _decision(c)
+        return
     be = c.breakeven
     st.dataframe(pd.DataFrame([{"Break-even yield for": label, "Lowest yield at which the alternative is not worse": _breakeven_text(be[k])}
                                for k, label in (("pmi", "Process mass intensity"), ("rme", "Reaction mass efficiency"),
@@ -126,14 +131,19 @@ def _candidate(c, shown: bool) -> None:
             continue
         o, v = score.metrics.get(k), sc.metrics.get(k)
         ch = registry.change(k, o, v)
-        rows.append({"Metric": m.label, "Original": ui.fmt(o), f"Alternative at {y}% yield": ui.fmt(v),
+        rows.append({"Metric": m.label, "Original": ui.fmt(o) + (" (est.)" if k in score.estimated_metrics else ""),
+                     f"Alternative at {y}% yield": ui.fmt(v) + (" (est.)" if k in sc.estimated_metrics else ""),
                      "Change": ("better " if ch and ch > 1e-9 else "worse " if ch and ch < -1e-9 else "") + ui.signed(ch),
                      "Unit": m.unit})
     st.dataframe(pd.DataFrame(rows), hide_index=True, width="stretch")
     st.caption(f"Verdict of the alternative at {y}% yield: {sc.greenness['label']} "
                f"(combined score {ui.fmt(sc.greenness['score'])}; original {ui.fmt(score.greenness['score'])}, "
-               f"{score.greenness['label']}). Scenario values are hypothetical.")
+               f"{score.greenness['label']}). Scenario values are hypothetical. '(est.)' marks a value that depends "
+               "on an estimated amount.")
+    _decision(c)
 
+
+def _decision(c) -> None:
     st.markdown("**Your decision**")
     prev = ss["decisions"].get(c.id)
     if prev:
@@ -157,19 +167,19 @@ for i, c in enumerate(passed):
     d = ss["decisions"].get(c.id)
     mark = {"accept": " · accepted", "reject": " · rejected by you"}.get(d["decision"], "") if d else ""
     gain = f"combined score {ui.signed(c.greenness_gain)} at the original yield" if c.greenness_gain is not None else ""
-    with st.expander(f"{i + 1}. {c.title}  ({gain}){mark}", expanded=i == 0):
+    with st.expander(f"{i + 1}. {ui.md(c.title)}  ({gain}){mark}", expanded=i == 0):
         _candidate(c, True)
 
 st.subheader(f"Considered, but not suggested ({len(rejected) + len(skipped)})")
 st.caption("These candidates failed the no-regression check or could not be computed. They are not suggestions. "
            "They are listed so that you can see what was considered and why it was dropped.")
 for c in rejected:
-    with st.expander(f"{c.title}: rejected"):
-        st.error("Rejected: " + c.reason)
+    with st.expander(f"{ui.md(c.title)}: rejected"):
+        st.error("Rejected: " + ui.md(c.reason))
         _candidate(c, False)
 for c in skipped:
-    with st.expander(f"{c.title}: not computed"):
-        st.warning(c.reason)
+    with st.expander(f"{ui.md(c.title)}: not computed"):
+        st.warning(ui.md(c.reason))
 
 st.subheader("General comment")
 general = st.text_area("Is an alternative missing that you know to work? Is something here wrong?",

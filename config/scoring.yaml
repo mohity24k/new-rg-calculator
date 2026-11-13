@@ -32,3 +32,13 @@ sensitivity:
   samples: 500           # random weightings (fixed seed, so the result is reproducible)
   seed: 20261112
   spread: 0.5            # each weight is multiplied by a factor between (1 - spread) and (1 + spread)
+
+# Which parts of the score are listed as reasons on the score card.
+reasons:
+  against_below: 0.5     # desirability below this: listed under "main reasons against"
+  in_favour_from: 0.8    # desirability at or above this: listed under "in favour"
+
+# Checks of the entered amounts (warnings on the Reaction and Score card pages).
+input_checks:
+  max_yield_percent: 100.5              # a computed yield above this is flagged
+  reported_yield_mismatch_percent: 5    # reported vs computed yield (percentage points)

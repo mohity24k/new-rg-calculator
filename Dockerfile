@@ -26,6 +26,7 @@ COPY .streamlit ./.streamlit
 COPY config ./config
 COPY gms ./gms
 COPY ui ./ui
+COPY scripts/export_feedback.py ./scripts/export_feedback.py
 
 # Run as a normal user (uid 1000, as Hugging Face Spaces expects). /data holds the feedback
 # database and the lookup caches: mount a volume there to keep them.

@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
-from gms import breakeven, greenness, report
+from gms import breakeven, greenness, report, scoring
 from gms.metrics import registry
 from ui import components as ui
 from ui import state
@@ -31,6 +31,9 @@ cols = {"Original": score}
 yields = {"Original": y0}
 for cid in chosen:
     c = next(x for x in passed if x.id == cid)
+    if scoring.theoretical_product_mass(c.reaction) is None:      # no product MW: no yield scenario possible
+        cols[c.title], yields[c.title] = c.score, y0
+        continue
     y = ss["scenario_yields"].get(cid, (y0 or 80) / 100)
     cols[c.title] = breakeven.scenario(c.reaction, y)
     yields[c.title] = 100 * y

@@ -85,8 +85,16 @@ def analysis() -> Optional[dict]:
         detected = classify.classify(reaction)
         if reaction.reaction_class is None:
             reaction.reaction_class = detected[0]
-        findings = diagnosis.diagnose(reaction, score, store)
-        candidates = suggest.suggest(reaction, score, store)
+        try:
+            findings = diagnosis.diagnose(reaction, score, store)
+        except Exception:                 # the score card must still be shown
+            log.exception("diagnosis failed")
+            findings, issues = [], issues + ["The diagnosis could not be computed for this reaction."]
+        try:
+            candidates = suggest.suggest(reaction, score, store)
+        except Exception:
+            log.exception("suggestions failed")
+            candidates, issues = [], issues + ["The alternatives could not be computed for this reaction."]
     try:
         names.RESOLVER.save(app_settings().data_dir / "name_cache.json")
     except OSError:

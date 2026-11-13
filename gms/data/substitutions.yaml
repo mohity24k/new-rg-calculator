@@ -317,6 +317,7 @@ rules:
             doi: "10.1021/acs.joc.9b03280"
             verified: yes
       - name: "boric acid (catalytic)"
+        role: catalyst   # 10 mol%: not a stoichiometric reagent
         smiles: "OB(O)O"
         amount: {mol_percent: 10.0}
         adds: []
@@ -404,6 +405,7 @@ rules:
             doi: "10.1021/acs.joc.9b03280"
             verified: yes
       - name: "boric acid (catalytic)"
+        role: catalyst   # 10 mol%: not a stoichiometric reagent
         smiles: "OB(O)O"
         amount: {mol_percent: 10.0}
         adds: []
@@ -491,6 +493,7 @@ rules:
             doi: "10.1021/acs.joc.9b03280"
             verified: yes
       - name: "boric acid (catalytic)"
+        role: catalyst   # 10 mol%: not a stoichiometric reagent
         smiles: "OB(O)O"
         amount: {mol_percent: 10.0}
         adds: []
@@ -569,6 +572,7 @@ rules:
             doi: "10.1021/acs.oprd.8b00193"
             verified: yes
       - name: "boric acid (catalytic)"
+        role: catalyst   # 10 mol%: not a stoichiometric reagent
         smiles: "OB(O)O"
         amount: {mol_percent: 10.0}
         adds: []
@@ -662,6 +666,7 @@ rules:
             doi: "10.1016/S0040-4039(00)94371-5"
             verified: yes
       - name: "boric acid (catalytic)"
+        role: catalyst   # 10 mol%: not a stoichiometric reagent
         smiles: "OB(O)O"
         amount: {mol_percent: 10.0}
         adds: []
@@ -719,6 +724,7 @@ rules:
             doi: "10.1021/op500305s"
             verified: no
       - name: "boric acid (catalytic)"
+        role: catalyst   # 10 mol%: not a stoichiometric reagent
         smiles: "OB(O)O"
         amount: {mol_percent: 10.0}
         adds: []

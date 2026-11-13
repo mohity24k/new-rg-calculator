@@ -63,9 +63,9 @@ st.caption(f"Now: PMI {ui.fmt(score.metrics.get('pmi'))}, EcoScale {ui.fmt(score
            "Findings are sorted by the gain in the combined score.")
 for i, f in enumerate(findings):
     gain = f"combined score {ui.signed(f.greenness_gain)}" if f.greenness_gain is not None else ""
-    with st.expander(f"{i + 1}. {f.title}  ({gain})", expanded=i < 3):
-        st.write(f.detail)
-        st.markdown(f"**What if:** {ui.esc(f.what_if)}")
+    with st.expander(f"{i + 1}. {ui.md(f.title)}  ({gain})", expanded=i < 3):
+        st.write(ui.md(f.detail))
+        st.markdown(f"**What if:** {ui.md(f.what_if)}")
         rows = []
         for k, change in f.gains.items():
             if change is None or abs(change) < 1e-9:

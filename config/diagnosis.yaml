@@ -29,3 +29,5 @@ chromatography:
 
 harsh_conditions:
   min_penalty: 3                # EcoScale temperature/time or set-up penalty points at or above this
+  what_if_temperature_c: 22     # what-if: room temperature
+  what_if_time_h: 0.5           # what-if: less than 1 h

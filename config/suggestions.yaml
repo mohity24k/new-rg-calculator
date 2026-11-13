@@ -24,6 +24,9 @@ checked_metrics: [ae, rme, ce, erf, pmi, mi, e_factor, mp, emy, ecoscale, hazmat
 # Cost check: relative increase of the material cost that is still accepted.
 cost_tolerance_rel: 0.0
 
+# Hazard check: accepted increase of the mass-weighted CHEM21 solvent class (1-4).
+solvent_class_tolerance: 0.01
+
 # "Crystallisation instead of chromatography": the amount of crystallisation solvent is not
 # known, so this assumed amount is added to the candidate and marked as an estimate.
 crystallisation:

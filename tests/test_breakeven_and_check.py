@@ -144,3 +144,29 @@ def test_edit_that_cannot_be_computed_is_reported():
                          "with": {"name": "solvent without density", "smiles": "CCCCCCCCCCCCCCCC(C)C"}}])
     r.components.insert(-1, Component("x", "additive", mass_g=1.0))
     assert edits.apply(r, [{"op": "remove", "name": "x"}]).find("x") is None
+
+
+def test_catalytic_replacement_is_not_counted_as_a_reactant(amide):
+    r, base, cands = amide
+    c = _by_title(cands, "boric acid")
+    new = next(x for x in c.reaction.components if x.name.startswith("boric acid"))
+    assert new.role == "catalyst" and new.equiv == pytest.approx(0.10)
+    assert c.score.metrics["ae"] > 90                                 # acid + amine -> amide + water
+    assert c.status == "rejected" and "hazard" in c.reason            # boric acid is H360
+
+
+def test_candidate_estimates_are_marked_in_the_exports(amide):
+    import csv
+    import io
+    from gms import report
+    r, base, cands = amide
+    c = _by_title(cands, "ethyl acetate in place of DMF")
+    assert "pmi" in c.summary()["estimated_metrics"]
+    rep = report.build(r, base, [], cands)
+    rows = list(csv.reader(io.StringIO(report.to_csv(rep).decode("utf-8"))))
+    head = next(x for x in rows if x and x[0] == "Metric")
+    col = head.index(f"Candidate at original yield: {c.title}")
+    assert head[col + 1] == "Candidate is estimated"
+    pmi = next(x for x in rows if x and x[0] == "Process mass intensity")
+    ae = next(x for x in rows if x and x[0] == "Atom economy")
+    assert pmi[col + 1] == "estimated" and ae[col + 1] == ""

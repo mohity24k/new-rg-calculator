@@ -56,10 +56,11 @@ def complete(reaction: Reaction, online: Optional[bool] = None) -> list[str]:
             c.mass_g = c.moles * c.mw
             _add_note(c, "mass = moles x MW")
 
-    # equivalents -> moles. Reference = moles per 1 equivalent.
+    # equivalents -> moles. One equivalent = the moles of the limiting reactant (the usual
+    # laboratory meaning), whatever the stoichiometric coefficients are.
     refs = [c.moles / c.equiv for c in reaction.by_role("reactant") if c.moles and c.equiv and c.equiv > 0]
     lim = limiting(reaction)
-    ref = min(refs) if refs else (lim.moles / lim.coefficient if lim and lim.moles else None)
+    ref = min(refs) if refs else (lim.moles if lim and lim.moles else None)
     for c in reaction.by_role(*EQUIV_ROLES):
         if c.equiv is not None and c.moles is None and ref:
             c.moles = c.equiv * ref
@@ -71,10 +72,19 @@ def complete(reaction: Reaction, online: Optional[bool] = None) -> list[str]:
         if not any(c.limiting for c in reaction.by_role(*STOICHIOMETRIC_ROLES)):
             lim.limiting = True
         if lim.moles:
-            per_equiv = lim.moles / (lim.coefficient or 1.0)
             for c in reaction.by_role(*EQUIV_ROLES):
                 if c.equiv is None and c.moles:
-                    c.equiv = round(c.moles / per_equiv, 4)
+                    c.equiv = round(c.moles / lim.moles, 4)
+
+    # A paper often gives the yield but not the isolated mass. The product mass is then computed
+    # from the reported yield and marked as an estimate.
+    p = reaction.product
+    if p is not None and p.mass_g is None and p.moles is None and p.mw and lim is not None and lim.moles \
+            and reaction.reported_yield_percent:
+        p.moles = lim.moles / (lim.coefficient or 1.0) * p.coefficient * reaction.reported_yield_percent / 100.0
+        p.mass_g = p.moles * p.mw
+        p.estimated = True
+        _add_note(p, f"mass computed from the reported yield of {reaction.reported_yield_percent:g}%")
 
     for c in reaction.by_role(*STOICHIOMETRIC_ROLES, "product"):
         if not c.mw:
@@ -84,3 +94,11 @@ def complete(reaction: Reaction, online: Optional[bool] = None) -> list[str]:
         if c.mass_g is None:
             issues.append(f"'{c.name}' ({c.role.replace('_', ' ')}): no amount. It is not counted in the mass metrics.")
     return issues
+
+
+def excess_factor(c: Component, lim: Optional[Component]) -> Optional[float]:
+    """Amount charged divided by the stoichiometric amount (1 = no excess), from the equivalents
+    and the coefficients: equiv x coefficient(limiting) / coefficient(c)."""
+    if lim is None or not c.equiv:
+        return None
+    return c.equiv * (lim.coefficient or 1.0) / (c.coefficient or 1.0)

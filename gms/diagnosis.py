@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from gms import config, edits, scoring
-from gms.chem import hazard
+from gms.chem import amounts, hazard
 from gms.metrics import registry
 from gms.model import STOICHIOMETRIC_ROLES, Reaction
 
@@ -81,7 +81,7 @@ def diagnose(reaction: Reaction, base=None, store: Optional[hazard.HazardStore] 
     for x in hot:
         f = Finding("mass_hotspot", f"{x['name']} is {_pct(x['share_of_input'])} of the input mass",
                     f"{x['mass_g']:.3g} g of {x['name']} ({x['role'].replace('_', ' ')}) adds "
-                    f"{x['pmi_contribution']:.3g} kg/kg to the PMI of {base.metrics['pmi']:.3g}.",
+                    f"{x['pmi_contribution']:.3g} kg/kg to the PMI of {base.metrics['pmi'] or 0:.3g}.",
                     [x["name"]], what_if=f"Use {_pct(c['what_if_factor'])} of the amount of {x['name']}.")
         out.append(_gain(base, f, edits.apply(reaction, [
             {"op": "scale_mass", "name": x["name"], "factor": c["what_if_factor"]}]), store))
@@ -120,11 +120,12 @@ def diagnose(reaction: Reaction, base=None, store: Optional[hazard.HazardStore] 
     # 4. excess of a reactant or reagent
     e = cfg["excess_reagent"]
     for x in reaction.by_role(*STOICHIOMETRIC_ROLES):
-        if x.limiting or not x.equiv or x.equiv / (x.coefficient or 1.0) < e["min_equiv"]:
+        factor = amounts.excess_factor(x, lim)
+        if x.limiting or factor is None or factor < e["min_equiv"]:
             continue
-        target = e["target_equiv"] * (x.coefficient or 1.0)
+        target = x.equiv * e["target_equiv"] / factor          # equivalents that give the target excess
         f = Finding("excess_reagent", f"{x.name} is used in excess ({x.equiv:.3g} equivalents)",
-                    f"{x.mass:.3g} g of {x.name} is charged; {x.mass * (x.coefficient or 1.0) / x.equiv:.3g} g "
+                    f"{x.mass:.3g} g of {x.name} is charged; {x.mass / factor:.3g} g "
                     "is the stoichiometric amount.", [x.name],
                     what_if=f"Use {target:.3g} equivalents of {x.name}.")
         out.append(_gain(base, f, edits.apply(reaction, [{"op": "set_equiv", "name": x.name, "equiv": target}]), store))
@@ -132,7 +133,7 @@ def diagnose(reaction: Reaction, base=None, store: Optional[hazard.HazardStore] 
     # 5. low yield
     y = base.metrics.get("yield")
     ly = cfg["low_yield"]
-    if y is not None and y < ly["below_percent"]:
+    if y is not None and y < ly["below_percent"] and scoring.theoretical_product_mass(reaction):
         f = Finding("low_yield", f"The yield is {y:.0f}%",
                     "Every mass metric is divided by the product mass, so lost product raises PMI and E-factor "
                     "and lowers RME. The cause can be incomplete conversion, side reactions or losses in isolation.",
@@ -185,8 +186,9 @@ def diagnose(reaction: Reaction, base=None, store: Optional[hazard.HazardStore] 
                         "Long heating or cooling below 0 degC costs energy.", [eco["temp_time"]],
                         what_if="The same reaction at room temperature in less than 1 h.")
             out.append(_gain(base, f, edits.apply(reaction, [
-                {"op": "set", "field": "temperature_c", "value": 22.0}, {"op": "set", "field": "reflux", "value": False},
-                {"op": "set", "field": "time_h", "value": 0.5}]), store))
+                {"op": "set", "field": "temperature_c", "value": float(cfg["harsh_conditions"]["what_if_temperature_c"])},
+                {"op": "set", "field": "reflux", "value": False},
+                {"op": "set", "field": "time_h", "value": float(cfg["harsh_conditions"]["what_if_time_h"])}]), store))
         if eco["penalties"]["setup"] >= hc:
             f = Finding("special_setup", f"Special set-up: {', '.join(eco['setups'])} ({eco['penalties']['setup']} EcoScale points)",
                         "Special equipment adds operator effort and risk.", list(eco["setups"]),

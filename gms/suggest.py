@@ -20,7 +20,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from gms import breakeven, config, edits, precedents, regression, scoring
-from gms.chem import hazard, solvents
+from gms.chem import amounts, hazard, solvents
 from gms.chem.structure import canon
 from gms.metrics import registry
 from gms.model import STOICHIOMETRIC_ROLES, Reaction
@@ -92,6 +92,7 @@ class Candidate:
             "breakeven": self.breakeven, "assumptions": self.assumptions,
             "check": self.check,
             "metrics": self.score.metrics if self.score else None,
+            "estimated_metrics": list(self.score.estimated_metrics) if self.score else [],
             "verdict": self.score.greenness["label"] if self.score else None,
         }
 
@@ -191,6 +192,8 @@ def _table_candidates(reaction: Reaction) -> list[Candidate]:
                 continue
             for rep in rule["replacements"]:
                 w = {"name": rep["name"], "smiles": rep["smiles"]}
+                if rep.get("role"):                     # e.g. a catalytic replacement for a reagent
+                    w["role"] = _ROLE_FIX.get(rep["role"], rep["role"])
                 mix = _mixture_parts(rep) if kind.endswith("solvent") else None
                 if mix:
                     w["parts"], w["parts_note"] = mix
@@ -225,10 +228,12 @@ def _built_in_candidates(reaction: Reaction) -> list[Candidate]:
     cfg = config.load("suggestions")
     cls = reaction.reaction_class
     st = cfg["stoichiometry"]
+    lim0 = next((x for x in reaction.by_role(*STOICHIOMETRIC_ROLES) if x.limiting), None)
     for comp in reaction.by_role(*STOICHIOMETRIC_ROLES):
-        coef = comp.coefficient or 1.0
-        if comp.limiting or not comp.equiv or comp.equiv / coef < st["min_equiv"]:
+        factor = amounts.excess_factor(comp, lim0)          # charged / stoichiometric amount
+        if comp.limiting or factor is None or factor < st["min_equiv"]:
             continue
+        coef = comp.equiv / factor                          # equivalents that are exactly stoichiometric
         target, basis = st["target_equiv"], f"default target of {st['target_equiv']:g} equivalents (config/suggestions.yaml)"
         prec = {"available": False, "reason": "no precedent data for the amount of this material in this reaction class"}
         typ = None

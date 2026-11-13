@@ -3,6 +3,7 @@
 The extraction model is replaced by a local stub server. No test uses the network."""
 
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -49,7 +50,7 @@ def text(at) -> str:
     for kind in ("markdown", "caption", "info", "warning", "error", "success", "title", "subheader"):
         parts += [str(e.value) for e in getattr(at, kind)]
     parts += [e.label for e in at.expander]
-    return "\n".join(parts)
+    return re.sub(r"\\([\\`*_{}\[\]()#+!|<>~$])", r"\1", "\n".join(parts))     # undo the Markdown escaping
 
 
 def analyse_example(at: AppTest, example: str) -> AppTest:
@@ -222,3 +223,42 @@ def test_json_report_can_be_loaded_again():
     again = Reaction.from_dict(rep["reaction"])
     r2, problems = forms.reaction_from_rows(forms.rows_from_reaction(again), forms.meta_from_reaction(again))
     assert problems == [] and r2.product.name == r.product.name
+
+
+def test_product_without_a_structure_does_not_break_the_app():
+    """A product typed as a compound number has no molecular weight: the pages must still work."""
+    at = analyse_example(start(), "example-amide-hatu-dmf")
+    r = dict(at.session_state["reaction"])
+    r["components"] = [dict(c, name="compound 3a", smiles=None, mw=None) if c["role"] == "product" else c
+                       for c in r["components"]]
+    at.session_state["reaction"] = r
+    at.session_state["analysis"] = None
+    at.run()
+    assert not at.exception
+    for page in ("scorecard", "diagnosis", "alternatives", "compare"):
+        goto(at, page)
+    a = at.session_state["analysis"]
+    assert a["score"].metrics["yield"] is None and a["score"].metrics["ae"] is None
+    assert a["score"].metrics["pmi"] is not None                    # masses are known
+    goto(at, "alternatives")
+    assert any("need the molecular weight of the product" in i.value for i in at.info)
+
+
+def test_names_cannot_inject_markdown():
+    from ui import components as ui
+    assert ui.md("[click](https://evil.example)") == "\\[click\\]\\(https://evil.example\\)"
+    assert ui.md("![x](https://evil.example/a.png)").startswith("\\!\\[")
+    assert ui.esc("<script>alert(1)</script>") == "&lt;script&gt;alert(1)&lt;/script&gt;"
+    at = analyse_example(start(), "example-redam-dce")
+    r = dict(at.session_state["reaction"])
+    r["name"] = "[click](https://evil.example)"
+    r["components"] = [dict(c, name="[bad](https://evil.example) solvent") if c["name"] == "dichloromethane" else c
+                       for c in r["components"]]
+    at.session_state["reaction"] = r
+    at.session_state["analysis"] = None
+    at.run()
+    for page in ("reaction", "scorecard", "diagnosis", "alternatives"):
+        goto(at, page)
+        raw = "\n".join(str(e.value) for kind in ("markdown", "caption", "warning", "error", "info")
+                        for e in getattr(at, kind)) + "\n".join(e.label for e in at.expander)
+        assert "](https://evil.example)" not in raw, page             # never an unescaped link

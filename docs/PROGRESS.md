@@ -55,9 +55,32 @@ docker build -t green-metrics-studio . && docker run -p 7860:7860 green-metrics-
 | Documentation | done | `README.md`, `docs/` |
 | Benchmarks with sources | done: 13 known alternatives, 9 suggested (8 in the first three), 4 rejected by the check, 0 not generated | `benchmarks/` |
 
+### Independent review
+
+A fresh-context reviewer checked the code against the brief. It confirmed the break-even
+formulas (the candidate's metric at the break-even yield equals the original's), the edit
+arithmetic, the no-regression check, the security settings and a set of edge-case inputs. It
+found ten defects; all are fixed and covered by tests:
+
+1. A product without a recognised structure crashed the analysis (now handled; pages work).
+2. An unknown yield was scored as 0% (now "not available"; reported yield is used where given).
+3. Atom economy and RME were wrong when a reagent had no molecular weight or mass (now not available).
+4. A catalytic replacement (boric acid, 10 mol%) was counted as a stoichiometric reagent (now a catalyst).
+5. Candidate metrics in the exports had no estimate marker (now marked in CSV, JSON, PDF and the scenario table).
+6. Hard-coded tolerances and thresholds (moved to `config/`).
+7. Impossible values (PMI 0, E-factor -1) when no absolute amount is given (now not available).
+8. The meaning of "equivalent" depended on the coefficient of the limiting reactant (now n / n(limiting)).
+9. Names from a PDF could inject Markdown links (now escaped).
+10. The feedback token could be guessed without limit; the export script was not in the image (attempt
+    limit and delay added; script copied into the image).
+
+A live check against PubChem found one more defect: a lookup that timed out was repeated on
+every re-scoring, which made the suggestion step hang. Failed lookups are now remembered for
+ten minutes (`config/hazard.yaml`).
+
 ### Verified in the build session
 
-- Full test suite passes (see the last commit message for the count).
+- Full test suite: 167 tests pass, no network. CI on GitHub passed, including the Docker build and health check.
 - `docker build` of the committed Dockerfile succeeded; the container was driven with a real
   browser twice: without an extraction server (enter, analyse, all pages, PDF download) and with
   a stub extraction server (extract, review, analyse). The key and endpoint did not appear in the page.
@@ -74,7 +97,16 @@ No metric formula changed. These things changed around the formulas:
 3. **The old pages** (separate mass, EcoScale and comparison pages with Route A / Route B slots)
    are replaced by the reaction record flow. The life-cycle hazard ratio page is kept as a
    reference page.
-4. **The classic "one reaction per PDF" mode is no longer in the UI.** The app uses the dataset
+4. **A value that cannot be computed is "not available", not 0.** The formulas return 0 when a
+   molecular weight or a mass is missing (for example a product typed as "compound 3a", or a
+   reagent without a structure). `gms/scoring.py` now reports those metrics as not available
+   and says why. An entered mass of 0 is still scored as before. The formula functions are
+   unchanged; the one visible difference is the degenerate golden case "no reactants", where
+   atom economy and RME were 0 and are now not available (`tests/test_scoring.py`).
+5. **One equivalent is the moles of the limiting reactant**, whatever the coefficients are.
+6. **A product mass can be computed from the reported yield** when no isolated mass is given.
+   It is marked as an estimate.
+7. **The classic "one reaction per PDF" mode is no longer in the UI.** The app uses the dataset
    pipeline (roles kept, many reactions per document). `gms/extraction/classic.py` remains for
    the extraction speed benchmark.
 

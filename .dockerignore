@@ -10,7 +10,8 @@ tests
 notebooks
 docling
 benchmarks
-scripts
+scripts/*
+!scripts/export_feedback.py
 gms/data/precedent_reactions.jsonl.gz
 .streamlit/secrets.toml
 .env

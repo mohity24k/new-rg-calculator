@@ -36,7 +36,7 @@ def _density(name: str, role: str, smiles: Optional[str]) -> Optional[float]:
 
 def _per_equiv(reaction: Reaction) -> Optional[float]:
     lim = amounts.limiting(reaction)
-    return lim.moles / (lim.coefficient or 1.0) if lim and lim.moles else None
+    return lim.moles if lim and lim.moles else None
 
 
 def _scale(c: Component, factor: float) -> None:

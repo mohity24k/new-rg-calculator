@@ -97,9 +97,9 @@ def assess(score) -> dict:
     for key in sorted(parts, key=lambda k: -(1 - parts[k]) * weights[k]):
         d, lim = parts[key], cfg["desirability"][key]
         text = f"{_label(key)}: {_fmt(key, values[key])} (target {lim['best']:g}, poor at {lim['worst']:g})"
-        if d < 0.5:
+        if d < cfg["reasons"]["against_below"]:
             reasons.append(text)
-        elif d >= 0.8:
+        elif d >= cfg["reasons"]["in_favour_from"]:
             strengths.append(text)
     notes = []
     if missing:

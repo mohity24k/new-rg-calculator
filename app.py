@@ -37,7 +37,7 @@ with st.sidebar:
     a = st.session_state.get("analysis")
     if a:
         g = a["score"].greenness
-        st.markdown(f"**Current reaction**  \n{ui.esc(a['reaction'].name or 'unnamed')}")
+        st.markdown(f"**Current reaction**  \n{ui.md(a['reaction'].name or 'unnamed')}")
         st.markdown(ui.badge(g["label"], ui.VERDICT_COLOUR[g["verdict"]]), unsafe_allow_html=True)
     else:
         st.caption("No reaction analysed yet.")

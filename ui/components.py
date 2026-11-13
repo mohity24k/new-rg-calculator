@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import html
 import math
+import re
 
 import streamlit as st
 
@@ -43,6 +44,15 @@ def css() -> None:
 
 def esc(x) -> str:
     return html.escape(str(x), quote=True)
+
+
+_MD_SPECIAL = re.compile(r"([\\`*_{}\[\]()#+!|<>~$])")
+
+
+def md(x) -> str:
+    """Text for st.markdown / st.caption / st.warning: Markdown characters are escaped, so a
+    name from a paper or from the user cannot become a link, an image or formatting."""
+    return _MD_SPECIAL.sub(r"\\\1", str(x))
 
 
 def fmt(value, digits: int = 3) -> str:

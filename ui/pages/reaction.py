@@ -90,11 +90,11 @@ with st.expander("Start from an example, a saved reaction or a PDF", expanded=ss
                     st.warning("No reaction procedure was found on these pages. Check the page range.")
                 else:
                     from gms.extraction import enrich
-                    i = st.selectbox("Reaction to review", range(len(rx)), format_func=lambda k: enrich.summary(rx[k]))
+                    i = st.selectbox("Reaction to review", range(len(rx)), format_func=lambda k: enrich.summary(rx[k]))  # plain text
                     rec = rx[i]
                     st.caption(f"Completeness: {100 * rec.get('completeness', 0):.0f}% of the materials have a mass.")
                     for f in rec.get("flags", []):
-                        st.warning(f"Check: {f['code'].replace('_', ' ')}. {f['detail']}")
+                        st.warning(f"Check: {f['code'].replace('_', ' ')}. {ui.md(f['detail'])}")
                     pages = (rec.get("source") or {}).get("pages") or []
                     if pages and st.checkbox("Show the source page"):
                         st.image(classic.render_page(exr["pdf"], pages[0] - 1, dpi=110), width="stretch")
@@ -111,16 +111,17 @@ v = ss["editor_version"]
 src = meta.get("source") or {}
 if src.get("entry") == "pdf":
     st.warning("This reaction was extracted from a PDF by a model. Check every row against the source "
-               f"(file {src.get('file') or 'unknown'}, page(s) {', '.join(map(str, src.get('pages') or [])) or 'unknown'}) "
+               f"(file {ui.md(src.get('file') or 'unknown')}, page(s) {', '.join(map(str, src.get('pages') or [])) or 'unknown'}) "
                "before you analyse it.")
     for f in src.get("flags") or []:
-        st.caption(f"Extraction check: {f}")
+        st.caption(f"Extraction check: {ui.md(f)}")
 
 st.subheader("Materials")
 advanced = st.toggle("Show advanced columns (structure, molecular weight, coefficient, benign, estimate)",
                      key=f"adv_{v}")
 st.caption("One row per material. **Role** decides how the material counts: reactants and reagents are in the "
-           "balanced equation; everything else is auxiliary. Give the amount as mass, volume, moles or equivalents. "
+           "balanced equation; everything else is auxiliary. Give the amount as mass, volume, moles or equivalents "
+           "(1 equivalent = the moles of the limiting reactant). "
            "Tick **Limiting** for the limiting reactant. Add rows at the bottom of the table.")
 cols = [c for c in forms.COLUMNS if advanced or c not in forms.ADVANCED]
 edited = st.data_editor(
@@ -198,7 +199,7 @@ if a:
     st.subheader("Review: what the app understood")
     cls, how, why = a["detected_class"]
     label = classify.CLASSES.get(r.reaction_class, "Not one of the supported classes")
-    st.markdown(f"**Reaction class:** {label}. " + (ui.esc(why) if cls == r.reaction_class else "Set by you."))
+    st.markdown(f"**Reaction class:** {label}. " + (ui.md(why) if cls == r.reaction_class else "Set by you."))
     if r.reaction_class is None:
         st.info("Suggestions for reaction solvent, reagents and catalysts exist only for amide coupling, "
                 "Suzuki-Miyaura coupling and reductive amination. Workup and purification suggestions, the score "
@@ -215,17 +216,17 @@ if a:
                                 "Equiv.": st.column_config.NumberColumn(format="%.3g"),
                                 "MW": st.column_config.NumberColumn(format="%.2f")})
     for msg in a["issues"]:
-        st.warning(msg)
+        st.warning(ui.md(msg))
     for msg in score.warnings:
         if msg not in a["issues"]:
-            st.warning(msg)
+            st.warning(ui.md(msg))
     inferred = stoich.infer_coefficients([c.smiles for c in r.by_role("reactant")], r.product.smiles if r.product else None)
     current = [c.coefficient for c in r.by_role("reactant")]
     if inferred and not inferred["covered"]:
         st.warning("The product has more carbon atoms than the reactants supply. A reactant may be missing, or it "
                    "has another role in the table (for example 'reagent').")
     elif inferred and inferred["coefficients"] != current and all(x == 1 for x in current):
-        pairs = ", ".join(f"{n} x {c.name}" for n, c in zip(inferred["coefficients"], r.by_role("reactant")))
+        pairs = ", ".join(f"{n} x {ui.md(c.name)}" for n, c in zip(inferred["coefficients"], r.by_role("reactant")))
         st.info(f"Atom balance suggests these coefficients: {pairs}. The app does not change them for you. If "
                 "this is right, set the coefficients in the advanced columns and analyse again.")
     st.success("Analysed. Continue with the score card.")

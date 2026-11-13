@@ -96,11 +96,12 @@ def check(original: Reaction, o_score, candidate: Reaction, c_score) -> dict:
                          "this dimension gets worse; the overall worst score decides the check" if c > o else ""))
 
     osc, csc = o_score.hazard_summary["solvent_class"], c_score.hazard_summary["solvent_class"]
+    tol_sc = config.load("suggestions")["solvent_class_tolerance"]
     if osc is not None and csc is not None:
         rows.append(_row("Hazard", "Solvent class (CHEM21, mass-weighted; 1 recommended - 4 highly hazardous)",
                          round(osc, 2), round(csc, 2),
-                         FAIL if csc > osc + 0.01 else BETTER if csc < osc - 0.01 else SAME,
-                         "the solvents used are ranked worse on average" if csc > osc + 0.01 else ""))
+                         FAIL if csc > osc + tol_sc else BETTER if csc < osc - tol_sc else SAME,
+                         "the solvents used are ranked worse on average" if csc > osc + tol_sc else ""))
 
     # 3. metrics
     for key in config.load("suggestions")["checked_metrics"]:
