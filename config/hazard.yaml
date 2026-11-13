@@ -20,40 +20,47 @@ ecoscale_symbols:
   "E":  [H200, H201, H202, H203, H204, H205, H240, H241]
   "N":  [H400, H410, H411]
 
-# Hazard score of one material = the highest score among its H-statements, per dimension.
-# Health and environment follow the CHEM21 solvent guide scoring (Prat et al. 2016); the
-# physical-hazard scale is this tool's own and uses the GHS categories. 1 = low, 10 = severe.
+# Hazard score of one material = the highest score among its H-statements, per dimension
+# (1 = low, 10 = severe; 1-3 green, 4-6 amber, 7-10 red, as in the CHEM21 guide).
+#   health, environment: the CHEM21 solvent guide scoring of H-statements (Prat et al.,
+#       Green Chem. 2016, 18, 288; values in gms/data/chem21_scoring.yaml), applied here to
+#       every material. The guide adds +1 to the health score of a solvent that boils below
+#       85 degC and uses the boiling point in the environment score; those two solvent-only
+#       rules are not applied here. Sub-categories (H360D, H361f...) count as the parent code.
+#   safety: this tool's own scale for physical hazards, in line with the guide's flash-point
+#       scores (H224: 7, H225: 5, H226: 3).
 scores:
   health:
-    H340: 10
-    H350: 10
-    H360: 10
-    H341: 7
-    H351: 7
-    H361: 7
+    H340: 9
+    H350: 9
+    H360: 9
     H300: 9
     H310: 9
     H330: 9
-    H301: 7
-    H311: 7
-    H331: 7
-    H370: 7
-    H372: 7
     H314: 7
-    H334: 7
-    H318: 6
-    H371: 6
-    H373: 6
-    H304: 4
-    H302: 4
-    H312: 4
-    H332: 4
-    H336: 4
-    H315: 4
-    H317: 4
-    H319: 4
-    H335: 4
-    H362: 4
+    H341: 6
+    H351: 6
+    H361: 6
+    H301: 6
+    H311: 6
+    H331: 6
+    H370: 6
+    H372: 6
+    H334: 4
+    H318: 4
+    H304: 2
+    H371: 2
+    H373: 2
+    H302: 2
+    H312: 2
+    H332: 2
+    H336: 2
+    H315: 2
+    H317: 2
+    H319: 2
+    H335: 2
+    EUH070: 2
+    EUH066: 2
   safety:
     H200: 10
     H201: 10
@@ -64,32 +71,35 @@ scores:
     H240: 10
     H241: 9
     H250: 9
-    H220: 8
-    H224: 8
     H260: 8
     H271: 8
+    H220: 7
+    H224: 7
     H242: 7
-    H225: 6
-    H228: 6
-    H251: 6
-    H261: 6
-    H270: 6
-    H272: 6
-    H226: 4
-    H252: 4
-    H290: 3
+    H225: 5
+    H228: 5
+    H251: 5
+    H261: 5
+    H270: 5
+    H272: 5
+    H226: 3
+    H252: 3
+    H290: 2
   environment:
+    H420: 10
+    EUH420: 10
     H400: 7
     H410: 7
-    H420: 10
-    H411: 6
+    H411: 7
     H412: 5
-    H413: 4
+    H413: 5
   default_no_statement: 1      # material with GHS data and no statement in that dimension
 
-# A material counts as "high hazard" (for the high-hazard mass intensity and for the diagnosis)
-# when its score in any dimension is at least this value.
-high_hazard_min: 7
+# A material counts as "high hazard" (high-hazard mass intensity, diagnosis) when its score
+# reaches this value in that dimension. Health 6 includes suspected CMR, toxic (category 3) and
+# organ-toxic materials; 7 in safety / environment includes extremely flammable, pyrophoric and
+# water-reactive materials and materials very toxic or toxic to aquatic life.
+high_hazard_min: {health: 6, safety: 7, environment: 7}
 
 # Solvent class (CHEM21 ranking after discussion) -> number used for the mass-weighted class.
 solvent_class: {recommended: 1, problematic: 2, hazardous: 3, highly hazardous: 4}

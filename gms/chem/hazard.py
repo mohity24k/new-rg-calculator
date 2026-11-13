@@ -43,6 +43,11 @@ class HazardProfile:
         return self.status in ("classified", "not_classified")
 
 
+def _profile(name: str, rec: dict) -> HazardProfile:
+    return HazardProfile(name=name, status=rec["status"], h_codes=list(rec.get("h_codes", [])), cid=rec.get("cid"),
+                         source=rec.get("source", ""), retrieved=rec.get("retrieved", ""))
+
+
 def base_code(code: str) -> str:
     """'H360D' -> 'H360', 'H361fd' -> 'H361' (the scores are defined on the base statement)."""
     m = re.match(r"((?:EU)?H\d{3})", code)
@@ -54,10 +59,14 @@ def select_statements(sources: list[dict]) -> tuple[list[str], str]:
     cfg = config.load("hazard")["ghs"]
     for wanted in cfg["source_priority"]:
         for s in sources:
-            if s["source"].startswith(wanted) and s["statements"]:
+            if not s["source"].startswith(wanted):
+                continue
+            if s["statements"]:
                 keep = [c for c, share in s["statements"]
                         if share is None or share >= cfg["min_report_share_pct"]]
                 return list(dict.fromkeys(keep)), s["source"]
+            if s.get("not_classified"):              # the source says: does not meet the GHS criteria
+                return [], s["source"]
     for s in sources:                                    # any other source (NITE, HCIS, ...)
         if s["statements"]:
             return list(dict.fromkeys(c for c, _ in s["statements"])), s["source"]
@@ -80,8 +89,9 @@ def worst_score(profile: HazardProfile) -> Optional[int]:
 
 
 def is_high_hazard(profile: HazardProfile) -> bool:
-    w = worst_score(profile)
-    return w is not None and w >= config.load("hazard")["high_hazard_min"]
+    s = scores(profile)
+    limits = config.load("hazard")["high_hazard_min"]
+    return s is not None and any(s[d] >= limits[d] for d in DIMENSIONS)
 
 
 def ecoscale_symbols(profile: HazardProfile) -> list[str]:
@@ -131,7 +141,7 @@ class HazardStore:
         online = self.online if online is None else online
         rec = self._stored(name, smiles)
         if rec is not None:
-            return HazardProfile(name=name, **rec)
+            return _profile(name, rec)
         if not online:
             return HazardProfile(name=name, status="unavailable")
         try:
@@ -141,7 +151,7 @@ class HazardStore:
         with self._lock:
             self._cache[self.key(name, smiles)] = rec
             self._save()
-        return HazardProfile(name=name, **rec)
+        return _profile(name, rec)
 
     def _save(self) -> None:
         if not self.cache_path:
@@ -158,17 +168,18 @@ class HazardStore:
 def fetch(name: str, smiles: Optional[str] = None) -> dict:
     """One PubChem lookup -> storable record. Raises LookupFailed on a transient failure."""
     today = _dt.date.today().isoformat()
-    cid = pubchem.cid_for(names.clean(name), smiles)
-    if cid is None:
+    cids = pubchem.cids_for(names.clean(name), smiles)
+    if not cids:
         return {"status": "no_data", "h_codes": [], "cid": None, "source": "PubChem: compound not found",
                 "retrieved": today}
-    sources = pubchem.ghs_for_cid(cid)
-    if not sources:
-        return {"status": "no_data", "h_codes": [], "cid": cid,
-                "source": "PubChem: no GHS classification", "retrieved": today}
-    codes, source = select_statements(sources)
-    return {"status": "classified" if codes else "not_classified", "h_codes": codes, "cid": cid,
-            "source": f"PubChem GHS Classification ({source})", "retrieved": today}
+    for cid in cids:
+        sources = pubchem.ghs_for_cid(cid)
+        if sources:
+            codes, source = select_statements(sources)
+            return {"status": "classified" if codes else "not_classified", "h_codes": codes, "cid": cid,
+                    "source": f"PubChem GHS Classification ({source})", "retrieved": today}
+    return {"status": "no_data", "h_codes": [], "cid": cids[0],
+            "source": "PubChem: no GHS classification", "retrieved": today}
 
 
 _STORE: Optional[HazardStore] = None

@@ -7,6 +7,9 @@
 #                          <= moderate is amber. These are the thresholds the app used before v1.
 #   tolerance_rel/_abs     no-regression check: a candidate may be worse than the original by at
 #                          most max(tolerance_rel x |original|, tolerance_abs) before it is rejected.
+#                          The mass-intensity metrics have 5%: a solvent swap at equal volume
+#                          changes the mass by the density ratio (hexane -> heptane: +4%), and lab
+#                          amounts are not known more precisely than that.
 #   yield_dependent        true if the value changes with the isolated yield
 #   legacy_label           the label used in exports before v1 (kept in the CSV/JSON reports)
 #   reference              formula source
@@ -47,7 +50,7 @@ metrics:
     direction: lower
     good: 5
     moderate: 20
-    tolerance_rel: 0.02
+    tolerance_rel: 0.05
     tolerance_abs: 0.05
     yield_dependent: true
     legacy_label: "Process Mass Intensity (PMI, kg/kg)"
@@ -60,7 +63,7 @@ metrics:
     direction: lower
     good: 5
     moderate: 20
-    tolerance_rel: 0.02
+    tolerance_rel: 0.05
     tolerance_abs: 0.05
     yield_dependent: true
     legacy_label: "Mass Intensity excl. water (MI, kg/kg)"
@@ -73,7 +76,7 @@ metrics:
     direction: lower
     good: 5
     moderate: 20
-    tolerance_rel: 0.02
+    tolerance_rel: 0.05
     tolerance_abs: 0.05
     yield_dependent: true
     legacy_label: "E-Factor (kg waste/kg product)"
@@ -86,7 +89,7 @@ metrics:
     direction: higher
     good: 20
     moderate: 5
-    tolerance_rel: 0.02
+    tolerance_rel: 0.05
     tolerance_abs: 0.05
     yield_dependent: true
     legacy_label: "Mass Productivity (MP, %)"
@@ -99,7 +102,7 @@ metrics:
     direction: higher
     good: 50
     moderate: 20
-    tolerance_rel: 0.02
+    tolerance_rel: 0.05
     tolerance_abs: 0.05
     yield_dependent: true
     legacy_label: "Effective Mass Yield (EMY, %)"
@@ -151,8 +154,12 @@ metrics:
     direction: higher
     good: 75
     moderate: 50
+    # 5 points = one EcoScale hazard symbol. The EcoScale gives "highly flammable" the same
+    # penalty as "toxic", so a swap from a non-flammable hazardous solvent (dichloromethane)
+    # to a recommended flammable one (ethyl acetate) loses 5 points. With a smaller tolerance
+    # the check rejects every such swap. A loss inside the tolerance is shown as a trade-off.
     tolerance_rel: 0.0
-    tolerance_abs: 0.5
+    tolerance_abs: 5.0
     yield_dependent: true
     legacy_label: "Eco-Scale Score"
     reference: "Van Aken, Strekowski, Patiny 2006; Tamargo et al. 2024, Table 10.3"
@@ -164,7 +171,7 @@ metrics:
     direction: lower
     good: 0.5
     moderate: 5
-    tolerance_rel: 0.02
+    tolerance_rel: 0.05
     tolerance_abs: 0.01
     yield_dependent: true
     legacy_label: null

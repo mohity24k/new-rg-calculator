@@ -1,0 +1,29 @@
+id: example-amide-hatu-dmf
+title: "Amide coupling: HATU, DIPEA, DMF"
+description: >-
+  Representative laboratory procedure for an amide coupling (typical conditions of the class,
+  written for this tool; not taken from one paper).
+reaction:
+  name: "N-benzyl-4-methoxybenzamide by HATU coupling"
+  reaction_class: amide_coupling
+  temperature_c: 22
+  time_h: 16
+  atmosphere: nitrogen
+  workup_steps:
+    - "Liquid-liquid extraction (incl. drying/filtration of desiccant)"
+    - "Classical chromatography"
+  source: {entry: example}
+  components:
+    - {name: "4-methoxybenzoic acid", role: reactant, smiles: "COc1ccc(cc1)C(=O)O", mass_g: 0.152, limiting: true}
+    - {name: "benzylamine", role: reactant, smiles: "NCc1ccccc1", equiv: 1.2}
+    - {name: "HATU", role: reagent, equiv: 1.2}
+    - {name: "DIPEA", role: base, equiv: 3.0}
+    - {name: "DMF", role: reaction_solvent, volume_ml: 5}
+    - {name: "ethyl acetate", role: workup, volume_ml: 60}
+    - {name: "saturated aqueous NaHCO3", role: water, volume_ml: 20}
+    - {name: "brine", role: water, volume_ml: 20}
+    - {name: "sodium sulfate", role: workup, mass_g: 2.0}
+    - {name: "silica gel", role: purification, mass_g: 20}
+    - {name: "hexane", role: purification, volume_ml: 150}
+    - {name: "ethyl acetate (eluent)", role: purification, smiles: "CCOC(C)=O", volume_ml: 50}
+    - {name: "N-benzyl-4-methoxybenzamide", role: product, smiles: "COc1ccc(cc1)C(=O)NCc1ccccc1", mass_g: 0.205}

@@ -35,6 +35,7 @@ class AuxiliaryMaterial:
     name: str
     mass: float  # g
     benign: bool = False  # e.g. water, NaCl, dilute ethanol (EMY only)
+    role: str = ""  # catalyst, base, additive, reaction_solvent, workup, purification
 
 
 # ---------------------------------------------------------------------------

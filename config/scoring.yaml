@@ -14,7 +14,7 @@ desirability:
   rme:       {worst: 20, best: 80, weight: 1.0}
   pmi:       {worst: 500, best: 10, scale: log, weight: 2.0}
   ecoscale:  {worst: 30, best: 80, weight: 2.0}
-  hazard:    {worst: 10, best: 3, weight: 2.0}     # worst hazard score (1-10) among the materials used
+  hazard:    {worst: 9, best: 3, weight: 2.0}      # worst hazard score (1-10) among the materials used
   solvent:   {worst: 4, best: 1, weight: 1.0}      # mass-weighted CHEM21 class: 1 recommended ... 4 highly hazardous
 
 verdict:

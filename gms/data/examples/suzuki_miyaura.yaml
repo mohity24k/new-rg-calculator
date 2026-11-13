@@ -1,0 +1,28 @@
+id: example-suzuki-dioxane
+title: "Suzuki-Miyaura coupling: Pd(PPh3)4, K2CO3, dioxane/water"
+description: >-
+  Representative laboratory procedure for a Suzuki-Miyaura coupling (typical conditions of the
+  class, written for this tool; not taken from one paper).
+reaction:
+  name: "4-methoxybiphenyl by Suzuki-Miyaura coupling"
+  reaction_class: suzuki_miyaura
+  temperature_c: 90
+  time_h: 12
+  atmosphere: argon
+  workup_steps:
+    - "Liquid-liquid extraction (incl. drying/filtration of desiccant)"
+    - "Classical chromatography"
+  source: {entry: example}
+  components:
+    - {name: "4-bromoanisole", role: reactant, smiles: "COc1ccc(Br)cc1", mass_g: 0.187, limiting: true}
+    - {name: "phenylboronic acid", role: reactant, smiles: "OB(O)c1ccccc1", equiv: 1.5}
+    - {name: "Pd(PPh3)4", role: catalyst, equiv: 0.05}
+    - {name: "K2CO3", role: base, equiv: 2.0}
+    - {name: "1,4-dioxane", role: reaction_solvent, volume_ml: 4}
+    - {name: "water", role: water, stage: reaction, volume_ml: 1}
+    - {name: "ethyl acetate", role: workup, volume_ml: 30}
+    - {name: "brine", role: water, volume_ml: 10}
+    - {name: "magnesium sulfate", role: workup, mass_g: 1.0}
+    - {name: "silica gel", role: purification, mass_g: 15}
+    - {name: "hexane", role: purification, volume_ml: 120}
+    - {name: "4-methoxybiphenyl", role: product, smiles: "COc1ccc(cc1)-c1ccccc1", mass_g: 0.166}

@@ -1,0 +1,1470 @@
+# Greener substitution rules for Green Metrics Studio.
+# Curated 2026-11-12. Every SMILES was parsed with RDKit.
+# verified: yes = bibliographic details AND the content the rule relies on were confirmed during curation
+#   from web search results (publisher, repository or indexing pages). Full texts could not be opened
+#   (publisher sites were blocked in the curation environment), so no entry was checked against a full paper.
+# verified: no  = the reference exists (title/journal/year/DOI confirmed) but the specific content the rule
+#   relies on could not be confirmed online; treat the rule as lower confidence until someone reads the paper.
+# Amounts given as {equiv: ...} or {mol_percent: ...} are starting points, not literature-exact loadings.
+schema_version: 1
+rules:
+  - id: amide-solvent-dmf
+    kind: reaction_solvent
+    classes: [amide_coupling]
+    target:
+      name: "N,N-dimethylformamide"
+      smiles: "CN(C)C=O"
+    problem: "Reprotoxic (H360D). Ranked hazardous in CHEM21. High boiling point (153 degC) makes removal slow and energy-intensive; usually removed by repeated aqueous washes."
+    replacements:
+      - name: "ethyl acetate"
+        smiles: "CCOC(C)=O"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "MacMillan et al. 2013 screened COMU, DIC/HOBt, HATU, PyBOP and T3P on four acid/amine pairings (aryl and alkyl acids with aryl and alkyl amines) and judged dimethyl carbonate, ethyl acetate and 2-MeTHF practical replacements for dichloromethane and DMF. A wider substrate set was then run with COMU in these solvents."
+        caveats: "Conversion depended on the reagent and the acid/amine pairing; T3P was poor for alkyl acid + aryl amine in that screen. Check that acid, amine (or amine salt) and base dissolve; polar or zwitterionic substrates may not. One COMU example needed about 24 h in ethyl acetate instead of about 4 h. Ethyl acetate is ranked recommended in CHEM21."
+        evidence: class_specific_study
+        sources:
+          - citation: "D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15, 596-600"
+            doi: "10.1039/C2GC36900A"
+            verified: yes
+          - citation: "A. Jordan, C. G. J. Hall, L. R. Thorp and H. F. Sneddon, Chem. Rev., 2022, 122, 6749-6794"
+            doi: "10.1021/acs.chemrev.1c00672"
+            verified: yes
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+      - name: "2-methyltetrahydrofuran"
+        smiles: "CC1CCCO1"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "MacMillan et al. 2013 screened COMU, DIC/HOBt, HATU, PyBOP and T3P on four acid/amine pairings (aryl and alkyl acids with aryl and alkyl amines) and judged dimethyl carbonate, ethyl acetate and 2-MeTHF practical replacements for dichloromethane and DMF. A wider substrate set was then run with COMU in these solvents."
+        caveats: "Conversion depended on the reagent and the acid/amine pairing; T3P was poor for alkyl acid + aryl amine in that screen. Check that acid, amine (or amine salt) and base dissolve; polar or zwitterionic substrates may not. 2-MeTHF forms peroxides on storage and costs more. It is ranked problematic, not recommended, in CHEM21."
+        evidence: class_specific_study
+        sources:
+          - citation: "D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15, 596-600"
+            doi: "10.1039/C2GC36900A"
+            verified: yes
+          - citation: "A. Jordan, C. G. J. Hall, L. R. Thorp and H. F. Sneddon, Chem. Rev., 2022, 122, 6749-6794"
+            doi: "10.1021/acs.chemrev.1c00672"
+            verified: yes
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+      - name: "dimethyl carbonate"
+        smiles: "COC(=O)OC"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "MacMillan et al. 2013 screened COMU, DIC/HOBt, HATU, PyBOP and T3P on four acid/amine pairings (aryl and alkyl acids with aryl and alkyl amines) and judged dimethyl carbonate, ethyl acetate and 2-MeTHF practical replacements for dichloromethane and DMF. A wider substrate set was then run with COMU in these solvents."
+        caveats: "Conversion depended on the reagent and the acid/amine pairing; T3P was poor for alkyl acid + aryl amine in that screen. Check that acid, amine (or amine salt) and base dissolve; polar or zwitterionic substrates may not. Keep to ambient temperature: dimethyl carbonate is an electrophile and can react with amines when heated with base. Melting point is about 4 degC, so it can freeze in a cold bath."
+        evidence: class_specific_study
+        sources:
+          - citation: "D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15, 596-600"
+            doi: "10.1039/C2GC36900A"
+            verified: yes
+          - citation: "A. Jordan, C. G. J. Hall, L. R. Thorp and H. F. Sneddon, Chem. Rev., 2022, 122, 6749-6794"
+            doi: "10.1021/acs.chemrev.1c00672"
+            verified: yes
+
+  - id: amide-solvent-dcm
+    kind: reaction_solvent
+    classes: [amide_coupling]
+    target:
+      name: "dichloromethane"
+      smiles: "ClCCl"
+    problem: "Suspected carcinogen (H351). Very volatile (bp 40 degC), so losses to air are high. Ranked hazardous in CHEM21 (final ranking). Gives a chlorinated waste stream."
+    replacements:
+      - name: "ethyl acetate"
+        smiles: "CCOC(C)=O"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "MacMillan et al. 2013 screened COMU, DIC/HOBt, HATU, PyBOP and T3P on four acid/amine pairings (aryl and alkyl acids with aryl and alkyl amines) and judged dimethyl carbonate, ethyl acetate and 2-MeTHF practical replacements for dichloromethane and DMF. A wider substrate set was then run with COMU in these solvents."
+        caveats: "Conversion depended on the reagent and the acid/amine pairing; T3P was poor for alkyl acid + aryl amine in that screen. Check that acid, amine (or amine salt) and base dissolve; polar or zwitterionic substrates may not. One COMU example needed about 24 h in ethyl acetate instead of about 4 h. Ethyl acetate is ranked recommended in CHEM21."
+        evidence: class_specific_study
+        sources:
+          - citation: "D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15, 596-600"
+            doi: "10.1039/C2GC36900A"
+            verified: yes
+          - citation: "A. Jordan, C. G. J. Hall, L. R. Thorp and H. F. Sneddon, Chem. Rev., 2022, 122, 6749-6794"
+            doi: "10.1021/acs.chemrev.1c00672"
+            verified: yes
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+      - name: "2-methyltetrahydrofuran"
+        smiles: "CC1CCCO1"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "MacMillan et al. 2013 screened COMU, DIC/HOBt, HATU, PyBOP and T3P on four acid/amine pairings (aryl and alkyl acids with aryl and alkyl amines) and judged dimethyl carbonate, ethyl acetate and 2-MeTHF practical replacements for dichloromethane and DMF. A wider substrate set was then run with COMU in these solvents."
+        caveats: "Conversion depended on the reagent and the acid/amine pairing; T3P was poor for alkyl acid + aryl amine in that screen. Check that acid, amine (or amine salt) and base dissolve; polar or zwitterionic substrates may not. 2-MeTHF forms peroxides on storage and costs more. It is ranked problematic, not recommended, in CHEM21."
+        evidence: class_specific_study
+        sources:
+          - citation: "D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15, 596-600"
+            doi: "10.1039/C2GC36900A"
+            verified: yes
+          - citation: "A. Jordan, C. G. J. Hall, L. R. Thorp and H. F. Sneddon, Chem. Rev., 2022, 122, 6749-6794"
+            doi: "10.1021/acs.chemrev.1c00672"
+            verified: yes
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+      - name: "dimethyl carbonate"
+        smiles: "COC(=O)OC"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "MacMillan et al. 2013 screened COMU, DIC/HOBt, HATU, PyBOP and T3P on four acid/amine pairings (aryl and alkyl acids with aryl and alkyl amines) and judged dimethyl carbonate, ethyl acetate and 2-MeTHF practical replacements for dichloromethane and DMF. A wider substrate set was then run with COMU in these solvents."
+        caveats: "Conversion depended on the reagent and the acid/amine pairing; T3P was poor for alkyl acid + aryl amine in that screen. Check that acid, amine (or amine salt) and base dissolve; polar or zwitterionic substrates may not. Keep to ambient temperature: dimethyl carbonate is an electrophile and can react with amines when heated with base. Melting point is about 4 degC, so it can freeze in a cold bath."
+        evidence: class_specific_study
+        sources:
+          - citation: "D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15, 596-600"
+            doi: "10.1039/C2GC36900A"
+            verified: yes
+          - citation: "A. Jordan, C. G. J. Hall, L. R. Thorp and H. F. Sneddon, Chem. Rev., 2022, 122, 6749-6794"
+            doi: "10.1021/acs.chemrev.1c00672"
+            verified: yes
+
+  - id: amide-solvent-nmp
+    kind: reaction_solvent
+    classes: [amide_coupling]
+    target:
+      name: "N-methyl-2-pyrrolidone"
+      smiles: "CN1CCCC1=O"
+    problem: "Reprotoxic (H360D). Ranked hazardous in CHEM21. Boiling point about 202 degC; cannot be removed on a rotary evaporator."
+    replacements:
+      - name: "ethyl acetate"
+        smiles: "CCOC(C)=O"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "The amide solvent study did not test NMP; it tested dichloromethane and DMF. The swap is suggested by analogy with DMF. MacMillan et al. 2013 screened COMU, DIC/HOBt, HATU, PyBOP and T3P on four acid/amine pairings (aryl and alkyl acids with aryl and alkyl amines) and judged dimethyl carbonate, ethyl acetate and 2-MeTHF practical replacements for dichloromethane and DMF. A wider substrate set was then run with COMU in these solvents."
+        caveats: "Conversion depended on the reagent and the acid/amine pairing; T3P was poor for alkyl acid + aryl amine in that screen. Check that acid, amine (or amine salt) and base dissolve; polar or zwitterionic substrates may not. One COMU example needed about 24 h in ethyl acetate instead of about 4 h. Ethyl acetate is ranked recommended in CHEM21."
+        evidence: general_guide
+        sources:
+          - citation: "D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15, 596-600"
+            doi: "10.1039/C2GC36900A"
+            verified: yes
+          - citation: "A. Jordan, C. G. J. Hall, L. R. Thorp and H. F. Sneddon, Chem. Rev., 2022, 122, 6749-6794"
+            doi: "10.1021/acs.chemrev.1c00672"
+            verified: yes
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+      - name: "2-methyltetrahydrofuran"
+        smiles: "CC1CCCO1"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "The amide solvent study did not test NMP; it tested dichloromethane and DMF. The swap is suggested by analogy with DMF. MacMillan et al. 2013 screened COMU, DIC/HOBt, HATU, PyBOP and T3P on four acid/amine pairings (aryl and alkyl acids with aryl and alkyl amines) and judged dimethyl carbonate, ethyl acetate and 2-MeTHF practical replacements for dichloromethane and DMF. A wider substrate set was then run with COMU in these solvents."
+        caveats: "Conversion depended on the reagent and the acid/amine pairing; T3P was poor for alkyl acid + aryl amine in that screen. Check that acid, amine (or amine salt) and base dissolve; polar or zwitterionic substrates may not. 2-MeTHF forms peroxides on storage and costs more. It is ranked problematic, not recommended, in CHEM21."
+        evidence: general_guide
+        sources:
+          - citation: "D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15, 596-600"
+            doi: "10.1039/C2GC36900A"
+            verified: yes
+          - citation: "A. Jordan, C. G. J. Hall, L. R. Thorp and H. F. Sneddon, Chem. Rev., 2022, 122, 6749-6794"
+            doi: "10.1021/acs.chemrev.1c00672"
+            verified: yes
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+      - name: "dimethyl carbonate"
+        smiles: "COC(=O)OC"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "The amide solvent study did not test NMP; it tested dichloromethane and DMF. The swap is suggested by analogy with DMF. MacMillan et al. 2013 screened COMU, DIC/HOBt, HATU, PyBOP and T3P on four acid/amine pairings (aryl and alkyl acids with aryl and alkyl amines) and judged dimethyl carbonate, ethyl acetate and 2-MeTHF practical replacements for dichloromethane and DMF. A wider substrate set was then run with COMU in these solvents."
+        caveats: "Conversion depended on the reagent and the acid/amine pairing; T3P was poor for alkyl acid + aryl amine in that screen. Check that acid, amine (or amine salt) and base dissolve; polar or zwitterionic substrates may not. Keep to ambient temperature: dimethyl carbonate is an electrophile and can react with amines when heated with base. Melting point is about 4 degC, so it can freeze in a cold bath."
+        evidence: general_guide
+        sources:
+          - citation: "D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15, 596-600"
+            doi: "10.1039/C2GC36900A"
+            verified: yes
+          - citation: "A. Jordan, C. G. J. Hall, L. R. Thorp and H. F. Sneddon, Chem. Rev., 2022, 122, 6749-6794"
+            doi: "10.1021/acs.chemrev.1c00672"
+            verified: yes
+
+  - id: amide-solvent-dmac
+    kind: reaction_solvent
+    classes: [amide_coupling]
+    target:
+      name: "N,N-dimethylacetamide"
+      smiles: "CC(=O)N(C)C"
+    problem: "Reprotoxic (H360D). Ranked hazardous in CHEM21. Boiling point about 165 degC; hard to remove."
+    replacements:
+      - name: "ethyl acetate"
+        smiles: "CCOC(C)=O"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "The amide solvent study did not test DMAc; it tested dichloromethane and DMF. The swap is suggested by analogy with DMF. MacMillan et al. 2013 screened COMU, DIC/HOBt, HATU, PyBOP and T3P on four acid/amine pairings (aryl and alkyl acids with aryl and alkyl amines) and judged dimethyl carbonate, ethyl acetate and 2-MeTHF practical replacements for dichloromethane and DMF. A wider substrate set was then run with COMU in these solvents."
+        caveats: "Conversion depended on the reagent and the acid/amine pairing; T3P was poor for alkyl acid + aryl amine in that screen. Check that acid, amine (or amine salt) and base dissolve; polar or zwitterionic substrates may not. One COMU example needed about 24 h in ethyl acetate instead of about 4 h. Ethyl acetate is ranked recommended in CHEM21."
+        evidence: general_guide
+        sources:
+          - citation: "D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15, 596-600"
+            doi: "10.1039/C2GC36900A"
+            verified: yes
+          - citation: "A. Jordan, C. G. J. Hall, L. R. Thorp and H. F. Sneddon, Chem. Rev., 2022, 122, 6749-6794"
+            doi: "10.1021/acs.chemrev.1c00672"
+            verified: yes
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+      - name: "2-methyltetrahydrofuran"
+        smiles: "CC1CCCO1"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "The amide solvent study did not test DMAc; it tested dichloromethane and DMF. The swap is suggested by analogy with DMF. MacMillan et al. 2013 screened COMU, DIC/HOBt, HATU, PyBOP and T3P on four acid/amine pairings (aryl and alkyl acids with aryl and alkyl amines) and judged dimethyl carbonate, ethyl acetate and 2-MeTHF practical replacements for dichloromethane and DMF. A wider substrate set was then run with COMU in these solvents."
+        caveats: "Conversion depended on the reagent and the acid/amine pairing; T3P was poor for alkyl acid + aryl amine in that screen. Check that acid, amine (or amine salt) and base dissolve; polar or zwitterionic substrates may not. 2-MeTHF forms peroxides on storage and costs more. It is ranked problematic, not recommended, in CHEM21."
+        evidence: general_guide
+        sources:
+          - citation: "D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15, 596-600"
+            doi: "10.1039/C2GC36900A"
+            verified: yes
+          - citation: "A. Jordan, C. G. J. Hall, L. R. Thorp and H. F. Sneddon, Chem. Rev., 2022, 122, 6749-6794"
+            doi: "10.1021/acs.chemrev.1c00672"
+            verified: yes
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+      - name: "dimethyl carbonate"
+        smiles: "COC(=O)OC"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "The amide solvent study did not test DMAc; it tested dichloromethane and DMF. The swap is suggested by analogy with DMF. MacMillan et al. 2013 screened COMU, DIC/HOBt, HATU, PyBOP and T3P on four acid/amine pairings (aryl and alkyl acids with aryl and alkyl amines) and judged dimethyl carbonate, ethyl acetate and 2-MeTHF practical replacements for dichloromethane and DMF. A wider substrate set was then run with COMU in these solvents."
+        caveats: "Conversion depended on the reagent and the acid/amine pairing; T3P was poor for alkyl acid + aryl amine in that screen. Check that acid, amine (or amine salt) and base dissolve; polar or zwitterionic substrates may not. Keep to ambient temperature: dimethyl carbonate is an electrophile and can react with amines when heated with base. Melting point is about 4 degC, so it can freeze in a cold bath."
+        evidence: general_guide
+        sources:
+          - citation: "D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15, 596-600"
+            doi: "10.1039/C2GC36900A"
+            verified: yes
+          - citation: "A. Jordan, C. G. J. Hall, L. R. Thorp and H. F. Sneddon, Chem. Rev., 2022, 122, 6749-6794"
+            doi: "10.1021/acs.chemrev.1c00672"
+            verified: yes
+
+  - id: amide-reagent-hatu
+    kind: reagent
+    classes: [amide_coupling]
+    target:
+      name: "HATU"
+      smiles: "CN(C)C(=[N+](C)C)On1nnc2cccnc21.F[P-](F)(F)(F)(F)F"
+    problem: "Flagged as potentially explosive in thermal stability screening (Sperry et al. 2018). Immune sensitiser; a case of anaphylaxis after repeated exposure is documented (McKnelly et al. 2020). High molecular weight (380) for one amide bond; leaves HOAt, tetramethylurea and hexafluorophosphate in the waste."
+    replacements:
+      - name: "propanephosphonic anhydride (T3P, supplied as a 50 wt% solution)"
+        smiles: "CCCP1(=O)OP(=O)(CCC)OP(=O)(CCC)O1"
+        amount: {equiv: 1.5}
+        adds: [{name: "pyridine", smiles: "c1ccncc1", role: base, equiv: 3.0}]
+        removes: []
+        scope: "Dunetz et al. 2011: T3P with pyridine coupled epimerisation-prone acids with amines, including poorly nucleophilic anilines, with low epimerisation; applied to an intermediate for a glucokinase activator. MacMillan et al. 2013 included T3P in their solvent screen (ethyl acetate, 2-MeTHF, dimethyl carbonate)."
+        caveats: "The T3P and pyridine amounts are starting points, not taken from one procedure; optimise them. T3P needs at least 2 equiv of base. If the procedure already has a tertiary amine base you can try keeping it, but the low-epimerisation result was obtained with pyridine. Pyridine is toxic and malodorous. In the MacMillan screen T3P gave poor conversion for alkyl acid + aryl amine. T3P comes as a solution; its carrier solvent adds to the solvent total. Phosphorus by-products go to the aqueous waste."
+        evidence: class_specific_study
+        sources:
+          - citation: "J. R. Dunetz, Y. Xiang, A. Baldwin and J. Ringling, Org. Lett., 2011, 13, 5048-5051"
+            doi: "10.1021/ol201875q"
+            verified: yes
+          - citation: "D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15, 596-600"
+            doi: "10.1039/C2GC36900A"
+            verified: yes
+          - citation: "J. R. Dunetz, J. Magano and G. A. Weisenburger, Org. Process Res. Dev., 2016, 20, 140-177"
+            doi: "10.1021/op500305s"
+            verified: no
+          - citation: "J. B. Sperry et al., Org. Process Res. Dev., 2018, 22, 1262-1275"
+            doi: "10.1021/acs.oprd.8b00193"
+            verified: yes
+          - citation: "K. J. McKnelly, W. Sokol and J. S. Nowick, J. Org. Chem., 2020, 85, 1764-1768"
+            doi: "10.1021/acs.joc.9b03280"
+            verified: yes
+      - name: "EDC hydrochloride (EDC.HCl)"
+        smiles: "CCN=C=NCCCN(C)C.Cl"
+        amount: {equiv: 1.2}
+        adds: []
+        removes: []
+        scope: "Carbodiimide whose urea by-product is water-soluble and is normally removed by an acidic aqueous wash. Covered in the Dunetz et al. 2016 review of coupling reagents used on large scale."
+        caveats: "Usually less reactive than uronium or phosphonium reagents: hindered acids and poorly nucleophilic amines can be slow. Often needs an additive (for example Oxyma) to limit N-acylurea formation and epimerisation. The basic urea can be hard to wash out of polar or basic products. Loading is a starting point. EDC is a skin and eye irritant and a possible sensitiser."
+        evidence: general_guide
+        sources:
+          - citation: "J. R. Dunetz, J. Magano and G. A. Weisenburger, Org. Process Res. Dev., 2016, 20, 140-177"
+            doi: "10.1021/op500305s"
+            verified: no
+          - citation: "J. B. Sperry et al., Org. Process Res. Dev., 2018, 22, 1262-1275"
+            doi: "10.1021/acs.oprd.8b00193"
+            verified: yes
+          - citation: "K. J. McKnelly, W. Sokol and J. S. Nowick, J. Org. Chem., 2020, 85, 1764-1768"
+            doi: "10.1021/acs.joc.9b03280"
+            verified: yes
+      - name: "1,1'-carbonyldiimidazole (CDI)"
+        smiles: "O=C(n1ccnc1)n1ccnc1"
+        amount: {equiv: 1.1}
+        adds: []
+        removes: []
+        scope: "Covered in the Dunetz et al. 2016 review of coupling reagents used on large scale. By-products are carbon dioxide and imidazole, which washes out with water."
+        caveats: "Two-step addition: activate the acid first, wait until gas evolution stops, then add the amine. Releases about one equivalent of CO2; vent the vessel. Moisture-sensitive. Excess CDI reacts with the amine to give a urea. Acyl imidazoles react slowly with anilines and hindered amines. Epimerisation risk for alpha-chiral acids is not assessed here. Loading is a starting point."
+        evidence: general_guide
+        sources:
+          - citation: "J. R. Dunetz, J. Magano and G. A. Weisenburger, Org. Process Res. Dev., 2016, 20, 140-177"
+            doi: "10.1021/op500305s"
+            verified: no
+          - citation: "J. B. Sperry et al., Org. Process Res. Dev., 2018, 22, 1262-1275"
+            doi: "10.1021/acs.oprd.8b00193"
+            verified: yes
+          - citation: "K. J. McKnelly, W. Sokol and J. S. Nowick, J. Org. Chem., 2020, 85, 1764-1768"
+            doi: "10.1021/acs.joc.9b03280"
+            verified: yes
+      - name: "boric acid (catalytic)"
+        smiles: "OB(O)O"
+        amount: {mol_percent: 10.0}
+        adds: []
+        removes: []
+        scope: "Low-confidence option. Boric acid catalysed direct amidation of a simple aliphatic acid with benzylamine is an Organic Syntheses procedure (Tang 2005); catalytic amidation is reviewed by Sabatini et al. 2019. Avoiding stoichiometric, poorly atom-economic coupling reagents was named a key research area by pharmaceutical manufacturers (Constable et al. 2007). Most suitable for unhindered acids and amines that tolerate heating."
+        caveats: "Not a drop-in swap. Water must be removed during the reaction (azeotropic reflux with a Dean-Stark trap, or molecular sieves), so solvent and temperature both change. Expect slow or failed reactions with hindered partners and poorly nucleophilic anilines. Heating can epimerise alpha-stereocentres. Not for heat-sensitive substrates. Catalyst loading is a starting point. Boric acid is itself classified reprotoxic (H360FD) in the EU, although it is used in catalytic amount."
+        evidence: single_report
+        sources:
+          - citation: "P. Tang, Org. Synth., 2005, 81, 262-267"
+            doi: "10.15227/orgsyn.081.0262"
+            verified: no
+          - citation: "M. T. Sabatini, L. T. Boulton, H. F. Sneddon and T. D. Sheppard, Nat. Catal., 2019, 2, 10-17"
+            doi: "10.1038/s41929-018-0211-5"
+            verified: no
+          - citation: "D. J. C. Constable, P. J. Dunn, J. D. Hayler, G. R. Humphrey, J. L. Leazer Jr., R. J. Linderman, K. Lorenz, J. Manley, B. A. Pearlman, A. Wells, A. Zaks and T. Y. Zhang, Green Chem., 2007, 9, 411-420"
+            doi: "10.1039/B703488C"
+            verified: yes
+
+  - id: amide-reagent-hbtu
+    kind: reagent
+    classes: [amide_coupling]
+    target:
+      name: "HBTU"
+      smiles: "CN(C)C(=[N+](C)C)On1nnc2ccccc21.F[P-](F)(F)(F)(F)F"
+    problem: "Flagged as potentially explosive in thermal stability screening (Sperry et al. 2018). Immune sensitiser (McKnelly et al. 2020). High molecular weight (379) for one amide bond; leaves HOBt, tetramethylurea and hexafluorophosphate in the waste."
+    replacements:
+      - name: "propanephosphonic anhydride (T3P, supplied as a 50 wt% solution)"
+        smiles: "CCCP1(=O)OP(=O)(CCC)OP(=O)(CCC)O1"
+        amount: {equiv: 1.5}
+        adds: [{name: "pyridine", smiles: "c1ccncc1", role: base, equiv: 3.0}]
+        removes: []
+        scope: "Dunetz et al. 2011: T3P with pyridine coupled epimerisation-prone acids with amines, including poorly nucleophilic anilines, with low epimerisation; applied to an intermediate for a glucokinase activator. MacMillan et al. 2013 included T3P in their solvent screen (ethyl acetate, 2-MeTHF, dimethyl carbonate)."
+        caveats: "The T3P and pyridine amounts are starting points, not taken from one procedure; optimise them. T3P needs at least 2 equiv of base. If the procedure already has a tertiary amine base you can try keeping it, but the low-epimerisation result was obtained with pyridine. Pyridine is toxic and malodorous. In the MacMillan screen T3P gave poor conversion for alkyl acid + aryl amine. T3P comes as a solution; its carrier solvent adds to the solvent total. Phosphorus by-products go to the aqueous waste."
+        evidence: class_specific_study
+        sources:
+          - citation: "J. R. Dunetz, Y. Xiang, A. Baldwin and J. Ringling, Org. Lett., 2011, 13, 5048-5051"
+            doi: "10.1021/ol201875q"
+            verified: yes
+          - citation: "D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15, 596-600"
+            doi: "10.1039/C2GC36900A"
+            verified: yes
+          - citation: "J. R. Dunetz, J. Magano and G. A. Weisenburger, Org. Process Res. Dev., 2016, 20, 140-177"
+            doi: "10.1021/op500305s"
+            verified: no
+          - citation: "J. B. Sperry et al., Org. Process Res. Dev., 2018, 22, 1262-1275"
+            doi: "10.1021/acs.oprd.8b00193"
+            verified: yes
+          - citation: "K. J. McKnelly, W. Sokol and J. S. Nowick, J. Org. Chem., 2020, 85, 1764-1768"
+            doi: "10.1021/acs.joc.9b03280"
+            verified: yes
+      - name: "EDC hydrochloride (EDC.HCl)"
+        smiles: "CCN=C=NCCCN(C)C.Cl"
+        amount: {equiv: 1.2}
+        adds: []
+        removes: []
+        scope: "Carbodiimide whose urea by-product is water-soluble and is normally removed by an acidic aqueous wash. Covered in the Dunetz et al. 2016 review of coupling reagents used on large scale."
+        caveats: "Usually less reactive than uronium or phosphonium reagents: hindered acids and poorly nucleophilic amines can be slow. Often needs an additive (for example Oxyma) to limit N-acylurea formation and epimerisation. The basic urea can be hard to wash out of polar or basic products. Loading is a starting point. EDC is a skin and eye irritant and a possible sensitiser."
+        evidence: general_guide
+        sources:
+          - citation: "J. R. Dunetz, J. Magano and G. A. Weisenburger, Org. Process Res. Dev., 2016, 20, 140-177"
+            doi: "10.1021/op500305s"
+            verified: no
+          - citation: "J. B. Sperry et al., Org. Process Res. Dev., 2018, 22, 1262-1275"
+            doi: "10.1021/acs.oprd.8b00193"
+            verified: yes
+          - citation: "K. J. McKnelly, W. Sokol and J. S. Nowick, J. Org. Chem., 2020, 85, 1764-1768"
+            doi: "10.1021/acs.joc.9b03280"
+            verified: yes
+      - name: "1,1'-carbonyldiimidazole (CDI)"
+        smiles: "O=C(n1ccnc1)n1ccnc1"
+        amount: {equiv: 1.1}
+        adds: []
+        removes: []
+        scope: "Covered in the Dunetz et al. 2016 review of coupling reagents used on large scale. By-products are carbon dioxide and imidazole, which washes out with water."
+        caveats: "Two-step addition: activate the acid first, wait until gas evolution stops, then add the amine. Releases about one equivalent of CO2; vent the vessel. Moisture-sensitive. Excess CDI reacts with the amine to give a urea. Acyl imidazoles react slowly with anilines and hindered amines. Epimerisation risk for alpha-chiral acids is not assessed here. Loading is a starting point."
+        evidence: general_guide
+        sources:
+          - citation: "J. R. Dunetz, J. Magano and G. A. Weisenburger, Org. Process Res. Dev., 2016, 20, 140-177"
+            doi: "10.1021/op500305s"
+            verified: no
+          - citation: "J. B. Sperry et al., Org. Process Res. Dev., 2018, 22, 1262-1275"
+            doi: "10.1021/acs.oprd.8b00193"
+            verified: yes
+          - citation: "K. J. McKnelly, W. Sokol and J. S. Nowick, J. Org. Chem., 2020, 85, 1764-1768"
+            doi: "10.1021/acs.joc.9b03280"
+            verified: yes
+      - name: "boric acid (catalytic)"
+        smiles: "OB(O)O"
+        amount: {mol_percent: 10.0}
+        adds: []
+        removes: []
+        scope: "Low-confidence option. Boric acid catalysed direct amidation of a simple aliphatic acid with benzylamine is an Organic Syntheses procedure (Tang 2005); catalytic amidation is reviewed by Sabatini et al. 2019. Avoiding stoichiometric, poorly atom-economic coupling reagents was named a key research area by pharmaceutical manufacturers (Constable et al. 2007). Most suitable for unhindered acids and amines that tolerate heating."
+        caveats: "Not a drop-in swap. Water must be removed during the reaction (azeotropic reflux with a Dean-Stark trap, or molecular sieves), so solvent and temperature both change. Expect slow or failed reactions with hindered partners and poorly nucleophilic anilines. Heating can epimerise alpha-stereocentres. Not for heat-sensitive substrates. Catalyst loading is a starting point. Boric acid is itself classified reprotoxic (H360FD) in the EU, although it is used in catalytic amount."
+        evidence: single_report
+        sources:
+          - citation: "P. Tang, Org. Synth., 2005, 81, 262-267"
+            doi: "10.15227/orgsyn.081.0262"
+            verified: no
+          - citation: "M. T. Sabatini, L. T. Boulton, H. F. Sneddon and T. D. Sheppard, Nat. Catal., 2019, 2, 10-17"
+            doi: "10.1038/s41929-018-0211-5"
+            verified: no
+          - citation: "D. J. C. Constable, P. J. Dunn, J. D. Hayler, G. R. Humphrey, J. L. Leazer Jr., R. J. Linderman, K. Lorenz, J. Manley, B. A. Pearlman, A. Wells, A. Zaks and T. Y. Zhang, Green Chem., 2007, 9, 411-420"
+            doi: "10.1039/B703488C"
+            verified: yes
+
+  - id: amide-reagent-tbtu
+    kind: reagent
+    classes: [amide_coupling]
+    target:
+      name: "TBTU"
+      smiles: "CN(C)C(=[N+](C)C)On1nnc2ccccc21.F[B-](F)(F)F"
+    problem: "Reported as potentially shock-sensitive in the Sperry et al. 2018 thermal stability study. Same uronium cation as HBTU, for which immune sensitisation is documented (McKnelly et al. 2020). Leaves HOBt, tetramethylurea and tetrafluoroborate in the waste."
+    replacements:
+      - name: "propanephosphonic anhydride (T3P, supplied as a 50 wt% solution)"
+        smiles: "CCCP1(=O)OP(=O)(CCC)OP(=O)(CCC)O1"
+        amount: {equiv: 1.5}
+        adds: [{name: "pyridine", smiles: "c1ccncc1", role: base, equiv: 3.0}]
+        removes: []
+        scope: "Dunetz et al. 2011: T3P with pyridine coupled epimerisation-prone acids with amines, including poorly nucleophilic anilines, with low epimerisation; applied to an intermediate for a glucokinase activator. MacMillan et al. 2013 included T3P in their solvent screen (ethyl acetate, 2-MeTHF, dimethyl carbonate)."
+        caveats: "The T3P and pyridine amounts are starting points, not taken from one procedure; optimise them. T3P needs at least 2 equiv of base. If the procedure already has a tertiary amine base you can try keeping it, but the low-epimerisation result was obtained with pyridine. Pyridine is toxic and malodorous. In the MacMillan screen T3P gave poor conversion for alkyl acid + aryl amine. T3P comes as a solution; its carrier solvent adds to the solvent total. Phosphorus by-products go to the aqueous waste."
+        evidence: class_specific_study
+        sources:
+          - citation: "J. R. Dunetz, Y. Xiang, A. Baldwin and J. Ringling, Org. Lett., 2011, 13, 5048-5051"
+            doi: "10.1021/ol201875q"
+            verified: yes
+          - citation: "D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15, 596-600"
+            doi: "10.1039/C2GC36900A"
+            verified: yes
+          - citation: "J. R. Dunetz, J. Magano and G. A. Weisenburger, Org. Process Res. Dev., 2016, 20, 140-177"
+            doi: "10.1021/op500305s"
+            verified: no
+          - citation: "J. B. Sperry et al., Org. Process Res. Dev., 2018, 22, 1262-1275"
+            doi: "10.1021/acs.oprd.8b00193"
+            verified: yes
+          - citation: "K. J. McKnelly, W. Sokol and J. S. Nowick, J. Org. Chem., 2020, 85, 1764-1768"
+            doi: "10.1021/acs.joc.9b03280"
+            verified: yes
+      - name: "EDC hydrochloride (EDC.HCl)"
+        smiles: "CCN=C=NCCCN(C)C.Cl"
+        amount: {equiv: 1.2}
+        adds: []
+        removes: []
+        scope: "Carbodiimide whose urea by-product is water-soluble and is normally removed by an acidic aqueous wash. Covered in the Dunetz et al. 2016 review of coupling reagents used on large scale."
+        caveats: "Usually less reactive than uronium or phosphonium reagents: hindered acids and poorly nucleophilic amines can be slow. Often needs an additive (for example Oxyma) to limit N-acylurea formation and epimerisation. The basic urea can be hard to wash out of polar or basic products. Loading is a starting point. EDC is a skin and eye irritant and a possible sensitiser."
+        evidence: general_guide
+        sources:
+          - citation: "J. R. Dunetz, J. Magano and G. A. Weisenburger, Org. Process Res. Dev., 2016, 20, 140-177"
+            doi: "10.1021/op500305s"
+            verified: no
+          - citation: "J. B. Sperry et al., Org. Process Res. Dev., 2018, 22, 1262-1275"
+            doi: "10.1021/acs.oprd.8b00193"
+            verified: yes
+          - citation: "K. J. McKnelly, W. Sokol and J. S. Nowick, J. Org. Chem., 2020, 85, 1764-1768"
+            doi: "10.1021/acs.joc.9b03280"
+            verified: yes
+      - name: "1,1'-carbonyldiimidazole (CDI)"
+        smiles: "O=C(n1ccnc1)n1ccnc1"
+        amount: {equiv: 1.1}
+        adds: []
+        removes: []
+        scope: "Covered in the Dunetz et al. 2016 review of coupling reagents used on large scale. By-products are carbon dioxide and imidazole, which washes out with water."
+        caveats: "Two-step addition: activate the acid first, wait until gas evolution stops, then add the amine. Releases about one equivalent of CO2; vent the vessel. Moisture-sensitive. Excess CDI reacts with the amine to give a urea. Acyl imidazoles react slowly with anilines and hindered amines. Epimerisation risk for alpha-chiral acids is not assessed here. Loading is a starting point."
+        evidence: general_guide
+        sources:
+          - citation: "J. R. Dunetz, J. Magano and G. A. Weisenburger, Org. Process Res. Dev., 2016, 20, 140-177"
+            doi: "10.1021/op500305s"
+            verified: no
+          - citation: "J. B. Sperry et al., Org. Process Res. Dev., 2018, 22, 1262-1275"
+            doi: "10.1021/acs.oprd.8b00193"
+            verified: yes
+          - citation: "K. J. McKnelly, W. Sokol and J. S. Nowick, J. Org. Chem., 2020, 85, 1764-1768"
+            doi: "10.1021/acs.joc.9b03280"
+            verified: yes
+      - name: "boric acid (catalytic)"
+        smiles: "OB(O)O"
+        amount: {mol_percent: 10.0}
+        adds: []
+        removes: []
+        scope: "Low-confidence option. Boric acid catalysed direct amidation of a simple aliphatic acid with benzylamine is an Organic Syntheses procedure (Tang 2005); catalytic amidation is reviewed by Sabatini et al. 2019. Avoiding stoichiometric, poorly atom-economic coupling reagents was named a key research area by pharmaceutical manufacturers (Constable et al. 2007). Most suitable for unhindered acids and amines that tolerate heating."
+        caveats: "Not a drop-in swap. Water must be removed during the reaction (azeotropic reflux with a Dean-Stark trap, or molecular sieves), so solvent and temperature both change. Expect slow or failed reactions with hindered partners and poorly nucleophilic anilines. Heating can epimerise alpha-stereocentres. Not for heat-sensitive substrates. Catalyst loading is a starting point. Boric acid is itself classified reprotoxic (H360FD) in the EU, although it is used in catalytic amount."
+        evidence: single_report
+        sources:
+          - citation: "P. Tang, Org. Synth., 2005, 81, 262-267"
+            doi: "10.15227/orgsyn.081.0262"
+            verified: no
+          - citation: "M. T. Sabatini, L. T. Boulton, H. F. Sneddon and T. D. Sheppard, Nat. Catal., 2019, 2, 10-17"
+            doi: "10.1038/s41929-018-0211-5"
+            verified: no
+          - citation: "D. J. C. Constable, P. J. Dunn, J. D. Hayler, G. R. Humphrey, J. L. Leazer Jr., R. J. Linderman, K. Lorenz, J. Manley, B. A. Pearlman, A. Wells, A. Zaks and T. Y. Zhang, Green Chem., 2007, 9, 411-420"
+            doi: "10.1039/B703488C"
+            verified: yes
+
+  - id: amide-reagent-pybop
+    kind: reagent
+    classes: [amide_coupling]
+    target:
+      name: "PyBOP"
+      smiles: "C1CCN(C1)[P+](On1nnc2ccccc21)(N1CCCC1)N1CCCC1.F[P-](F)(F)(F)(F)F"
+    problem: "Flagged as potentially explosive in thermal stability screening (Sperry et al. 2018). High molecular weight (520) for one amide bond; leaves HOBt, tris(pyrrolidino)phosphine oxide and hexafluorophosphate in the waste, and the phosphine oxide can be hard to separate from the product."
+    replacements:
+      - name: "propanephosphonic anhydride (T3P, supplied as a 50 wt% solution)"
+        smiles: "CCCP1(=O)OP(=O)(CCC)OP(=O)(CCC)O1"
+        amount: {equiv: 1.5}
+        adds: [{name: "pyridine", smiles: "c1ccncc1", role: base, equiv: 3.0}]
+        removes: []
+        scope: "Dunetz et al. 2011: T3P with pyridine coupled epimerisation-prone acids with amines, including poorly nucleophilic anilines, with low epimerisation; applied to an intermediate for a glucokinase activator. MacMillan et al. 2013 included T3P in their solvent screen (ethyl acetate, 2-MeTHF, dimethyl carbonate)."
+        caveats: "The T3P and pyridine amounts are starting points, not taken from one procedure; optimise them. T3P needs at least 2 equiv of base. If the procedure already has a tertiary amine base you can try keeping it, but the low-epimerisation result was obtained with pyridine. Pyridine is toxic and malodorous. In the MacMillan screen T3P gave poor conversion for alkyl acid + aryl amine. T3P comes as a solution; its carrier solvent adds to the solvent total. Phosphorus by-products go to the aqueous waste."
+        evidence: class_specific_study
+        sources:
+          - citation: "J. R. Dunetz, Y. Xiang, A. Baldwin and J. Ringling, Org. Lett., 2011, 13, 5048-5051"
+            doi: "10.1021/ol201875q"
+            verified: yes
+          - citation: "D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15, 596-600"
+            doi: "10.1039/C2GC36900A"
+            verified: yes
+          - citation: "J. R. Dunetz, J. Magano and G. A. Weisenburger, Org. Process Res. Dev., 2016, 20, 140-177"
+            doi: "10.1021/op500305s"
+            verified: no
+          - citation: "J. B. Sperry et al., Org. Process Res. Dev., 2018, 22, 1262-1275"
+            doi: "10.1021/acs.oprd.8b00193"
+            verified: yes
+      - name: "EDC hydrochloride (EDC.HCl)"
+        smiles: "CCN=C=NCCCN(C)C.Cl"
+        amount: {equiv: 1.2}
+        adds: []
+        removes: []
+        scope: "Carbodiimide whose urea by-product is water-soluble and is normally removed by an acidic aqueous wash. Covered in the Dunetz et al. 2016 review of coupling reagents used on large scale."
+        caveats: "Usually less reactive than uronium or phosphonium reagents: hindered acids and poorly nucleophilic amines can be slow. Often needs an additive (for example Oxyma) to limit N-acylurea formation and epimerisation. The basic urea can be hard to wash out of polar or basic products. Loading is a starting point. EDC is a skin and eye irritant and a possible sensitiser."
+        evidence: general_guide
+        sources:
+          - citation: "J. R. Dunetz, J. Magano and G. A. Weisenburger, Org. Process Res. Dev., 2016, 20, 140-177"
+            doi: "10.1021/op500305s"
+            verified: no
+          - citation: "J. B. Sperry et al., Org. Process Res. Dev., 2018, 22, 1262-1275"
+            doi: "10.1021/acs.oprd.8b00193"
+            verified: yes
+      - name: "1,1'-carbonyldiimidazole (CDI)"
+        smiles: "O=C(n1ccnc1)n1ccnc1"
+        amount: {equiv: 1.1}
+        adds: []
+        removes: []
+        scope: "Covered in the Dunetz et al. 2016 review of coupling reagents used on large scale. By-products are carbon dioxide and imidazole, which washes out with water."
+        caveats: "Two-step addition: activate the acid first, wait until gas evolution stops, then add the amine. Releases about one equivalent of CO2; vent the vessel. Moisture-sensitive. Excess CDI reacts with the amine to give a urea. Acyl imidazoles react slowly with anilines and hindered amines. Epimerisation risk for alpha-chiral acids is not assessed here. Loading is a starting point."
+        evidence: general_guide
+        sources:
+          - citation: "J. R. Dunetz, J. Magano and G. A. Weisenburger, Org. Process Res. Dev., 2016, 20, 140-177"
+            doi: "10.1021/op500305s"
+            verified: no
+          - citation: "J. B. Sperry et al., Org. Process Res. Dev., 2018, 22, 1262-1275"
+            doi: "10.1021/acs.oprd.8b00193"
+            verified: yes
+      - name: "boric acid (catalytic)"
+        smiles: "OB(O)O"
+        amount: {mol_percent: 10.0}
+        adds: []
+        removes: []
+        scope: "Low-confidence option. Boric acid catalysed direct amidation of a simple aliphatic acid with benzylamine is an Organic Syntheses procedure (Tang 2005); catalytic amidation is reviewed by Sabatini et al. 2019. Avoiding stoichiometric, poorly atom-economic coupling reagents was named a key research area by pharmaceutical manufacturers (Constable et al. 2007). Most suitable for unhindered acids and amines that tolerate heating."
+        caveats: "Not a drop-in swap. Water must be removed during the reaction (azeotropic reflux with a Dean-Stark trap, or molecular sieves), so solvent and temperature both change. Expect slow or failed reactions with hindered partners and poorly nucleophilic anilines. Heating can epimerise alpha-stereocentres. Not for heat-sensitive substrates. Catalyst loading is a starting point. Boric acid is itself classified reprotoxic (H360FD) in the EU, although it is used in catalytic amount."
+        evidence: single_report
+        sources:
+          - citation: "P. Tang, Org. Synth., 2005, 81, 262-267"
+            doi: "10.15227/orgsyn.081.0262"
+            verified: no
+          - citation: "M. T. Sabatini, L. T. Boulton, H. F. Sneddon and T. D. Sheppard, Nat. Catal., 2019, 2, 10-17"
+            doi: "10.1038/s41929-018-0211-5"
+            verified: no
+          - citation: "D. J. C. Constable, P. J. Dunn, J. D. Hayler, G. R. Humphrey, J. L. Leazer Jr., R. J. Linderman, K. Lorenz, J. Manley, B. A. Pearlman, A. Wells, A. Zaks and T. Y. Zhang, Green Chem., 2007, 9, 411-420"
+            doi: "10.1039/B703488C"
+            verified: yes
+
+  - id: amide-reagent-bop
+    kind: reagent
+    classes: [amide_coupling]
+    target:
+      name: "BOP reagent"
+      smiles: "CN(C)[P+](On1nnc2ccccc21)(N(C)C)N(C)C.F[P-](F)(F)(F)(F)F"
+    problem: "Releases one equivalent of hexamethylphosphoramide (HMPA), a carcinogen, as by-product. Also leaves HOBt and hexafluorophosphate in the waste."
+    replacements:
+      - name: "PyBOP"
+        smiles: "C1CCN(C1)[P+](On1nnc2ccccc21)(N1CCCC1)N1CCCC1.F[P-](F)(F)(F)(F)F"
+        amount: same_equiv
+        adds: []
+        removes: []
+        scope: "Coste et al. 1990 introduced PyBOP as a BOP analogue that does not form HMPA; it is used in the same way as BOP."
+        caveats: "Smallest change, but not a green end point: PyBOP was flagged as potentially explosive in thermal screening (Sperry et al. 2018) and still gives a phosphine oxide by-product and HOBt."
+        evidence: class_specific_study
+        sources:
+          - citation: "J. Coste, D. Le-Nguyen and B. Castro, Tetrahedron Lett., 1990, 31, 205-208"
+            doi: "10.1016/S0040-4039(00)94371-5"
+            verified: yes
+          - citation: "J. B. Sperry et al., Org. Process Res. Dev., 2018, 22, 1262-1275"
+            doi: "10.1021/acs.oprd.8b00193"
+            verified: yes
+      - name: "propanephosphonic anhydride (T3P, supplied as a 50 wt% solution)"
+        smiles: "CCCP1(=O)OP(=O)(CCC)OP(=O)(CCC)O1"
+        amount: {equiv: 1.5}
+        adds: [{name: "pyridine", smiles: "c1ccncc1", role: base, equiv: 3.0}]
+        removes: []
+        scope: "Dunetz et al. 2011: T3P with pyridine coupled epimerisation-prone acids with amines, including poorly nucleophilic anilines, with low epimerisation; applied to an intermediate for a glucokinase activator. MacMillan et al. 2013 included T3P in their solvent screen (ethyl acetate, 2-MeTHF, dimethyl carbonate)."
+        caveats: "The T3P and pyridine amounts are starting points, not taken from one procedure; optimise them. T3P needs at least 2 equiv of base. If the procedure already has a tertiary amine base you can try keeping it, but the low-epimerisation result was obtained with pyridine. Pyridine is toxic and malodorous. In the MacMillan screen T3P gave poor conversion for alkyl acid + aryl amine. T3P comes as a solution; its carrier solvent adds to the solvent total. Phosphorus by-products go to the aqueous waste."
+        evidence: class_specific_study
+        sources:
+          - citation: "J. R. Dunetz, Y. Xiang, A. Baldwin and J. Ringling, Org. Lett., 2011, 13, 5048-5051"
+            doi: "10.1021/ol201875q"
+            verified: yes
+          - citation: "D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15, 596-600"
+            doi: "10.1039/C2GC36900A"
+            verified: yes
+          - citation: "J. R. Dunetz, J. Magano and G. A. Weisenburger, Org. Process Res. Dev., 2016, 20, 140-177"
+            doi: "10.1021/op500305s"
+            verified: no
+          - citation: "J. Coste, D. Le-Nguyen and B. Castro, Tetrahedron Lett., 1990, 31, 205-208"
+            doi: "10.1016/S0040-4039(00)94371-5"
+            verified: yes
+      - name: "EDC hydrochloride (EDC.HCl)"
+        smiles: "CCN=C=NCCCN(C)C.Cl"
+        amount: {equiv: 1.2}
+        adds: []
+        removes: []
+        scope: "Carbodiimide whose urea by-product is water-soluble and is normally removed by an acidic aqueous wash. Covered in the Dunetz et al. 2016 review of coupling reagents used on large scale."
+        caveats: "Usually less reactive than uronium or phosphonium reagents: hindered acids and poorly nucleophilic amines can be slow. Often needs an additive (for example Oxyma) to limit N-acylurea formation and epimerisation. The basic urea can be hard to wash out of polar or basic products. Loading is a starting point. EDC is a skin and eye irritant and a possible sensitiser."
+        evidence: general_guide
+        sources:
+          - citation: "J. R. Dunetz, J. Magano and G. A. Weisenburger, Org. Process Res. Dev., 2016, 20, 140-177"
+            doi: "10.1021/op500305s"
+            verified: no
+          - citation: "J. Coste, D. Le-Nguyen and B. Castro, Tetrahedron Lett., 1990, 31, 205-208"
+            doi: "10.1016/S0040-4039(00)94371-5"
+            verified: yes
+      - name: "1,1'-carbonyldiimidazole (CDI)"
+        smiles: "O=C(n1ccnc1)n1ccnc1"
+        amount: {equiv: 1.1}
+        adds: []
+        removes: []
+        scope: "Covered in the Dunetz et al. 2016 review of coupling reagents used on large scale. By-products are carbon dioxide and imidazole, which washes out with water."
+        caveats: "Two-step addition: activate the acid first, wait until gas evolution stops, then add the amine. Releases about one equivalent of CO2; vent the vessel. Moisture-sensitive. Excess CDI reacts with the amine to give a urea. Acyl imidazoles react slowly with anilines and hindered amines. Epimerisation risk for alpha-chiral acids is not assessed here. Loading is a starting point."
+        evidence: general_guide
+        sources:
+          - citation: "J. R. Dunetz, J. Magano and G. A. Weisenburger, Org. Process Res. Dev., 2016, 20, 140-177"
+            doi: "10.1021/op500305s"
+            verified: no
+          - citation: "J. Coste, D. Le-Nguyen and B. Castro, Tetrahedron Lett., 1990, 31, 205-208"
+            doi: "10.1016/S0040-4039(00)94371-5"
+            verified: yes
+      - name: "boric acid (catalytic)"
+        smiles: "OB(O)O"
+        amount: {mol_percent: 10.0}
+        adds: []
+        removes: []
+        scope: "Low-confidence option. Boric acid catalysed direct amidation of a simple aliphatic acid with benzylamine is an Organic Syntheses procedure (Tang 2005); catalytic amidation is reviewed by Sabatini et al. 2019. Avoiding stoichiometric, poorly atom-economic coupling reagents was named a key research area by pharmaceutical manufacturers (Constable et al. 2007). Most suitable for unhindered acids and amines that tolerate heating."
+        caveats: "Not a drop-in swap. Water must be removed during the reaction (azeotropic reflux with a Dean-Stark trap, or molecular sieves), so solvent and temperature both change. Expect slow or failed reactions with hindered partners and poorly nucleophilic anilines. Heating can epimerise alpha-stereocentres. Not for heat-sensitive substrates. Catalyst loading is a starting point. Boric acid is itself classified reprotoxic (H360FD) in the EU, although it is used in catalytic amount."
+        evidence: single_report
+        sources:
+          - citation: "P. Tang, Org. Synth., 2005, 81, 262-267"
+            doi: "10.15227/orgsyn.081.0262"
+            verified: no
+          - citation: "M. T. Sabatini, L. T. Boulton, H. F. Sneddon and T. D. Sheppard, Nat. Catal., 2019, 2, 10-17"
+            doi: "10.1038/s41929-018-0211-5"
+            verified: no
+          - citation: "D. J. C. Constable, P. J. Dunn, J. D. Hayler, G. R. Humphrey, J. L. Leazer Jr., R. J. Linderman, K. Lorenz, J. Manley, B. A. Pearlman, A. Wells, A. Zaks and T. Y. Zhang, Green Chem., 2007, 9, 411-420"
+            doi: "10.1039/B703488C"
+            verified: yes
+
+  - id: amide-reagent-dcc
+    kind: reagent
+    classes: [amide_coupling]
+    target:
+      name: "N,N'-dicyclohexylcarbodiimide (DCC)"
+      smiles: "C(=NC1CCCCC1)=NC1CCCCC1"
+    problem: "Potent skin sensitiser and toxic in contact with skin. The dicyclohexylurea by-product is poorly soluble and traces are hard to remove completely, even by chromatography."
+    replacements:
+      - name: "EDC hydrochloride (EDC.HCl)"
+        smiles: "CCN=C=NCCCN(C)C.Cl"
+        amount: same_equiv
+        adds: []
+        removes: []
+        scope: "Same carbodiimide chemistry; the EDC urea is water-soluble and is normally removed by an acidic aqueous wash instead of filtration. Covered in the Dunetz et al. 2016 review of coupling reagents used on large scale."
+        caveats: "EDC.HCl is a salt; check that it dissolves, or reacts as a slurry, in your solvent. The basic urea can be hard to wash out of polar or basic products. Not suitable where the product cannot go through an aqueous wash. Keep any additive (HOBt, Oxyma, DMAP) that the DCC procedure used."
+        evidence: general_guide
+        sources:
+          - citation: "J. R. Dunetz, J. Magano and G. A. Weisenburger, Org. Process Res. Dev., 2016, 20, 140-177"
+            doi: "10.1021/op500305s"
+            verified: no
+      - name: "propanephosphonic anhydride (T3P, supplied as a 50 wt% solution)"
+        smiles: "CCCP1(=O)OP(=O)(CCC)OP(=O)(CCC)O1"
+        amount: {equiv: 1.5}
+        adds: [{name: "pyridine", smiles: "c1ccncc1", role: base, equiv: 3.0}]
+        removes: []
+        scope: "Dunetz et al. 2011: T3P with pyridine coupled epimerisation-prone acids with amines, including poorly nucleophilic anilines, with low epimerisation; applied to an intermediate for a glucokinase activator. MacMillan et al. 2013 included T3P in their solvent screen (ethyl acetate, 2-MeTHF, dimethyl carbonate)."
+        caveats: "The T3P and pyridine amounts are starting points, not taken from one procedure; optimise them. T3P needs at least 2 equiv of base. If the procedure already has a tertiary amine base you can try keeping it, but the low-epimerisation result was obtained with pyridine. Pyridine is toxic and malodorous. In the MacMillan screen T3P gave poor conversion for alkyl acid + aryl amine. T3P comes as a solution; its carrier solvent adds to the solvent total. Phosphorus by-products go to the aqueous waste."
+        evidence: class_specific_study
+        sources:
+          - citation: "J. R. Dunetz, Y. Xiang, A. Baldwin and J. Ringling, Org. Lett., 2011, 13, 5048-5051"
+            doi: "10.1021/ol201875q"
+            verified: yes
+          - citation: "D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15, 596-600"
+            doi: "10.1039/C2GC36900A"
+            verified: yes
+          - citation: "J. R. Dunetz, J. Magano and G. A. Weisenburger, Org. Process Res. Dev., 2016, 20, 140-177"
+            doi: "10.1021/op500305s"
+            verified: no
+      - name: "boric acid (catalytic)"
+        smiles: "OB(O)O"
+        amount: {mol_percent: 10.0}
+        adds: []
+        removes: []
+        scope: "Low-confidence option. Boric acid catalysed direct amidation of a simple aliphatic acid with benzylamine is an Organic Syntheses procedure (Tang 2005); catalytic amidation is reviewed by Sabatini et al. 2019. Avoiding stoichiometric, poorly atom-economic coupling reagents was named a key research area by pharmaceutical manufacturers (Constable et al. 2007). Most suitable for unhindered acids and amines that tolerate heating."
+        caveats: "Not a drop-in swap. Water must be removed during the reaction (azeotropic reflux with a Dean-Stark trap, or molecular sieves), so solvent and temperature both change. Expect slow or failed reactions with hindered partners and poorly nucleophilic anilines. Heating can epimerise alpha-stereocentres. Not for heat-sensitive substrates. Catalyst loading is a starting point. Boric acid is itself classified reprotoxic (H360FD) in the EU, although it is used in catalytic amount."
+        evidence: single_report
+        sources:
+          - citation: "P. Tang, Org. Synth., 2005, 81, 262-267"
+            doi: "10.15227/orgsyn.081.0262"
+            verified: no
+          - citation: "M. T. Sabatini, L. T. Boulton, H. F. Sneddon and T. D. Sheppard, Nat. Catal., 2019, 2, 10-17"
+            doi: "10.1038/s41929-018-0211-5"
+            verified: no
+          - citation: "D. J. C. Constable, P. J. Dunn, J. D. Hayler, G. R. Humphrey, J. L. Leazer Jr., R. J. Linderman, K. Lorenz, J. Manley, B. A. Pearlman, A. Wells, A. Zaks and T. Y. Zhang, Green Chem., 2007, 9, 411-420"
+            doi: "10.1039/B703488C"
+            verified: yes
+
+  - id: amide-additive-hobt
+    kind: additive
+    classes: [amide_coupling]
+    target:
+      name: "1-hydroxybenzotriazole (HOBt)"
+      smiles: "On1nnc2ccccc21"
+    problem: "Explosive properties when heated under confinement or under mechanical stimulus (Wehrstedt et al. 2005); anhydrous HOBt is subject to transport restrictions."
+    replacements:
+      - name: "ethyl cyano(hydroxyimino)acetate (Oxyma)"
+        smiles: "CCOC(=O)C(=NO)C#N"
+        amount: same_equiv
+        adds: []
+        removes: []
+        scope: "Subiros-Funosas et al. 2009: in carbodiimide-mediated peptide couplings (manual and automated) Oxyma suppressed racemisation and gave coupling efficiency better than HOBt and at least comparable to HOAt. Calorimetry (DSC, ARC) indicated a lower explosion risk than the benzotriazoles."
+        caveats: "Data are from peptide couplings. Oxyma with diisopropylcarbodiimide (DIC) can release hydrogen cyanide (McFarland et al. 2019); work in a fume hood and assess this for any carbodiimide. Does not apply when the benzotriazole is built into the reagent (HATU, HBTU, TBTU, PyBOP)."
+        evidence: class_specific_study
+        sources:
+          - citation: "R. Subiros-Funosas, R. Prohens, R. Barbas, A. El-Faham and F. Albericio, Chem. Eur. J., 2009, 15, 9394-9403"
+            doi: "10.1002/chem.200900614"
+            verified: yes
+          - citation: "K. D. Wehrstedt, P. A. Wandrey and D. Heitkamp, J. Hazard. Mater., 2005, 126, 1-7"
+            doi: "10.1016/j.jhazmat.2005.05.044"
+            verified: yes
+          - citation: "A. D. McFarland, J. Y. Buser, M. C. Embry, C. B. Held and S. P. Kolis, Org. Process Res. Dev., 2019, 23, 2099-2105"
+            doi: "10.1021/acs.oprd.9b00344"
+            verified: yes
+
+  - id: amide-additive-hoat
+    kind: additive
+    classes: [amide_coupling]
+    target:
+      name: "1-hydroxy-7-azabenzotriazole (HOAt)"
+      smiles: "On1nnc2cccnc21"
+    problem: "Benzotriazole-type additive; calorimetry showed a decomposition profile consistent with its reported explosivity (Subiros-Funosas et al. 2009). Expensive."
+    replacements:
+      - name: "ethyl cyano(hydroxyimino)acetate (Oxyma)"
+        smiles: "CCOC(=O)C(=NO)C#N"
+        amount: same_equiv
+        adds: []
+        removes: []
+        scope: "Subiros-Funosas et al. 2009: in carbodiimide-mediated peptide couplings (manual and automated) Oxyma suppressed racemisation and gave coupling efficiency better than HOBt and at least comparable to HOAt. Calorimetry (DSC, ARC) indicated a lower explosion risk than the benzotriazoles."
+        caveats: "Data are from peptide couplings. Oxyma with diisopropylcarbodiimide (DIC) can release hydrogen cyanide (McFarland et al. 2019); work in a fume hood and assess this for any carbodiimide. Does not apply when the benzotriazole is built into the reagent (HATU, HBTU, TBTU, PyBOP). HOAt is often chosen for the most difficult couplings; confirm conversion and epimerisation on your substrate."
+        evidence: class_specific_study
+        sources:
+          - citation: "R. Subiros-Funosas, R. Prohens, R. Barbas, A. El-Faham and F. Albericio, Chem. Eur. J., 2009, 15, 9394-9403"
+            doi: "10.1002/chem.200900614"
+            verified: yes
+          - citation: "A. D. McFarland, J. Y. Buser, M. C. Embry, C. B. Held and S. P. Kolis, Org. Process Res. Dev., 2019, 23, 2099-2105"
+            doi: "10.1021/acs.oprd.9b00344"
+            verified: yes
+
+  - id: suzuki-solvent-dioxane
+    kind: reaction_solvent
+    classes: [suzuki_miyaura]
+    target:
+      name: "1,4-dioxane"
+      smiles: "C1COCCO1"
+    problem: "Carcinogen classification (H350 or H351, depending on the date of the safety data sheet). Forms peroxides. Fully miscible with water, so it ends up in the aqueous waste. Ranked hazardous in CHEM21."
+    replacements:
+      - name: "isopropanol/water (3:1 v/v)"
+        smiles: "CC(C)O.O"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "Sherwood 2020 ran three Pd-catalysed couplings of aryl bromides (4-bromotoluene, 4-bromophenylacetic acid, 4'-bromoacetophenone) with phenylboronic acid at 0.6 mmol in 3:1 organic solvent/water. Isopropanol performed well in all three cases. Isopropanol and water are ranked recommended in CHEM21."
+        caveats: "Tested on simple aryl bromides only. Not covered: aryl chlorides, hindered partners, heteroaryl and other boronic acids prone to protodeboronation. Substrate-dependent: the paper's point is that this coupling is often insensitive to solvent, which makes a swap plausible but not certain. Catalyst and base may need re-optimising. Reflux temperature is about 80 degC, lower than dioxane, toluene or DMF."
+        evidence: class_specific_study
+        sources:
+          - citation: "J. Sherwood, Beilstein J. Org. Chem., 2020, 16, 1001-1005"
+            doi: "10.3762/bjoc.16.89"
+            verified: yes
+          - citation: "J. Sherwood, J. H. Clark, I. J. S. Fairlamb and J. M. Slattery, Green Chem., 2019, 21, 2164-2213"
+            doi: "10.1039/C9GC00617F"
+            verified: yes
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+      - name: "2-methyltetrahydrofuran/water (3:1 v/v)"
+        smiles: "CC1CCCO1.O"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "Sherwood 2020 ran three Pd-catalysed couplings of aryl bromides (4-bromotoluene, 4-bromophenylacetic acid, 4'-bromoacetophenone) with phenylboronic acid at 0.6 mmol in 3:1 organic solvent/water. 2-MeTHF was one of six greener solvents tested there, and it is listed as a suggested replacement for Suzuki-Miyaura couplings in Jordan et al. 2022."
+        caveats: "Tested on simple aryl bromides only. Not covered: aryl chlorides, hindered partners, heteroaryl and other boronic acids prone to protodeboronation. Substrate-dependent: the paper's point is that this coupling is often insensitive to solvent, which makes a swap plausible but not certain. Catalyst and base may need re-optimising. Two liquid phases: stir well; the inorganic base stays in the water layer. Boils at about 80 degC. Forms peroxides on storage. Ranked problematic, not recommended, in CHEM21."
+        evidence: class_specific_study
+        sources:
+          - citation: "J. Sherwood, Beilstein J. Org. Chem., 2020, 16, 1001-1005"
+            doi: "10.3762/bjoc.16.89"
+            verified: yes
+          - citation: "A. Jordan, C. G. J. Hall, L. R. Thorp and H. F. Sneddon, Chem. Rev., 2022, 122, 6749-6794"
+            doi: "10.1021/acs.chemrev.1c00672"
+            verified: yes
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+      - name: "water containing 2 wt% TPGS-750-M surfactant (micellar)"
+        smiles: "O"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "Lipshutz et al. 2011: Suzuki-Miyaura couplings at room temperature in water containing 2 wt% TPGS-750-M. The supplier protocol based on this work uses aryl bromides, Pd(dtbpf)Cl2 (about 2 mol%) and triethylamine (3 equiv) for 2-24 h."
+        caveats: "This is a different procedure, not a solvent swap: catalyst and base change too. Isolation still needs an organic solvent for extraction, or a filtration. The surfactant goes to the aqueous waste. High-melting or very lipophilic solids can mix poorly. TPGS-750-M is a polymer mixture without a single SMILES; the SMILES given is water only, so the surfactant mass is not counted."
+        evidence: class_specific_study
+        sources:
+          - citation: "B. H. Lipshutz, S. Ghorai, A. R. Abela, R. Moser, T. Nishikata, C. Duplais, A. Krasovskiy, R. D. Gaston and R. C. Gadwood, J. Org. Chem., 2011, 76, 4379-4391"
+            doi: "10.1021/jo101974u"
+            verified: yes
+
+  - id: suzuki-solvent-dme
+    kind: reaction_solvent
+    classes: [suzuki_miyaura]
+    target:
+      name: "1,2-dimethoxyethane"
+      smiles: "COCCOC"
+    problem: "Reprotoxic (H360FD). Forms peroxides. Ranked hazardous in CHEM21."
+    replacements:
+      - name: "isopropanol/water (3:1 v/v)"
+        smiles: "CC(C)O.O"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "Sherwood 2020 ran three Pd-catalysed couplings of aryl bromides (4-bromotoluene, 4-bromophenylacetic acid, 4'-bromoacetophenone) with phenylboronic acid at 0.6 mmol in 3:1 organic solvent/water. Isopropanol performed well in all three cases. Isopropanol and water are ranked recommended in CHEM21."
+        caveats: "Tested on simple aryl bromides only. Not covered: aryl chlorides, hindered partners, heteroaryl and other boronic acids prone to protodeboronation. Substrate-dependent: the paper's point is that this coupling is often insensitive to solvent, which makes a swap plausible but not certain. Catalyst and base may need re-optimising. Reflux temperature is about 80 degC, lower than dioxane, toluene or DMF."
+        evidence: class_specific_study
+        sources:
+          - citation: "J. Sherwood, Beilstein J. Org. Chem., 2020, 16, 1001-1005"
+            doi: "10.3762/bjoc.16.89"
+            verified: yes
+          - citation: "J. Sherwood, J. H. Clark, I. J. S. Fairlamb and J. M. Slattery, Green Chem., 2019, 21, 2164-2213"
+            doi: "10.1039/C9GC00617F"
+            verified: yes
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+      - name: "2-methyltetrahydrofuran/water (3:1 v/v)"
+        smiles: "CC1CCCO1.O"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "Sherwood 2020 ran three Pd-catalysed couplings of aryl bromides (4-bromotoluene, 4-bromophenylacetic acid, 4'-bromoacetophenone) with phenylboronic acid at 0.6 mmol in 3:1 organic solvent/water. 2-MeTHF was one of six greener solvents tested there, and it is listed as a suggested replacement for Suzuki-Miyaura couplings in Jordan et al. 2022."
+        caveats: "Tested on simple aryl bromides only. Not covered: aryl chlorides, hindered partners, heteroaryl and other boronic acids prone to protodeboronation. Substrate-dependent: the paper's point is that this coupling is often insensitive to solvent, which makes a swap plausible but not certain. Catalyst and base may need re-optimising. Two liquid phases: stir well; the inorganic base stays in the water layer. Boils at about 80 degC. Forms peroxides on storage. Ranked problematic, not recommended, in CHEM21."
+        evidence: class_specific_study
+        sources:
+          - citation: "J. Sherwood, Beilstein J. Org. Chem., 2020, 16, 1001-1005"
+            doi: "10.3762/bjoc.16.89"
+            verified: yes
+          - citation: "A. Jordan, C. G. J. Hall, L. R. Thorp and H. F. Sneddon, Chem. Rev., 2022, 122, 6749-6794"
+            doi: "10.1021/acs.chemrev.1c00672"
+            verified: yes
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+      - name: "water containing 2 wt% TPGS-750-M surfactant (micellar)"
+        smiles: "O"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "Lipshutz et al. 2011: Suzuki-Miyaura couplings at room temperature in water containing 2 wt% TPGS-750-M. The supplier protocol based on this work uses aryl bromides, Pd(dtbpf)Cl2 (about 2 mol%) and triethylamine (3 equiv) for 2-24 h."
+        caveats: "This is a different procedure, not a solvent swap: catalyst and base change too. Isolation still needs an organic solvent for extraction, or a filtration. The surfactant goes to the aqueous waste. High-melting or very lipophilic solids can mix poorly. TPGS-750-M is a polymer mixture without a single SMILES; the SMILES given is water only, so the surfactant mass is not counted."
+        evidence: class_specific_study
+        sources:
+          - citation: "B. H. Lipshutz, S. Ghorai, A. R. Abela, R. Moser, T. Nishikata, C. Duplais, A. Krasovskiy, R. D. Gaston and R. C. Gadwood, J. Org. Chem., 2011, 76, 4379-4391"
+            doi: "10.1021/jo101974u"
+            verified: yes
+
+  - id: suzuki-solvent-dmf
+    kind: reaction_solvent
+    classes: [suzuki_miyaura]
+    target:
+      name: "N,N-dimethylformamide"
+      smiles: "CN(C)C=O"
+    problem: "Reprotoxic (H360D). Ranked hazardous in CHEM21. High boiling point (153 degC) makes removal slow."
+    replacements:
+      - name: "isopropanol/water (3:1 v/v)"
+        smiles: "CC(C)O.O"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "Sherwood 2020 ran three Pd-catalysed couplings of aryl bromides (4-bromotoluene, 4-bromophenylacetic acid, 4'-bromoacetophenone) with phenylboronic acid at 0.6 mmol in 3:1 organic solvent/water. Isopropanol performed well in all three cases. Isopropanol and water are ranked recommended in CHEM21."
+        caveats: "Tested on simple aryl bromides only. Not covered: aryl chlorides, hindered partners, heteroaryl and other boronic acids prone to protodeboronation. Substrate-dependent: the paper's point is that this coupling is often insensitive to solvent, which makes a swap plausible but not certain. Catalyst and base may need re-optimising. Reflux temperature is about 80 degC, lower than dioxane, toluene or DMF. Substrates that needed DMF for solubility may not dissolve."
+        evidence: class_specific_study
+        sources:
+          - citation: "J. Sherwood, Beilstein J. Org. Chem., 2020, 16, 1001-1005"
+            doi: "10.3762/bjoc.16.89"
+            verified: yes
+          - citation: "J. Sherwood, J. H. Clark, I. J. S. Fairlamb and J. M. Slattery, Green Chem., 2019, 21, 2164-2213"
+            doi: "10.1039/C9GC00617F"
+            verified: yes
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+      - name: "2-methyltetrahydrofuran/water (3:1 v/v)"
+        smiles: "CC1CCCO1.O"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "Sherwood 2020 ran three Pd-catalysed couplings of aryl bromides (4-bromotoluene, 4-bromophenylacetic acid, 4'-bromoacetophenone) with phenylboronic acid at 0.6 mmol in 3:1 organic solvent/water. 2-MeTHF was one of six greener solvents tested there, and it is listed as a suggested replacement for Suzuki-Miyaura couplings in Jordan et al. 2022."
+        caveats: "Tested on simple aryl bromides only. Not covered: aryl chlorides, hindered partners, heteroaryl and other boronic acids prone to protodeboronation. Substrate-dependent: the paper's point is that this coupling is often insensitive to solvent, which makes a swap plausible but not certain. Catalyst and base may need re-optimising. Two liquid phases: stir well; the inorganic base stays in the water layer. Boils at about 80 degC. Forms peroxides on storage. Ranked problematic, not recommended, in CHEM21. Substrates that needed DMF for solubility may not dissolve."
+        evidence: class_specific_study
+        sources:
+          - citation: "J. Sherwood, Beilstein J. Org. Chem., 2020, 16, 1001-1005"
+            doi: "10.3762/bjoc.16.89"
+            verified: yes
+          - citation: "A. Jordan, C. G. J. Hall, L. R. Thorp and H. F. Sneddon, Chem. Rev., 2022, 122, 6749-6794"
+            doi: "10.1021/acs.chemrev.1c00672"
+            verified: yes
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+      - name: "water containing 2 wt% TPGS-750-M surfactant (micellar)"
+        smiles: "O"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "Lipshutz et al. 2011: Suzuki-Miyaura couplings at room temperature in water containing 2 wt% TPGS-750-M. The supplier protocol based on this work uses aryl bromides, Pd(dtbpf)Cl2 (about 2 mol%) and triethylamine (3 equiv) for 2-24 h."
+        caveats: "This is a different procedure, not a solvent swap: catalyst and base change too. Isolation still needs an organic solvent for extraction, or a filtration. The surfactant goes to the aqueous waste. High-melting or very lipophilic solids can mix poorly. TPGS-750-M is a polymer mixture without a single SMILES; the SMILES given is water only, so the surfactant mass is not counted."
+        evidence: class_specific_study
+        sources:
+          - citation: "B. H. Lipshutz, S. Ghorai, A. R. Abela, R. Moser, T. Nishikata, C. Duplais, A. Krasovskiy, R. D. Gaston and R. C. Gadwood, J. Org. Chem., 2011, 76, 4379-4391"
+            doi: "10.1021/jo101974u"
+            verified: yes
+
+  - id: suzuki-solvent-toluene
+    kind: reaction_solvent
+    classes: [suzuki_miyaura]
+    target:
+      name: "toluene"
+      smiles: "Cc1ccccc1"
+    problem: "Suspected of damaging the unborn child (H361d). Ranked problematic in CHEM21. 2-MeTHF sits in the same CHEM21 band, so it is not offered here as an improvement."
+    replacements:
+      - name: "isopropanol/water (3:1 v/v)"
+        smiles: "CC(C)O.O"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "Sherwood 2020 ran three Pd-catalysed couplings of aryl bromides (4-bromotoluene, 4-bromophenylacetic acid, 4'-bromoacetophenone) with phenylboronic acid at 0.6 mmol in 3:1 organic solvent/water. Isopropanol performed well in all three cases. Isopropanol and water are ranked recommended in CHEM21."
+        caveats: "Tested on simple aryl bromides only. Not covered: aryl chlorides, hindered partners, heteroaryl and other boronic acids prone to protodeboronation. Substrate-dependent: the paper's point is that this coupling is often insensitive to solvent, which makes a swap plausible but not certain. Catalyst and base may need re-optimising. Reflux temperature is about 80 degC, lower than dioxane, toluene or DMF. Very lipophilic substrates may be less soluble than in toluene."
+        evidence: class_specific_study
+        sources:
+          - citation: "J. Sherwood, Beilstein J. Org. Chem., 2020, 16, 1001-1005"
+            doi: "10.3762/bjoc.16.89"
+            verified: yes
+          - citation: "J. Sherwood, J. H. Clark, I. J. S. Fairlamb and J. M. Slattery, Green Chem., 2019, 21, 2164-2213"
+            doi: "10.1039/C9GC00617F"
+            verified: yes
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+      - name: "water containing 2 wt% TPGS-750-M surfactant (micellar)"
+        smiles: "O"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "Lipshutz et al. 2011: Suzuki-Miyaura couplings at room temperature in water containing 2 wt% TPGS-750-M. The supplier protocol based on this work uses aryl bromides, Pd(dtbpf)Cl2 (about 2 mol%) and triethylamine (3 equiv) for 2-24 h."
+        caveats: "This is a different procedure, not a solvent swap: catalyst and base change too. Isolation still needs an organic solvent for extraction, or a filtration. The surfactant goes to the aqueous waste. High-melting or very lipophilic solids can mix poorly. TPGS-750-M is a polymer mixture without a single SMILES; the SMILES given is water only, so the surfactant mass is not counted."
+        evidence: class_specific_study
+        sources:
+          - citation: "B. H. Lipshutz, S. Ghorai, A. R. Abela, R. Moser, T. Nishikata, C. Duplais, A. Krasovskiy, R. D. Gaston and R. C. Gadwood, J. Org. Chem., 2011, 76, 4379-4391"
+            doi: "10.1021/jo101974u"
+            verified: yes
+
+  - id: suzuki-solvent-thf
+    kind: reaction_solvent
+    classes: [suzuki_miyaura]
+    target:
+      name: "tetrahydrofuran"
+      smiles: "C1CCOC1"
+    problem: "Suspected carcinogen (H351). Forms peroxides. Miscible with water, so an extra extraction solvent is needed at workup. Ranked problematic in CHEM21."
+    replacements:
+      - name: "2-methyltetrahydrofuran/water (3:1 v/v)"
+        smiles: "CC1CCCO1.O"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "Sherwood 2020 ran three Pd-catalysed couplings of aryl bromides (4-bromotoluene, 4-bromophenylacetic acid, 4'-bromoacetophenone) with phenylboronic acid at 0.6 mmol in 3:1 organic solvent/water. 2-MeTHF was one of six greener solvents tested there, and it is listed as a suggested replacement for Suzuki-Miyaura couplings in Jordan et al. 2022."
+        caveats: "Tested on simple aryl bromides only. Not covered: aryl chlorides, hindered partners, heteroaryl and other boronic acids prone to protodeboronation. Substrate-dependent: the paper's point is that this coupling is often insensitive to solvent, which makes a swap plausible but not certain. Catalyst and base may need re-optimising. Two liquid phases: stir well; the inorganic base stays in the water layer. Boils at about 80 degC. Forms peroxides on storage. Ranked problematic, not recommended, in CHEM21. 2-MeTHF is in the same CHEM21 band as THF; the gain is at workup (the layers separate without adding an extraction solvent), not in hazard ranking. Aycock 2007 describes 2-MeTHF as a THF replacement in organometallic and biphasic reactions."
+        evidence: class_specific_study
+        sources:
+          - citation: "J. Sherwood, Beilstein J. Org. Chem., 2020, 16, 1001-1005"
+            doi: "10.3762/bjoc.16.89"
+            verified: yes
+          - citation: "A. Jordan, C. G. J. Hall, L. R. Thorp and H. F. Sneddon, Chem. Rev., 2022, 122, 6749-6794"
+            doi: "10.1021/acs.chemrev.1c00672"
+            verified: yes
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+          - citation: "D. F. Aycock, Org. Process Res. Dev., 2007, 11, 156-159"
+            doi: "10.1021/op060155c"
+            verified: yes
+      - name: "isopropanol/water (3:1 v/v)"
+        smiles: "CC(C)O.O"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "Sherwood 2020 ran three Pd-catalysed couplings of aryl bromides (4-bromotoluene, 4-bromophenylacetic acid, 4'-bromoacetophenone) with phenylboronic acid at 0.6 mmol in 3:1 organic solvent/water. Isopropanol performed well in all three cases. Isopropanol and water are ranked recommended in CHEM21."
+        caveats: "Tested on simple aryl bromides only. Not covered: aryl chlorides, hindered partners, heteroaryl and other boronic acids prone to protodeboronation. Substrate-dependent: the paper's point is that this coupling is often insensitive to solvent, which makes a swap plausible but not certain. Catalyst and base may need re-optimising. Reflux temperature is about 80 degC, lower than dioxane, toluene or DMF."
+        evidence: class_specific_study
+        sources:
+          - citation: "J. Sherwood, Beilstein J. Org. Chem., 2020, 16, 1001-1005"
+            doi: "10.3762/bjoc.16.89"
+            verified: yes
+          - citation: "J. Sherwood, J. H. Clark, I. J. S. Fairlamb and J. M. Slattery, Green Chem., 2019, 21, 2164-2213"
+            doi: "10.1039/C9GC00617F"
+            verified: yes
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+
+  - id: suzuki-catalyst-pd-pph3-4
+    kind: catalyst
+    classes: [suzuki_miyaura]
+    target:
+      name: "tetrakis(triphenylphosphine)palladium(0)"
+      smiles: "[Pd].c1ccc(cc1)P(c1ccccc1)c1ccccc1.c1ccc(cc1)P(c1ccccc1)c1ccccc1.c1ccc(cc1)P(c1ccccc1)c1ccccc1.c1ccc(cc1)P(c1ccccc1)c1ccccc1"
+    problem: "Air- and light-sensitive, so often used at 3-5 mol%. Only about 9% palladium by mass; the rest is triphenylphosphine, which ends up as triphenylphosphine oxide and can be hard to separate from the product."
+    replacements:
+      - name: "palladium(II) acetate with SPhos ligand"
+        smiles: "CC(=O)[O-].CC(=O)[O-].[Pd+2]"
+        amount: {mol_percent: 1.0}
+        adds: [{name: "SPhos (2-dicyclohexylphosphino-2',6'-dimethoxybiphenyl)", smiles: "COc1cccc(OC)c1-c1ccccc1P(C1CCCCC1)C1CCCCC1", role: ligand, equiv: 0.02}]
+        removes: []
+        scope: "Barder et al. 2005: Pd/SPhos catalysts coupled aryl and heteroaryl halides with aryl-, heteroaryl- and vinylboronic acids, worked at low catalyst levels, gave hindered biaryls and coupled aryl chlorides at room temperature."
+        caveats: "Substrate-dependent. The 1 mol% Pd and 2 mol% ligand given here are a starting point; lower the loading only after conversion is established. Base and solvent of the original Pd(PPh3)4 procedure may not be the best for this catalyst. SPhos is costly. Residual palladium in the product still has to be checked."
+        evidence: class_specific_study
+        sources:
+          - citation: "T. E. Barder, S. D. Walker, J. R. Martinelli and S. L. Buchwald, J. Am. Chem. Soc., 2005, 127, 4685-4696"
+            doi: "10.1021/ja042491j"
+            verified: yes
+      - name: "palladium on carbon (Pd/C)"
+        smiles: "[Pd]"
+        amount: same_moles
+        adds: []
+        removes: []
+        scope: "Maegawa et al. 2007: ligand-free Pd/C coupled aryl bromides and aryl triflates with arylboronic acids at room temperature in aqueous media; the catalyst was reused five times and palladium in the filtrate was below 1 ppm. Pd/C in Suzuki-Miyaura couplings is reviewed by Felpin et al. 2006."
+        caveats: "Substrate-dependent. Shown for aryl bromides and triflates; aryl chlorides are generally much less reactive with Pd/C. Results vary with the Pd/C grade. Dry Pd/C can ignite solvent vapour; handle wet and filter with care. Start at the same palladium loading and adjust. The SMILES is palladium metal only; the carbon support is not represented, so weigh by the stated Pd content."
+        evidence: class_specific_study
+        sources:
+          - citation: "T. Maegawa, Y. Kitamura, S. Sako, T. Udzu, A. Sakurai, A. Tanaka, Y. Kobayashi, K. Endo, U. Bora, T. Kurita, A. Kozaki, Y. Monguchi and H. Sajiki, Chem. Eur. J., 2007, 13, 5937-5943"
+            doi: "10.1002/chem.200601795"
+            verified: yes
+          - citation: "F.-X. Felpin, T. Ayad and S. Mitra, Eur. J. Org. Chem., 2006, 2679-2690"
+            doi: "10.1002/ejoc.200501004"
+            verified: yes
+
+  - id: suzuki-base-cs2co3
+    kind: base
+    classes: [suzuki_miyaura]
+    target:
+      name: "caesium carbonate"
+      smiles: "O=C([O-])[O-].[Cs+].[Cs+]"
+    problem: "Caesium is a scarce element and the salt is expensive. High formula mass (326 g/mol against 138 for potassium carbonate) raises the mass intensity. The ACS GCI Pharmaceutical Roundtable Suzuki-Miyaura reagent guide says it should be substituted where possible."
+    replacements:
+      - name: "potassium carbonate"
+        smiles: "O=C([O-])[O-].[K+].[K+]"
+        amount: same_equiv
+        adds: []
+        removes: []
+        scope: "The ACS GCI Pharmaceutical Roundtable reagent guide prefers simple inorganic bases (sodium or potassium hydroxide, carbonate, bicarbonate, phosphate) for Suzuki-Miyaura couplings."
+        caveats: "Substrate-dependent; a guide recommendation, not a tested swap. Caesium carbonate is often chosen for its solubility in organic solvents or for anhydrous conditions; potassium carbonate usually needs water or an alcohol co-solvent to work. Expect to re-optimise for hindered or slow couplings."
+        evidence: general_guide
+        sources:
+          - citation: "ACS GCI Pharmaceutical Roundtable, Reagent Guides: Suzuki-Miyaura (web guide, no DOI), https://reagents.acsgcipr.org/reagent-guides/suzuki-miyaura/"
+            doi: ""
+            verified: yes
+      - name: "tripotassium phosphate"
+        smiles: "O=P([O-])([O-])[O-].[K+].[K+].[K+]"
+        amount: same_equiv
+        adds: []
+        removes: []
+        scope: "The ACS GCI Pharmaceutical Roundtable reagent guide prefers simple inorganic bases (sodium or potassium hydroxide, carbonate, bicarbonate, phosphate) for Suzuki-Miyaura couplings."
+        caveats: "Substrate-dependent; a guide recommendation, not a tested swap. Stronger base than carbonate: check base-sensitive groups (esters, epimerisable centres). Local rules can limit phosphate in aqueous waste."
+        evidence: general_guide
+        sources:
+          - citation: "ACS GCI Pharmaceutical Roundtable, Reagent Guides: Suzuki-Miyaura (web guide, no DOI), https://reagents.acsgcipr.org/reagent-guides/suzuki-miyaura/"
+            doi: ""
+            verified: yes
+
+  - id: redam-solvent-dce
+    kind: reaction_solvent
+    classes: [reductive_amination]
+    target:
+      name: "1,2-dichloroethane"
+      smiles: "ClCCCl"
+    problem: "Carcinogen (H350), toxic and highly flammable. Ranked highly hazardous in CHEM21."
+    replacements:
+      - name: "ethyl acetate"
+        smiles: "CCOC(C)=O"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "McGonagle et al. 2013 screened ten solvents with three borane-based reductants in direct reductive aminations of alkyl and aryl aldehydes with twelve amines, to replace dichloromethane, 1,2-dichloroethane and DMF. Ethyl acetate was found to be a suitable replacement; the representative procedure used sodium triacetoxyborohydride (1.2 equiv) in ethyl acetate at room temperature for 6 h."
+        caveats: "Aldehydes only; ketones were not part of the study and are usually slower. Do not switch to methanol when the reductant is sodium triacetoxyborohydride: the reagent reacts with methanol, and Abdel-Magid et al. 1996 used 1,2-dichloroethane, THF or acetonitrile. Unhindered primary amines can be acetylated by ethyl acetate on long heating; keep to room temperature."
+        evidence: class_specific_study
+        sources:
+          - citation: "F. I. McGonagle, D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15, 1159-1165"
+            doi: "10.1039/C3GC40359A"
+            verified: yes
+          - citation: "A. F. Abdel-Magid, K. G. Carson, B. D. Harris, C. A. Maryanoff and R. D. Shah, J. Org. Chem., 1996, 61, 3849-3862"
+            doi: "10.1021/jo960057x"
+            verified: yes
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+      - name: "dimethyl carbonate"
+        smiles: "COC(=O)OC"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "McGonagle et al. 2013 screened ten solvents with three borane-based reductants in direct reductive aminations of alkyl and aryl aldehydes with twelve amines, to replace dichloromethane, 1,2-dichloroethane and DMF. Dimethyl carbonate was one of the solvents screened and is cited by the ACS GCI Pharmaceutical Roundtable, with ethyl acetate, as a workable alternative to chlorinated solvents for this reaction."
+        caveats: "Aldehydes only; ketones were not part of the study and are usually slower. Do not switch to methanol when the reductant is sodium triacetoxyborohydride: the reagent reacts with methanol, and Abdel-Magid et al. 1996 used 1,2-dichloroethane, THF or acetonitrile. Check the per-solvent data in the paper for your reductant before relying on this. Dimethyl carbonate can react with amines when heated; keep to room temperature."
+        evidence: class_specific_study
+        sources:
+          - citation: "F. I. McGonagle, D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15, 1159-1165"
+            doi: "10.1039/C3GC40359A"
+            verified: no
+          - citation: "A. F. Abdel-Magid, K. G. Carson, B. D. Harris, C. A. Maryanoff and R. D. Shah, J. Org. Chem., 1996, 61, 3849-3862"
+            doi: "10.1021/jo960057x"
+            verified: yes
+
+  - id: redam-solvent-dcm
+    kind: reaction_solvent
+    classes: [reductive_amination]
+    target:
+      name: "dichloromethane"
+      smiles: "ClCCl"
+    problem: "Suspected carcinogen (H351). Very volatile (bp 40 degC), so losses to air are high. Ranked hazardous in CHEM21 (final ranking). Gives a chlorinated waste stream."
+    replacements:
+      - name: "ethyl acetate"
+        smiles: "CCOC(C)=O"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "McGonagle et al. 2013 screened ten solvents with three borane-based reductants in direct reductive aminations of alkyl and aryl aldehydes with twelve amines, to replace dichloromethane, 1,2-dichloroethane and DMF. Ethyl acetate was found to be a suitable replacement; the representative procedure used sodium triacetoxyborohydride (1.2 equiv) in ethyl acetate at room temperature for 6 h."
+        caveats: "Aldehydes only; ketones were not part of the study and are usually slower. Do not switch to methanol when the reductant is sodium triacetoxyborohydride: the reagent reacts with methanol, and Abdel-Magid et al. 1996 used 1,2-dichloroethane, THF or acetonitrile. Unhindered primary amines can be acetylated by ethyl acetate on long heating; keep to room temperature."
+        evidence: class_specific_study
+        sources:
+          - citation: "F. I. McGonagle, D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15, 1159-1165"
+            doi: "10.1039/C3GC40359A"
+            verified: yes
+          - citation: "A. F. Abdel-Magid, K. G. Carson, B. D. Harris, C. A. Maryanoff and R. D. Shah, J. Org. Chem., 1996, 61, 3849-3862"
+            doi: "10.1021/jo960057x"
+            verified: yes
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+      - name: "dimethyl carbonate"
+        smiles: "COC(=O)OC"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "McGonagle et al. 2013 screened ten solvents with three borane-based reductants in direct reductive aminations of alkyl and aryl aldehydes with twelve amines, to replace dichloromethane, 1,2-dichloroethane and DMF. Dimethyl carbonate was one of the solvents screened and is cited by the ACS GCI Pharmaceutical Roundtable, with ethyl acetate, as a workable alternative to chlorinated solvents for this reaction."
+        caveats: "Aldehydes only; ketones were not part of the study and are usually slower. Do not switch to methanol when the reductant is sodium triacetoxyborohydride: the reagent reacts with methanol, and Abdel-Magid et al. 1996 used 1,2-dichloroethane, THF or acetonitrile. Check the per-solvent data in the paper for your reductant before relying on this. Dimethyl carbonate can react with amines when heated; keep to room temperature."
+        evidence: class_specific_study
+        sources:
+          - citation: "F. I. McGonagle, D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15, 1159-1165"
+            doi: "10.1039/C3GC40359A"
+            verified: no
+          - citation: "A. F. Abdel-Magid, K. G. Carson, B. D. Harris, C. A. Maryanoff and R. D. Shah, J. Org. Chem., 1996, 61, 3849-3862"
+            doi: "10.1021/jo960057x"
+            verified: yes
+
+  - id: redam-reagent-nabh3cn
+    kind: reagent
+    classes: [reductive_amination]
+    target:
+      name: "sodium cyanoborohydride"
+      smiles: "[Na+].[BH3-]C#N"
+    problem: "Highly toxic. Releases hydrogen cyanide on contact with acid, leaves cyanide in the aqueous waste and can contaminate the product with cyanide."
+    replacements:
+      - name: "sodium triacetoxyborohydride"
+        smiles: "[Na+].CC(=O)O[BH-](OC(C)=O)OC(C)=O"
+        amount: {equiv: 1.4}
+        adds: []
+        removes: []
+        scope: "Abdel-Magid et al. 1996: general for aldehydes and ketones with primary and secondary amines; gave higher yields and fewer side products than sodium cyanoborohydride in methanol in their comparisons. Acetic acid is used as catalyst with ketones and is usually not needed with aldehydes. McGonagle et al. 2013 used 1.2 equiv in ethyl acetate with aldehydes."
+        caveats: "Not compatible with methanol, the usual solvent for cyanoborohydride: the solvent must change too. The original paper preferred 1,2-dichloroethane (also THF or acetonitrile); use ethyl acetate where the McGonagle study applies. Higher mass per hydride than cyanoborohydride. Moisture-sensitive. Dialkylation of primary amines with aldehydes can occur; the paper then used stepwise imine formation and sodium borohydride. Aromatic and hindered ketones can be slow. The loading is a starting point."
+        evidence: class_specific_study
+        sources:
+          - citation: "A. F. Abdel-Magid, K. G. Carson, B. D. Harris, C. A. Maryanoff and R. D. Shah, J. Org. Chem., 1996, 61, 3849-3862"
+            doi: "10.1021/jo960057x"
+            verified: yes
+          - citation: "F. I. McGonagle, D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15, 1159-1165"
+            doi: "10.1039/C3GC40359A"
+            verified: yes
+      - name: "2-picoline borane"
+        smiles: "Cc1cccc[n+]1[BH3-]"
+        amount: {equiv: 1.0}
+        adds: []
+        removes: []
+        scope: "Sato et al. 2004: one-pot reductive amination of aldehydes and ketones with 2-picoline borane in methanol, in water and neat, with a small amount of acetic acid. Works in methanol, so the solvent of a cyanoborohydride procedure can usually stay. It is a storable solid."
+        caveats: "The loading is a starting point. Hydrogen is released on acidic quench; vent the vessel. Reactions in water were reported to work poorly for highly water-soluble amines. 2-Picoline and boron residues must be washed out. Less literature precedent than triacetoxyborohydride for hindered or weakly basic amines."
+        evidence: class_specific_study
+        sources:
+          - citation: "S. Sato, T. Sakamoto, E. Miyazawa and Y. Kikugawa, Tetrahedron, 2004, 60, 7899-7906"
+            doi: "10.1016/j.tet.2004.06.045"
+            verified: yes
+
+  - id: workup-dcm
+    kind: workup_solvent
+    classes: [any]
+    target:
+      name: "dichloromethane"
+      smiles: "ClCCl"
+    problem: "Suspected carcinogen (H351). Very volatile (bp 40 degC), so losses to air are high. Ranked hazardous in CHEM21 (final ranking). Gives a chlorinated waste stream."
+    replacements:
+      - name: "ethyl acetate"
+        smiles: "CCOC(C)=O"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "General replacement for extraction of neutral organic products. Ethyl acetate is ranked recommended in CHEM21."
+        caveats: "The organic layer is now the upper layer. Ethyl acetate dissolves more water and more polar impurities than dichloromethane: wash with brine and dry well. It hydrolyses in contact with strong aqueous base or acid; keep such washes short and cold. Very polar products may partition less well; check the aqueous layer."
+        evidence: general_guide
+        sources:
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+      - name: "2-methyltetrahydrofuran"
+        smiles: "CC1CCCO1"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "Aycock 2007 describes 2-MeTHF as a good substitute for dichloromethane in biphasic reactions. Stable to aqueous base, unlike ethyl acetate."
+        caveats: "The organic layer is now the upper layer. Forms peroxides on storage; test before concentrating. Dissolves a few percent of water; dry well. Boils at about 80 degC. Costs more. Ranked problematic, not recommended, in CHEM21."
+        evidence: general_guide
+        sources:
+          - citation: "D. F. Aycock, Org. Process Res. Dev., 2007, 11, 156-159"
+            doi: "10.1021/op060155c"
+            verified: yes
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+
+  - id: workup-diethyl-ether
+    kind: workup_solvent
+    classes: [any]
+    target:
+      name: "diethyl ether"
+      smiles: "CCOCC"
+    problem: "Extremely flammable, with a very low flash point and low autoignition temperature. Forms explosive peroxides. Boils at 35 degC, so losses to air are high. Ranked highly hazardous in CHEM21."
+    replacements:
+      - name: "2-methyltetrahydrofuran"
+        smiles: "CC1CCCO1"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "Ether solvent that is immiscible with water. Ranked problematic in CHEM21, two bands better than diethyl ether."
+        caveats: "Still a peroxide former; test before concentrating. Boils at about 80 degC, so it is slower to remove than diethyl ether. Dissolves more water than diethyl ether; dry well. Extracts polar impurities more readily."
+        evidence: general_guide
+        sources:
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+          - citation: "D. F. Aycock, Org. Process Res. Dev., 2007, 11, 156-159"
+            doi: "10.1021/op060155c"
+            verified: yes
+      - name: "methyl tert-butyl ether"
+        smiles: "COC(C)(C)C"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "Closest in behaviour to diethyl ether (bp 55 degC) and much less prone to peroxide formation. Ranked hazardous in CHEM21, one band better than diethyl ether."
+        caveats: "Only a modest improvement: still highly flammable and still ranked hazardous in CHEM21. Cleaved by strong acids; avoid concentrated acid washes. Persistent groundwater contaminant; never put it down the drain."
+        evidence: general_guide
+        sources:
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+
+  - id: workup-hexane
+    kind: workup_solvent
+    classes: [any]
+    target:
+      name: "n-hexane"
+      smiles: "CCCCCC"
+    problem: "n-Hexane is neurotoxic on repeated exposure and suspected of damaging fertility (H361f). Ranked hazardous in CHEM21."
+    replacements:
+      - name: "n-heptane"
+        smiles: "CCCCCCC"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "Heptane is ranked problematic in CHEM21 and in the Prat et al. 2014 survey of pharmaceutical solvent guides, one band better than hexane. Solvent behaviour is very similar."
+        caveats: "Boils at 98 degC against 69 degC: slower to evaporate, and volatile products are harder to free of solvent. Still highly flammable and toxic to aquatic life (H410). Some compounds are slightly less soluble."
+        evidence: general_guide
+        sources:
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+          - citation: "D. Prat, J. Hayler and A. Wells, Green Chem., 2014, 16, 4546-4551"
+            doi: "10.1039/C4GC01149J"
+            verified: yes
+
+  - id: workup-chloroform
+    kind: workup_solvent
+    classes: [any]
+    target:
+      name: "chloroform"
+      smiles: "ClC(Cl)Cl"
+    problem: "Suspected carcinogen (H351), toxic if inhaled and damages liver and kidneys on repeated exposure. Ranked highly hazardous in CHEM21."
+    replacements:
+      - name: "ethyl acetate"
+        smiles: "CCOC(C)=O"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "General replacement for extraction of neutral organic products. Ethyl acetate is ranked recommended in CHEM21."
+        caveats: "The organic layer is now the upper layer. Chloroform extracts some polar and basic compounds (amines, amides, alkaloids) better than ethyl acetate; check recovery and use more extractions if needed. Ethyl acetate hydrolyses in contact with strong aqueous base or acid."
+        evidence: general_guide
+        sources:
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+      - name: "2-methyltetrahydrofuran"
+        smiles: "CC1CCCO1"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "Water-immiscible ether, stable to aqueous base. Ranked problematic in CHEM21."
+        caveats: "The organic layer is now the upper layer. Check recovery of polar products. Forms peroxides on storage; test before concentrating. Dissolves a few percent of water; dry well."
+        evidence: general_guide
+        sources:
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+
+  - id: workup-benzene
+    kind: workup_solvent
+    classes: [any]
+    target:
+      name: "benzene"
+      smiles: "c1ccccc1"
+    problem: "Human carcinogen (H350) and mutagen (H340). Ranked highly hazardous in CHEM21."
+    replacements:
+      - name: "toluene"
+        smiles: "Cc1ccccc1"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "Closest aromatic hydrocarbon without the carcinogen classification. Ranked problematic in CHEM21."
+        caveats: "Toluene is suspected of damaging the unborn child (H361d); it is a lesser hazard, not a harmless one. Boils at 111 degC against 80 degC, so it is harder to remove. It cannot replace benzene for freeze-drying (it freezes at -95 degC). Azeotrope compositions differ."
+        evidence: general_guide
+        sources:
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+          - citation: "D. Prat, J. Hayler and A. Wells, Green Chem., 2014, 16, 4546-4551"
+            doi: "10.1039/C4GC01149J"
+            verified: yes
+
+  - id: chrom-dcm
+    kind: purification_solvent
+    classes: [any]
+    target:
+      name: "dichloromethane"
+      smiles: "ClCCl"
+    problem: "Chromatography is one of the largest sources of chlorinated solvent waste in medicinal chemistry (Taygerly et al. 2012). Dichloromethane (typically as dichloromethane/methanol) is a suspected carcinogen (H351) and is ranked hazardous in CHEM21 (final ranking)."
+    replacements:
+      - name: "ethyl acetate/ethanol (3:1 v/v) in heptane"
+        smiles: "CCOC(C)=O.CCO.CCCCCCC"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "Taygerly et al. 2012: experimentally derived guide; mixtures of 3:1 ethyl acetate/ethanol in heptane, with or without acetic acid or ammonium hydroxide additive, covered neutral, acidic and basic test compounds that are usually run in dichloromethane/methanol. MacMillan et al. 2012 give a second, independent guide to dichloromethane-free eluents."
+        caveats: "Not a like-for-like eluent strength: find the new ratio by TLC. Selectivity differs, so close-running impurities may separate better or worse. Ethyl acetate absorbs in the UV below about 255 nm and can hide weak chromophores on an automated system. Take additive levels from the paper. Compounds that are soluble only in dichloromethane may need dry loading."
+        evidence: class_specific_study
+        sources:
+          - citation: "J. P. Taygerly, L. M. Miller, A. Yee and E. A. Peterson, Green Chem., 2012, 14, 3020-3025"
+            doi: "10.1039/C2GC36064K"
+            verified: yes
+          - citation: "D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2012, 14, 3016-3019"
+            doi: "10.1039/C2GC36378J"
+            verified: yes
+      - name: "isopropanol in heptane"
+        smiles: "CC(C)O.CCCCCCC"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "Taygerly et al. 2012 list isopropanol in heptane as a starting point for neutral compounds."
+        caveats: "Stated for neutral compounds only. Find the ratio by TLC. Isopropanol is viscous, so column back-pressure is higher and fractions take longer to evaporate."
+        evidence: class_specific_study
+        sources:
+          - citation: "J. P. Taygerly, L. M. Miller, A. Yee and E. A. Peterson, Green Chem., 2012, 14, 3020-3025"
+            doi: "10.1039/C2GC36064K"
+            verified: yes
+
+  - id: chrom-hexane
+    kind: purification_solvent
+    classes: [any]
+    target:
+      name: "n-hexane"
+      smiles: "CCCCCC"
+    problem: "n-Hexane is neurotoxic on repeated exposure and suspected of damaging fertility (H361f). Ranked hazardous in CHEM21. Column chromatography uses it in large volumes."
+    replacements:
+      - name: "n-heptane"
+        smiles: "CCCCCCC"
+        amount: same_volume
+        adds: []
+        removes: []
+        scope: "Heptane is ranked one band better than hexane in CHEM21 and in the Prat et al. 2014 survey. Taygerly et al. 2012 used heptane as the non-polar component of their eluents. Eluent strength is close to hexane."
+        caveats: "Boils at 98 degC against 69 degC, so fractions take longer to evaporate and volatile products are harder to free of solvent. Slightly higher viscosity. Still flammable and toxic to aquatic life (H410). Re-check Rf by TLC."
+        evidence: general_guide
+        sources:
+          - citation: "D. Prat, A. Wells, J. Hayler, H. Sneddon, C. R. McElroy, S. Abou-Shehada and P. J. Dunn, Green Chem., 2016, 18, 288-296"
+            doi: "10.1039/C5GC01008J"
+            verified: yes
+          - citation: "D. Prat, J. Hayler and A. Wells, Green Chem., 2014, 16, 4546-4551"
+            doi: "10.1039/C4GC01149J"
+            verified: yes
+          - citation: "J. P. Taygerly, L. M. Miller, A. Yee and E. A. Peterson, Green Chem., 2012, 14, 3020-3025"
+            doi: "10.1039/C2GC36064K"
+            verified: yes
+
+  - id: purif-chromatography-to-crystallisation
+    kind: purification_method
+    classes: [any]
+    target:
+      step: "Classical chromatography"
+    problem: "Uses a large volume of solvent and silica per gram of product. EcoScale gives classical chromatography 10 penalty points against 1 for crystallisation and filtration."
+    replacements:
+      - step: "Crystallization and filtration"
+        adds: []
+        removes: []
+        scope: "Low-confidence prompt, not a recipe. Worth trying when the product is a solid and the crude is already fairly clean."
+        caveats: "Only works if the product crystallises. Whether impurities are rejected depends on the impurity profile; close analogues and isomers often co-crystallise. Finding a solvent takes screening, and material is lost to the mother liquor. Oils, small-scale or very impure crudes usually still need chromatography. A crystallisation solvent is still needed and counts in the metrics."
+        evidence: general_guide
+        sources:
+          - citation: "K. Van Aken, L. Strekowski and L. Patiny, Beilstein J. Org. Chem., 2006, 2, No. 3"
+            doi: "10.1186/1860-5397-2-3"
+            verified: yes

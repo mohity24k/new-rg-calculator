@@ -40,9 +40,12 @@ def _request(method: str, url: str, **kw) -> requests.Response:
     return r
 
 
-def cid_for(name: Optional[str] = None, smiles: Optional[str] = None) -> Optional[int]:
-    """PubChem compound identifier from a name (preferred) or a SMILES. None if unknown."""
-    for namespace, value in (("name", name), ("smiles", smiles)):
+def cids_for(name: Optional[str] = None, smiles: Optional[str] = None) -> list[int]:
+    """PubChem compound identifiers for a SMILES (exact structure) and for a name, in that
+    order, without duplicates. Salts and complexes often have their hazard data on the record
+    found by name, so the caller tries both."""
+    out: list[int] = []
+    for namespace, value in (("smiles", smiles), ("name", name)):
         if not value:
             continue
         r = _request("POST", f"{BASE}/pug/compound/{namespace}/cids/JSON", data={namespace: value})
@@ -54,14 +57,16 @@ def cid_for(name: Optional[str] = None, smiles: Optional[str] = None) -> Optiona
             cids = r.json()["IdentifierList"]["CID"]
         except (ValueError, KeyError):
             continue
-        if cids and cids[0]:
-            return int(cids[0])
-    return None
+        if cids and cids[0] and int(cids[0]) not in out:
+            out.append(int(cids[0]))
+    return out
 
 
 def parse_ghs(record: dict) -> list[dict]:
     """PUG View 'GHS Classification' record -> one entry per source:
-    {'source': str, 'statements': [(code, share_percent_or_None), ...]} in PubChem's order."""
+    {'source': str, 'statements': [(code, share_percent_or_None), ...], 'not_classified': bool}
+    in PubChem's order. 'not_classified' means the source states that the compound does not meet
+    the GHS hazard criteria."""
     refs = {r.get("ReferenceNumber"): r.get("SourceName", "") for r in record.get("Reference", [])}
     out: dict[int, dict] = {}
 
@@ -70,11 +75,14 @@ def parse_ghs(record: dict) -> list[dict]:
             if s.get("TOCHeading") == "GHS Classification":
                 for info in s.get("Information", []):
                     ref = info.get("ReferenceNumber")
-                    entry = out.setdefault(ref, {"source": refs.get(ref, ""), "statements": []})
+                    entry = out.setdefault(ref, {"source": refs.get(ref, ""), "statements": [], "not_classified": False})
                     if info.get("Name") != "GHS Hazard Statements":
                         continue
                     for item in info.get("Value", {}).get("StringWithMarkup", []):
-                        m = _H_RE.match(item.get("String", ""))
+                        text = item.get("String", "")
+                        if text.strip().lower().startswith("not classified"):
+                            entry["not_classified"] = True
+                        m = _H_RE.match(text)
                         if m:
                             share = float(m.group(2)) if m.group(2) else None
                             entry["statements"].append((m.group(1).upper().replace("EUH", "EUH"), share))

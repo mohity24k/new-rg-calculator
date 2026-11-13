@@ -1,0 +1,24 @@
+id: example-redam-dce
+title: "Reductive amination: NaBH(OAc)3, 1,2-dichloroethane"
+description: >-
+  Representative laboratory procedure for a direct reductive amination under the conditions of
+  Abdel-Magid et al. (J. Org. Chem. 1996, 61, 3849), written for this tool; the amounts are
+  typical and not taken from one experiment of that paper.
+reaction:
+  name: "N-benzylmorpholine by reductive amination"
+  reaction_class: reductive_amination
+  temperature_c: 22
+  time_h: 4
+  atmosphere: nitrogen
+  workup_steps:
+    - "Liquid-liquid extraction (incl. drying/filtration of desiccant)"
+  source: {entry: example}
+  components:
+    - {name: "benzaldehyde", role: reactant, smiles: "O=Cc1ccccc1", mass_g: 0.531, limiting: true}
+    - {name: "morpholine", role: reactant, smiles: "C1COCCN1", equiv: 1.05}
+    - {name: "sodium triacetoxyborohydride", role: reagent, equiv: 1.4}
+    - {name: "1,2-dichloroethane", role: reaction_solvent, volume_ml: 18}
+    - {name: "saturated aqueous NaHCO3", role: water, volume_ml: 20}
+    - {name: "dichloromethane", role: workup, volume_ml: 45}
+    - {name: "sodium sulfate", role: workup, mass_g: 2.0}
+    - {name: "N-benzylmorpholine", role: product, smiles: "C(c1ccccc1)N1CCOCC1", mass_g: 0.78}
