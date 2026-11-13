@@ -142,9 +142,17 @@ def _num(v) -> str:
         return v
     if isinstance(v, bool):
         return "yes" if v else "no"
-    if abs(v) >= 1000 or (v != 0 and abs(v) < 0.01):
-        return f"{v:.3g}"
+    if abs(v) < 5e-7:
+        return "0"
+    if abs(v) >= 100:
+        return f"{v:,.0f}"
+    if abs(v) < 0.01:
+        return f"{v:.2g}"
     return f"{v:.2f}"
+
+
+_STATUS = {"classified": "", "not_classified": "no hazard statement", "no_data": "no GHS data found",
+           "unavailable": "lookup not possible"}
 
 
 def to_pdf(report: dict) -> bytes:
@@ -203,7 +211,7 @@ def to_pdf(report: dict) -> bytes:
     for c in rx["components"]:
         h = haz.get(c["name"], {})
         rows.append([c["name"], c["role"].replace("_", " "), _num(c.get("mass_g")),
-                     ", ".join(h.get("h_codes", [])) or (h.get("status", "") if h else ""),
+                     ", ".join(h.get("h_codes", [])) or (_STATUS.get(h.get("status"), "") if h else ""),
                      "/".join(str(h.get(d, "?")) for d in ("health", "safety", "environment")) if h else "",
                      ("ESTIMATE: " if c.get("estimated") else "") + (c.get("note") or "as entered")])
     el.append(table(rows, [38 * mm, 24 * mm, 16 * mm, 40 * mm, 18 * mm, 42 * mm]))
