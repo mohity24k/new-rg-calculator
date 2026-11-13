@@ -19,10 +19,10 @@ CLASSES = {
 }
 
 _SMARTS = {
-    "acid": "[CX3](=O)[OX2H1,OX1-]",
+    "acid": "[CX3;$(C[#6])](=O)[OX2H1,OX1-]",
     "amine": "[NX3;H2,H1;!$(N[C,S,P]=[O,S,N]);!$(N-[N,O]);!$(N=*)]",
     "amine_any": "[NX3;!$(N[C,S,P]=[O,S,N]);!$(N=*);!$([N]-[N,O])]",
-    "amide": "[CX3](=O)[NX3]",
+    "amide": "[CX3;$(C[#6])](=O)[NX3]",
     "boron": "[#6][BX3]([OX2])[OX2]",
     "bf3k": "[#6][BX4-](F)(F)F",
     "halide": "[c,$([CX3]=[CX3])][Cl,Br,I]",
@@ -52,15 +52,23 @@ def _count(smiles: Optional[str], key: str) -> int:
 
 
 def classify(reaction: Reaction) -> tuple[Optional[str], Optional[str], str]:
-    reactants = [c for c in reaction.by_role("reactant", "reagent") if c.smiles]
     product = reaction.product
-    names = " ".join(c.name.lower() for c in reaction.inputs)
-    smiles_all = [c.smiles for c in reaction.inputs if c.smiles]
-    has = lambda key: any(_count(c.smiles, key) for c in reactants)          # noqa: E731
-    total = lambda key: sum(_count(c.smiles, key) for c in reactants)        # noqa: E731
+    return classify_structures(
+        [c.smiles for c in reaction.by_role("reactant", "reagent") if c.smiles],
+        product.smiles if product else None,
+        " ".join(c.name.lower() for c in reaction.inputs),
+        [c.smiles for c in reaction.inputs if c.smiles])
 
-    if product is not None and product.smiles and reactants:
-        p = product.smiles
+
+def classify_structures(reactants: list, product: Optional[str], names: str = "",
+                        smiles_all: Optional[list] = None) -> tuple[Optional[str], Optional[str], str]:
+    """Class from SMILES lists (used directly by the dataset import)."""
+    smiles_all = smiles_all if smiles_all is not None else list(reactants)
+    has = lambda key: any(_count(s, key) for s in reactants)          # noqa: E731
+    total = lambda key: sum(_count(s, key) for s in reactants)        # noqa: E731
+
+    if product and reactants:
+        p = product
         if (has("boron") or has("bf3k")) and (has("halide") or has("triflate")) and \
                 not _count(p, "boron") and not _count(p, "bf3k"):
             pd = any(_count(s, "pd_ni") for s in smiles_all) or "palladium" in names or "pd(" in names or "pd/" in names
@@ -87,3 +95,16 @@ def classify(reaction: Reaction) -> tuple[Optional[str], Optional[str], str]:
             ("amine" in names or has("amine")):
         return "reductive_amination", "reagents", "A carbonyl compound, an amine and a hydride reductant are present."
     return None, None, "The reaction was not recognised as one of the supported classes."
+
+
+PARTNER_PATTERNS = {
+    "amide_coupling": ("acid", "amine"),
+    "suzuki_miyaura": ("boron", "bf3k", "halide", "triflate"),
+    "reductive_amination": ("carbonyl", "amine"),
+}
+
+
+def is_partner(reaction_class: str, smiles: Optional[str]) -> bool:
+    """True if the compound is one of the two coupling partners of the class (the acid or the
+    amine, the boron compound or the halide, the carbonyl compound or the amine)."""
+    return any(_count(smiles, k) for k in PARTNER_PATTERNS.get(reaction_class, ()))

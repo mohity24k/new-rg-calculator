@@ -833,6 +833,7 @@ rules:
             doi: "10.1039/C5GC01008J"
             verified: yes
       - name: "water containing 2 wt% TPGS-750-M surfactant (micellar)"
+        precedent_search: false   # the dataset cannot tell micellar conditions from water as a co-solvent
         smiles: "O"
         amount: same_volume
         adds: []
@@ -890,6 +891,7 @@ rules:
             doi: "10.1039/C5GC01008J"
             verified: yes
       - name: "water containing 2 wt% TPGS-750-M surfactant (micellar)"
+        precedent_search: false   # the dataset cannot tell micellar conditions from water as a co-solvent
         smiles: "O"
         amount: same_volume
         adds: []
@@ -947,6 +949,7 @@ rules:
             doi: "10.1039/C5GC01008J"
             verified: yes
       - name: "water containing 2 wt% TPGS-750-M surfactant (micellar)"
+        precedent_search: false   # the dataset cannot tell micellar conditions from water as a co-solvent
         smiles: "O"
         amount: same_volume
         adds: []
@@ -986,6 +989,7 @@ rules:
             doi: "10.1039/C5GC01008J"
             verified: yes
       - name: "water containing 2 wt% TPGS-750-M surfactant (micellar)"
+        precedent_search: false   # the dataset cannot tell micellar conditions from water as a co-solvent
         smiles: "O"
         amount: same_volume
         adds: []

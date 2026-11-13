@@ -24,10 +24,7 @@ import copy
 import re
 from typing import Optional
 
-import pandas as pd
-
 from gms.chem import names, structure, units
-from gms.extraction import classic
 
 def load_cache(path: Optional[str]):
     if path:
@@ -176,58 +173,6 @@ def enrich_reaction(rec: dict, cfg: dict, online: bool = True) -> dict:
     r["completeness"] = round(sum(c["mass_g"] is not None for c in counted) / len(counted), 3) if counted else 0.0
     r["enriched"] = True
     return r
-
-# ---------------------------------------------------------------------------
-# Adapter to the interactive app (one reaction -> existing review table)
-# ---------------------------------------------------------------------------
-
-
-APP_ROLE = {"reactant": "reactant", "reagent": "reactant", "catalyst": "catalyst", "base": "base",
-            "additive": "additive", "reaction_solvent": "solvent", "workup": "workup",
-            "purification": "workup", "water": "water", "product": "product", "ignore": "ignore"}
-
-
-def to_review_table(rec: dict) -> pd.DataFrame:
-    """Enriched reaction -> the review table of the Upload PDF page (pdf_extraction.COLUMNS).
-    Reagents count as reactants and purification as workup, as in the single-reaction mode."""
-    rows = []
-    pages = ", ".join(str(p) for p in (rec.get("source") or {}).get("pages", []))
-    for c in rec["components"]:
-        role = APP_ROLE.get(c["role"], "additive")
-        flags = list(c.get("flags", []))
-        if role != "ignore" and c.get("quantity") is None and c.get("equiv") is None:
-            role = "ignore"
-            flags = ["no amount stated (set Role back to include)"]
-        if role in ("reactant", "product") and not c.get("mw"):
-            flags.append("MW unknown: enter MW or SMILES")
-        if role != "ignore" and c.get("mass_g") is None:
-            flags.append("mass missing")
-        if role == "reactant" and c.get("moles") is None:
-            flags.append("moles missing")
-        if c["role"] == "reagent":
-            flags.append("stoichiometric reagent")
-        rows.append({"Name": c["name"], "Role": role, "Mass (g)": units.sig(c.get("mass_g")),
-                     "Moles (mol)": units.sig(c.get("moles")), "MW (g/mol)": c.get("mw"),
-                     "Carbons": c.get("carbons"), "SMILES": c.get("smiles"), "Page": pages,
-                     "Flag": "; ".join(dict.fromkeys(flags))})
-    df = classic._typed(pd.DataFrame(rows, columns=classic.COLUMNS))
-    if df.empty:
-        return df
-    df["_o"] = df["Role"].map(classic.ROLES.index)
-    return df.sort_values(["_o", "Name"], key=lambda c: c.str.lower() if c.dtype == object else c) \
-             .drop(columns="_o").reset_index(drop=True)
-
-
-def review_meta(rec: dict) -> dict:
-    """Conditions in the shape pdf_extraction.suggest_eco_inputs expects."""
-    cond = rec.get("conditions") or {}
-    workup = [w.lower() for w in rec.get("workup") or []]
-    if rec.get("purification"):
-        workup.append(rec["purification"].lower())
-    return {"yield_percent": rec.get("yield_percent"), "temperature_c": cond.get("temperature_c"),
-            "time_h": cond.get("time_h"), "atmosphere": cond.get("atmosphere"),
-            "activation": cond.get("activation"), "workup": workup, "heated": bool(cond.get("reflux"))}
-
 
 def summary(rec: dict) -> str:
     prod = next((c["name"] for c in rec["components"] if c["role"] == "product"), "no product")

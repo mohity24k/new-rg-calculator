@@ -120,12 +120,12 @@ def _mixture_parts(rep: dict) -> Optional[tuple[list[dict], str]]:
 def _confidence(evidence: str, sources: list, prec: dict) -> tuple[str, str]:
     cfg = config.load("suggestions")["confidence"]
     verified = any(s.get("verified") for s in sources)
-    n = prec.get("n") if prec.get("available") else None
+    n = prec.get("n_sole", prec.get("n")) if prec.get("available") else None
     if evidence == "class_specific_study" and verified and n is not None and n >= cfg["precedents_for_high"]:
         return "high", f"a study on this reaction class and {n} precedents in the dataset"
     if evidence == "class_specific_study" and verified:
         return "moderate", "a study on this reaction class" + (
-            f"; only {n} precedents in the dataset" if n is not None else "; no precedent data for this kind of change")
+            (f"; only {n} precedents in the dataset" if n else "; no precedent in the dataset") if n is not None else "; no precedent data for this kind of change")
     if evidence != "single_report" and n is not None and n >= cfg["precedents_for_moderate"]:
         return "moderate", f"{n} precedents in the dataset; no study of this change on this reaction class"
     why = {"general_guide": "a general guide only", "single_report": "a single report",
@@ -181,7 +181,8 @@ def _table_candidates(reaction: Reaction) -> list[Candidate]:
                     id=_cid(rule["id"], rep["step"]), kind=kind, title=f"{rep['step']} in place of {step.lower()}",
                     target=step, replacement=rep["step"], edit_list=ed, problem=rule.get("problem", ""),
                     scope=rep.get("scope", ""), caveats=rep.get("caveats", ""), rule_id=rule["id"],
-                    evidence_level=rep["evidence"], sources=rep.get("sources", [])))
+                    evidence_level=rep["evidence"], sources=rep.get("sources", []),
+                    precedent={"available": False, "reason": "the dataset has no workup or purification data"}))
             continue
         tsmi = canon(rule["target"].get("smiles"))
         for comp in reaction.by_role(*KIND_ROLES[kind]):
@@ -210,9 +211,11 @@ def _table_candidates(reaction: Reaction) -> list[Candidate]:
                     edit_list=ed, problem=rule.get("problem", ""), scope=rep.get("scope", ""),
                     caveats=rep.get("caveats", ""), rule_id=rule["id"], evidence_level=rep["evidence"],
                     sources=rep.get("sources", []),
-                    precedent=(precedents.support(cls, rep["smiles"], PRECEDENT_GROUP[kind])
-                               if kind in PRECEDENT_GROUP else
-                               {"available": False, "reason": "the dataset has no workup or purification amounts"})))
+                    precedent=(
+                        {"available": False, "reason": "the dataset cannot identify these conditions"}
+                        if rep.get("precedent_search") is False else
+                        precedents.support(cls, rep["smiles"], PRECEDENT_GROUP[kind]) if kind in PRECEDENT_GROUP else
+                        {"available": False, "reason": "the dataset has no workup or purification data"})))
     return out
 
 
@@ -225,16 +228,26 @@ def _built_in_candidates(reaction: Reaction) -> list[Candidate]:
         coef = comp.coefficient or 1.0
         if comp.limiting or not comp.equiv or comp.equiv / coef < st["min_equiv"]:
             continue
-        typ = precedents.typical(cls, f"equiv:{comp.role}")
         target, basis = st["target_equiv"], f"default target of {st['target_equiv']:g} equivalents (config/suggestions.yaml)"
-        prec = {"available": False, "reason": "no precedent data for the amounts in this reaction class"}
+        prec = {"available": False, "reason": "no precedent data for the amount of this material in this reaction class"}
+        typ = None
+        if comp.role == "reactant":
+            t = precedents.typical(cls, "equiv:reactant")
+            if t:
+                typ = {"n": t["n"], "q1": t["q1"], "median": t["median"], "q3": t["q3"],
+                       "what": "the coupling partner in excess"}
+        else:
+            sup = precedents.support(cls, comp.smiles, "agent")
+            if sup.get("available") and sup.get("equiv_n"):
+                typ = {"n": sup["equiv_n"], "q1": sup["equiv_q1"], "median": sup["equiv_median"],
+                       "q3": sup["equiv_q3"], "what": comp.name}
         if typ and typ["n"] >= st["min_precedents"]:
             prec = {"available": True, "n": typ["n"], "n_class": typ["n"], "examples": [],
-                    "note": f"median {typ['median']:.2g} equivalents (quartiles {typ['q1']:.2g}-{typ['q3']:.2g}) "
-                            f"for a {comp.role} in {typ['n']} precedents"}
+                    "note": f"{typ['n']:,} precedents of this reaction class use {typ['what']} at a median of "
+                            f"{typ['median']:.2g} equivalents (middle half {typ['q1']:.2g} to {typ['q3']:.2g})"}
             if typ["median"] < comp.equiv / coef:
                 target = max(1.0, typ["median"])
-                basis = f"median of {typ['n']} precedents of this reaction class"
+                basis = f"median of {typ['n']:,} precedents of this reaction class"
         target *= coef
         if target >= comp.equiv:
             continue
@@ -260,8 +273,8 @@ def _built_in_candidates(reaction: Reaction) -> list[Candidate]:
         prec = {"available": False, "reason": "no precedent data for the concentration in this reaction class"}
         if typ and typ["n"] >= st["min_precedents"]:
             prec = {"available": True, "n": typ["n"], "n_class": typ["n"], "examples": [],
-                    "note": f"median {typ['median']:.2g} mL per mmol (quartiles {typ['q1']:.2g}-{typ['q3']:.2g}) "
-                            f"in {typ['n']} precedents"}
+                    "note": f"{typ['n']:,} precedents of this reaction class use a median of {typ['median']:.2g} mL "
+                            f"of solvent per mmol (middle half {typ['q1']:.2g} to {typ['q3']:.2g})"}
             target, basis = max(typ["median"], 1.0), f"median of {typ['n']} precedents of this reaction class"
         if per > co["max_ml_per_mmol"] and target < per:
             out.append(Candidate(

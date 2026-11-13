@@ -51,7 +51,8 @@ def support(reaction_class: Optional[str], smiles: Optional[str], group: str) ->
     rec = cls.get(group, {}).get(key)
     base = {"available": True, "n_class": cls["n"], "dataset": meta().get("name", "")}
     if rec is None:
-        return {**base, "n": 0, "yield_q1": None, "yield_median": None, "yield_q3": None, "examples": []}
+        return {**base, "n": 0, "yield_q1": None, "yield_median": None, "yield_q3": None, "examples": [],
+                **({"n_sole": 0} if group == "solvent" else {})}
     return {**base, **rec}
 
 

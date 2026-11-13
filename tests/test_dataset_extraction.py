@@ -234,32 +234,29 @@ def test_validation_catches_wrong_yield_mass_balance_and_mmol():
     assert {"moles_mass_mismatch", "yield_mismatch", "mass_balance", "temperature_out_of_range"} <= codes
 
 
-def test_review_table_adapter_feeds_the_existing_calculator():
-    r3b = enrich.enrich_reaction(next(r for r in _paper_reactions() if r["label"] == "3b"), CFG, online=False)
-    df = enrich.to_review_table(r3b)
-    assert set(df.columns) == set(px.COLUMNS)
-    assert df.loc[df["Name"] == "1,4-dioxane", "Role"].item() == "solvent"
-    assert df.loc[df["Name"] == "Na2SO4", "Role"].item() == "ignore"     # no amount, as in the classic mode
-    t = px.to_app_tables(df)
-    assert t["product"]["name"] == "4-methylbiphenyl"
-    rx = [mm.Reactant(x["Name"], x["MW (g/mol)"], x["Moles charged (mol)"], x["Mass charged (g)"],
-                      int(x["Carbons/molecule"]), is_limiting=x["Limiting reagent?"])
-          for _, x in t["reactants_df"].iterrows()]
-    res = mm.compute_all_mass_metrics(rx, t["product"]["mw"], t["product"]["actual_mass"])
-    assert res["Percentage Yield (%)"] == pytest.approx(83.2, abs=0.2)
-    sug = px.suggest_eco_inputs(enrich.review_meta(r3b), r3b["yield_percent"])
-    assert "Classical chromatography" in sug["workup_steps"] and "Inert gas atmosphere" in sug["setups"]
+def test_extracted_record_becomes_a_reaction_with_roles_kept():
+    """Extraction record -> reaction record -> score, without losing the roles."""
+    from gms import scoring
+    from gms.extraction import service
+    r3b = next(r for r in _paper_reactions() if r.get("label") == "3b")
+    reaction = service.to_reaction(r3b, "si.pdf")
+    roles = {c.name: c.role for c in reaction.components}
+    assert roles["1,4-dioxane"] == "reaction_solvent" and roles["EtOAc"] == "workup"
+    assert roles["4-methylbiphenyl"] == "product" and roles["Pd(PPh3)4"] == "catalyst"
+    assert reaction.source["entry"] == "pdf" and reaction.source["file"] == "si.pdf"
+    assert "Classical chromatography" in reaction.workup_steps
+    done, score, _ = scoring.prepare_and_score(reaction, online=False)
+    assert score.metrics["yield"] == pytest.approx(83, abs=1.5)
+    by_role = {c["role"] for c in score.contributions}
+    assert {"reaction_solvent", "workup", "catalyst", "base"} <= by_role
 
-
-# ---------------------------------------------------------------------------
-# Concurrent client and checkpointed runs (stub server)
-# ---------------------------------------------------------------------------
 
 class Stub:
     def __init__(self, reject_schema=False, delay=0.05):
         self.reject_schema, self.delay = reject_schema, delay
         self.in_flight = self.max_in_flight = self.calls = 0
         self.schemas = []
+        self.keys = []
         self.lock = threading.Lock()
         stub = self
 
@@ -285,6 +282,10 @@ class Stub:
                     with stub.lock:
                         stub.in_flight -= 1
 
+            def do_GET(self):                       # GET /v1/models: the app's health check
+                stub.keys.append(self.headers.get("Authorization"))
+                self._send(200, {"object": "list", "data": [{"id": "stub-model"}]})
+
             def _send(self, code, obj):
                 b = json.dumps(obj).encode()
                 self.send_response(code)
@@ -302,6 +303,7 @@ class Stub:
 
     def close(self):
         self.srv.shutdown()
+        self.srv.server_close()
 
 
 @pytest.fixture

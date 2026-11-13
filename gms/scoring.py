@@ -83,6 +83,7 @@ def mass_metrics(reaction: Reaction) -> tuple[dict, dict]:
         reactants=reactants,
         product_mw=(p.mw or 0.0) if p else 0.0,
         product_actual_mass=p.mass if p else 0.0,
+        product_moles=p.moles if p and p.moles else None,
         auxiliaries=_auxiliaries(reaction),
         water_mass=sum(c.mass for c in reaction.by_role("water")),
         product_coefficient=p.coefficient if p else 1.0,
@@ -113,6 +114,7 @@ def hazard_rows(reaction: Reaction, store: Optional[hazard.HazardStore] = None) 
         else:
             prof = store.lookup(c.name, c.smiles)
         sc = hazard.scores(prof)
+        solvent_like = c.role == "reaction_solvent" or (c.role in SOLVENT_ROLES and c.volume_ml is not None)
         solv = solvents.lookup(c.smiles) if c.role in SOLVENT_ROLES else None
         rows.append({
             "name": c.name, "role": c.role, "mass_g": c.mass, "status": prof.status,
@@ -124,6 +126,7 @@ def hazard_rows(reaction: Reaction, store: Optional[hazard.HazardStore] = None) 
             "ecoscale_symbols": es.compound_hazards(hazard.ecoscale_symbols(prof)),
             "chem21_ranking": solv.ranking if solv else None,
             "chem21_class": solv.class_number if solv else None,
+            "solvent_like": solvent_like,
         })
     return rows
 
@@ -146,8 +149,7 @@ def hazard_summary(rows: list[dict], product_mass: float, total_input: float) ->
         "solvent_class": (sum(r["chem21_class"] * r["mass_g"] for r in solv) / solv_mass) if solv_mass else None,
         "worst_solvent_class": max((r["chem21_class"] for r in solv), default=None),
         "worst_solvent": max(solv, key=lambda r: r["chem21_class"])["name"] if solv else None,
-        "solvents_not_in_guide": [r["name"] for r in rows if r["role"] in SOLVENT_ROLES
-                                  and r["chem21_class"] is None],
+        "solvents_not_in_guide": [r["name"] for r in rows if r["solvent_like"] and r["chem21_class"] is None],
     }
 
 

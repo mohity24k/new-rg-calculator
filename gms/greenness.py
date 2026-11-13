@@ -50,7 +50,8 @@ def _fmt(key: str, value) -> str:
     if key in _NAMES:
         return f"{value:.2g}"
     m = registry.get(key)
-    return f"{value:.3g} {m.unit}".strip()
+    text = f"{value:,.0f}" if abs(value) >= 1000 and not math.isinf(value) else f"{value:.3g}"
+    return f"{text} {m.unit}".strip()
 
 
 def _verdict(score_value: Optional[float], capped: bool) -> str:

@@ -46,6 +46,19 @@ def _scale(c: Component, factor: float) -> None:
             setattr(c, f, v * factor)
 
 
+def _unique_name(r: Reaction, name: str, role: str, replacing: Optional[Component] = None) -> str:
+    """Component names identify rows. If the name is already used (ethyl acetate as the new
+    reaction solvent and as the extraction solvent), add the role to the new one."""
+    taken = {c.name for c in r.components if c is not replacing}
+    if name not in taken:
+        return name
+    labelled = f"{name} ({'co-solvent' if role == 'water' else role.replace('_', ' ')})"
+    n, out = 2, labelled
+    while out in taken:
+        out, n = f"{labelled} {n}", n + 1
+    return out
+
+
 def _replace(r: Reaction, e: dict) -> None:
     old = r.find(e["name"])
     if old is None:
@@ -66,8 +79,9 @@ def _replace(r: Reaction, e: dict) -> None:
                 raise EditError(f"the density of '{part['name']}' is not known")
             mw, carbons = mol_props(smi)
             v = vol * part["fraction"]
+            role = "water" if smi == "O" else old.role
             new_parts.append(Component(
-                name=part["name"], role="water" if smi == "O" else old.role, smiles=smi, mw=mw, carbons=carbons,
+                name=_unique_name(r, part["name"], role, old), role=role, smiles=smi, mw=mw, carbons=carbons,
                 stage=old.stage, volume_ml=v, mass_g=v * d_new, moles=v * d_new / mw if mw else None,
                 estimated=True, note=f"assumes the same total volume as {old.name}: {v:.3g} mL x {d_new:g} g/mL"
                                      + (f"; {w['parts_note']}" if w.get("parts_note") else "")))
@@ -76,7 +90,8 @@ def _replace(r: Reaction, e: dict) -> None:
         return
     smiles = canon(w.get("smiles"))
     mw, carbons = mol_props(smiles)
-    new = Component(name=w["name"], role=w.get("role") or old.role, smiles=smiles, mw=mw, carbons=carbons,
+    role = w.get("role") or old.role
+    new = Component(name=_unique_name(r, w["name"], role, old), role=role, smiles=smiles, mw=mw, carbons=carbons,
                     stage=old.stage, coefficient=old.coefficient, estimated=True)
     amount = e.get("amount", "same_volume")
     if amount == "same_volume":
@@ -135,7 +150,7 @@ def apply(reaction: Reaction, edit_list: list[dict]) -> Reaction:
             per = _per_equiv(r)
             smiles = canon(d.get("smiles"))
             mw, carbons = mol_props(smiles)
-            c = Component(name=d["name"], role=d["role"], smiles=smiles, mw=mw, carbons=carbons,
+            c = Component(name=_unique_name(r, d["name"], d["role"]), role=d["role"], smiles=smiles, mw=mw, carbons=carbons,
                           equiv=d.get("equiv"), mass_g=d.get("mass_g"), volume_ml=d.get("volume_ml"),
                           estimated=True, note=d.get("note", "amount from the cited procedure"))
             if c.equiv is not None and c.mass_g is None:
