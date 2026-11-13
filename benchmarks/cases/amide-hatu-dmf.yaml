@@ -1,0 +1,74 @@
+id: amide-hatu-dmf
+title: Amide coupling with HATU in N,N-dimethylformamide
+source:
+  description: Procedure from a US patent, as recorded in the Open Reaction Database (CC BY-SA 4.0). Amounts are
+    those stated in the procedure; workup amounts that the patent does not state are not included.
+  patent: US09073871B2
+  ord_reaction_id: ord-09f308ca4f744751a18faddd32faa4d6
+  procedure_text: 'To a solution of 4-(3-methylbutanoyl)benzoic acid (9.5 g, 46 mmol) in N,N-dimethylformamide (80
+    mL) was added O-(7-Azabenzotriazol-1-yl)-N,N,N′,N′-tetramethyluronium hexafluorophosphate (26.3 g, 69.1 mmol)
+    at 0° C. The mixture was stirred for 40 minutes. Methyl 3-aminopropanoate hydrochloride (7.72 g, 55.3 mmol)
+    and triethylamine (23.3 g, 230 mmol) were added and the reaction was allowed to warm to room temperature and
+    stir for 16 hours. The reaction mixture was extracted with ethyl acetate (3×). The combined organics were washed
+    with brine, dried over sodium sulfate, filtered, and concentrated. Purification by column chromatography gave
+    methyl 3-(4-(3-methylbutanoyl)benzamido)propanoate (10 g, 77%) as a pale yellow solid. 1H NMR (400 MHz, CDCl3,
+    δ): 7.98 (d, J=8.0 Hz, 2H), 7.83 (d, J=8.4 Hz, 2H), 6.91 (s, 1H), 3.72-3.76 (m, 5H), 2.84 (d, J=6.0 Hz, 2H),
+    2.66-2.69 (t, J=6.0 Hz, 2H), 2.23-2.33 (m, 1H), 0.99 (d, J=6.4 Hz, 6H).'
+reaction:
+  name: methyl 3-(4-(3-methylbutanoyl)benzamido)propanoate (US09073871B2)
+  reaction_class: amide_coupling
+  reported_yield_percent: 77.0
+  temperature_c: 0
+  time_h: 16
+  workup_steps:
+  - Liquid-liquid extraction (incl. drying/filtration of desiccant)
+  - Classical chromatography
+  source:
+    entry: benchmark
+    ord_reaction_id: ord-09f308ca4f744751a18faddd32faa4d6
+    patent: US09073871B2
+  components:
+  - name: 4-(3-methylbutanoyl)benzoic acid
+    role: reactant
+    smiles: CC(C)CC(=O)c1ccc(C(=O)O)cc1
+    mass_g: 9.5
+  - name: HATU
+    role: reagent
+    smiles: CN(C)C(On1nnc2cccnc21)=[N+](C)C.F[P-](F)(F)(F)(F)F
+    mass_g: 26.3
+  - name: N,N-dimethylformamide
+    role: reaction_solvent
+    smiles: CN(C)C=O
+    volume_ml: 80.0
+  - name: Methyl 3-aminopropanoate hydrochloride
+    role: reactant
+    smiles: COC(=O)CCN.Cl
+    mass_g: 7.72
+  - name: triethylamine
+    role: base
+    smiles: CCN(CC)CC
+    mass_g: 23.3
+  - name: methyl 3-(4-(3-methylbutanoyl)benzamido)propanoate
+    role: product
+    smiles: COC(=O)CCNC(=O)c1ccc(C(=O)CC(C)C)cc1
+    mass_g: 10.0
+known_greener:
+- description: Ethyl acetate, 2-MeTHF or dimethyl carbonate in place of DMF as the reaction solvent
+  kind: reaction_solvent
+  target: N,N-dimethylformamide
+  replacement_smiles:
+  - CCOC(C)=O
+  - CC1CCCO1
+  - COC(=O)OC
+  source:
+    citation: D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green Chem., 2013, 15,
+      596-600
+    doi: 10.1039/C2GC36900A
+- description: T3P with pyridine in place of HATU
+  kind: reagent
+  target: HATU
+  replacement_smiles:
+  - CCCP1(=O)OP(=O)(CCC)OP(=O)(CCC)O1
+  source:
+    citation: J. R. Dunetz, Y. Xiang, A. Baldwin and J. Ringling, Org. Lett., 2011, 13, 5048-5051
+    doi: 10.1021/ol201875q

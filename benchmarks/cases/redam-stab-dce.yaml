@@ -1,0 +1,55 @@
+id: redam-stab-dce
+title: Reductive amination with sodium triacetoxyborohydride in 1,2-dichloroethane
+source:
+  description: Procedure from a US patent, as recorded in the Open Reaction Database (CC BY-SA 4.0). Amounts are
+    those stated in the procedure; workup amounts that the patent does not state are not included.
+  patent: US08927588B2
+  ord_reaction_id: ord-5160cd059641445f8a5f14ce6e528db9
+  procedure_text: 'The same operation as in Example (90c) was performed using tert-butyl 3-ethoxy-4-oxopiperidine-1-carboxylate
+    obtained in Example (90b) (3.4 g, 14 mmol), benzylamine (1.65 g, 15.4 mmol), sodium (triacetoxy)borohydride
+    (5.93 g, 28 mmol) and 1,2-dichloroethane (40 mL). The resulting residue was purified by silica gel column chromatography
+    (elution solvent: hexane/ethyl acetate=4/1, 1/1, 1/3, 0/1) to obtain 4.06 g of the title compound as a colorless
+    oily substance (87%).'
+reaction:
+  name: tert-butyl 4-(benzylamino)-3-ethoxypiperidine-1-carboxylate (US08927588B2)
+  reaction_class: reductive_amination
+  reported_yield_percent: 86.7
+  temperature_c: 22
+  time_h: null
+  workup_steps:
+  - Classical chromatography
+  source:
+    entry: benchmark
+    ord_reaction_id: ord-5160cd059641445f8a5f14ce6e528db9
+    patent: US08927588B2
+  components:
+  - name: benzylamine
+    role: reactant
+    smiles: NCc1ccccc1
+    mass_g: 1.65
+  - name: 1,2-dichloroethane
+    role: reaction_solvent
+    smiles: ClCCCl
+    volume_ml: 40.0
+  - name: tert-butyl 3-ethoxy-4-oxopiperidine-1-carboxylate
+    role: reactant
+    smiles: CCOC1CN(C(=O)OC(C)(C)C)CCC1=O
+    mass_g: 3.4
+  - name: sodium triacetoxyborohydride
+    role: reagent
+    smiles: CC(=O)O[BH-](OC(C)=O)OC(C)=O.[Na+]
+    mass_g: 5.93
+  - name: tert-butyl 4-(benzylamino)-3-ethoxypiperidine-1-carboxylate
+    role: product
+    smiles: CCO[C@@H]1CN(C(=O)OC(C)(C)C)CC[C@@H]1NCc1ccccc1
+    mass_g: 4.06
+known_greener:
+- description: Ethyl acetate in place of 1,2-dichloroethane as the reaction solvent
+  kind: reaction_solvent
+  target: 1,2-dichloroethane
+  replacement_smiles:
+  - CCOC(C)=O
+  source:
+    citation: F. I. McGonagle, D. S. MacMillan, J. Murray, H. F. Sneddon, C. Jamieson and A. J. B. Watson, Green
+      Chem., 2013, 15, 1159-1165
+    doi: 10.1039/C3GC40359A

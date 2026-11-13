@@ -48,6 +48,13 @@ def compounds() -> dict[str, list[str]]:
                 add(rep.get("name"), rep.get("smiles"))
                 for extra in (rep.get("adds") or []) + (rep.get("removes") or []):
                     add(extra.get("name"), extra.get("smiles"))
+    for case in sorted((config.ROOT / "benchmarks" / "cases").glob("*.yaml")):      # benchmark materials
+        d = yaml.safe_load(case.read_text(encoding="utf-8"))
+        for c in (d.get("reaction") or {}).get("components", []):
+            add(c["name"], c.get("smiles"))
+        for route in d.get("routes", []):
+            for c in route["reactants"]:
+                add(c["name"], c["smiles"])
     extra = config.DATA_DIR / "seed_compounds.yaml"
     if extra.exists():
         for c in yaml.safe_load(extra.read_text(encoding="utf-8")):

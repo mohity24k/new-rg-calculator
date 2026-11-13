@@ -1,0 +1,74 @@
+id: suzuki-pd-pph3-4-dioxane
+title: Suzuki-Miyaura coupling with Pd(PPh3)4 in 1,4-dioxane / water (microwave)
+source:
+  description: Procedure from a US patent, as recorded in the Open Reaction Database (CC BY-SA 4.0). Amounts are
+    those stated in the procedure; workup amounts that the patent does not state are not included.
+  patent: US08071588B2
+  ord_reaction_id: ord-d414c5951c6746da9afb3166a1c67849
+  procedure_text: To a solution of [(3-bromophenyl)methyl]amine hydrochloric salt (0.556 g, 2.5 mmol) in 1,4-dioxane
+    (15 mL) and H2O (5 mL) was added {3-[(4-{[(1,1-dimethylethyl)-oxy]carbonyl}-1-piperazinyl)methyl]phenyl}boronic
+    acid (1.041 g, 3.25 mmol), Pd(PPH3)4 (0.144 g, 0.125 mmol), and K2CO3 (1.382 g, 10 mmol). This mixture was heated
+    in a microwave oven at about 150° C. for about 15 mins. The organic layer was separated, dried using a Glas-Col
+    evaporator (Sigma-Aldrich), and was then purified by CombiFlash chromatograph to afford the title compound 0.798
+    g (84%). LC-MS m/z 382 (M+H)+.
+reaction:
+  name: tert-butyl 4-[[3'-(aminomethyl)biphenyl-3-yl]methyl]piperazine-1-carboxylate (US08071588B2)
+  reaction_class: suzuki_miyaura
+  reported_yield_percent: 84.0
+  temperature_c: 150
+  time_h: 0.25
+  workup_steps:
+  - Classical chromatography
+  source:
+    entry: benchmark
+    ord_reaction_id: ord-d414c5951c6746da9afb3166a1c67849
+    patent: US08071588B2
+  components:
+  - name: (3-bromophenyl)methanamine hydrochloride
+    role: reactant
+    smiles: NCc1cccc(Br)c1
+    mass_g: 0.556
+  - name: 3-[(4-Boc-piperazin-1-yl)methyl]phenylboronic acid
+    role: reactant
+    smiles: CC(C)(C)OC(=O)N1CCN(Cc2cccc(B(O)O)c2)CC1
+    mass_g: 1.041
+  - name: K2CO3
+    role: base
+    smiles: O=C([O-])[O-].[K+].[K+]
+    mass_g: 1.382
+  - name: 1,4-dioxane
+    role: reaction_solvent
+    smiles: C1COCCO1
+    volume_ml: 15.0
+  - name: H2O
+    role: water
+    smiles: O
+    volume_ml: 5.0
+    stage: reaction
+  - name: Pd(PPh3)4
+    role: catalyst
+    smiles: '[Pd].c1ccc(P(c2ccccc2)c2ccccc2)cc1.c1ccc(P(c2ccccc2)c2ccccc2)cc1.c1ccc(P(c2ccccc2)c2ccccc2)cc1.c1ccc(P(c2ccccc2)c2ccccc2)cc1'
+    mass_g: 0.144
+  - name: tert-butyl 4-[[3'-(aminomethyl)biphenyl-3-yl]methyl]piperazine-1-carboxylate
+    role: product
+    smiles: CC(C)(C)OC(=O)N1CCN(Cc2cccc(-c3cccc(CN)c3)c2)CC1
+    mass_g: 0.798
+  activation: microwave
+known_greener:
+- description: Isopropanol/water or 2-MeTHF/water in place of 1,4-dioxane
+  kind: reaction_solvent
+  target: 1,4-dioxane
+  replacement_smiles:
+  - CC(C)O.O
+  - CC1CCCO1.O
+  source:
+    citation: J. Sherwood, Beilstein J. Org. Chem., 2020, 16, 1001-1005
+    doi: 10.3762/bjoc.16.89
+- description: Pd(OAc)2 with SPhos at lower loading in place of Pd(PPh3)4
+  kind: catalyst
+  target: Pd(PPh3)4
+  replacement_smiles:
+  - CC(=O)[O-].CC(=O)[O-].[Pd+2]
+  source:
+    citation: T. E. Barder, S. D. Walker, J. R. Martinelli and S. L. Buchwald, J. Am. Chem. Soc., 2005, 127, 4685-4696
+    doi: 10.1021/ja042491j

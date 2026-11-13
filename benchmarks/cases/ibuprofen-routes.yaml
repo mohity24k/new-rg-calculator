@@ -1,0 +1,30 @@
+id: ibuprofen-routes
+title: "Ibuprofen: Boots route (6 steps) and BHC route (3 steps), atom economy"
+kind: calculator_check
+source:
+  description: >-
+    The classic teaching case of a greener route. The published atom economies are 40% for the
+    Boots route and 77% for the BHC route (99% if the acetic acid by-product is recovered).
+    This case checks the atom-economy calculator on a whole route: all reagents of the route are
+    entered as reactants and ibuprofen as the product. It is a route comparison, not a suggestion
+    that the tool can generate (retrosynthesis is not part of v1).
+  citation: "M. C. Cann and M. E. Connelly, Real-World Cases in Green Chemistry, American Chemical Society, 2000"
+routes:
+  - name: Boots route
+    published_atom_economy_percent: 40
+    reactants:
+      - {name: isobutylbenzene, smiles: "CC(C)Cc1ccccc1"}
+      - {name: acetic anhydride, smiles: "CC(=O)OC(C)=O"}
+      - {name: ethyl chloroacetate, smiles: "CCOC(=O)CCl"}
+      - {name: sodium ethoxide, smiles: "CC[O-].[Na+]"}
+      - {name: hydronium, smiles: "[OH3+]"}
+      - {name: hydroxylamine, smiles: "NO"}
+      - {name: water, smiles: "O", coefficient: 2}
+  - name: BHC route
+    published_atom_economy_percent: 77
+    reactants:
+      - {name: isobutylbenzene, smiles: "CC(C)Cc1ccccc1"}
+      - {name: acetic anhydride, smiles: "CC(=O)OC(C)=O"}
+      - {name: hydrogen, smiles: "[HH]"}
+      - {name: carbon monoxide, smiles: "[C-]#[O+]"}
+product: {name: ibuprofen, smiles: "CC(C)Cc1ccc(cc1)C(C)C(=O)O"}

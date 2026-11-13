@@ -1,0 +1,68 @@
+id: suzuki-pd-pph3-4-dme
+title: Suzuki-Miyaura coupling with Pd(PPh3)4 in 1,2-dimethoxyethane / water
+source:
+  description: Procedure from a US patent, as recorded in the Open Reaction Database (CC BY-SA 4.0). Amounts are
+    those stated in the procedure; workup amounts that the patent does not state are not included.
+  patent: US07629346B2
+  ord_reaction_id: ord-a719aaabe79a47f5811f1517a636e559
+  procedure_text: To a solution of 5.058 g of 3,5-dibromo-pyrazin-2-ylamine in 100.0 ml 1,2-dimethoxyethane was
+    added at room temperature 1.156 g of tetrakis(triphenylphosphine) palladium (0) and stirred for 0.5 hours. To
+    the resulting mixture was added a solution of 5.30 g sodium carbonate in 50.0 ml water and 3.078 g 4-fluorophenylboronic
+    acid. The mixture was heated to 100° C. for 5 h. The resulting yellow solution was partitioned between 10% aqueous
+    citric acid and ethyl acetate. The organic layer washed with 10% aqueous sodium bicarbonate and brine, dried
+    over magnesium sulfate and evaporated. The residue was purified by chromatography on silica gel with a gradient
+    of heptane to dichloromethane to yield 3.22 g of the title compound as white crystals. MS (ISP) (M+H+)=268.1
+    and 270.1
+reaction:
+  name: 5-bromo-3-(4-fluorophenyl)pyrazin-2-amine (US07629346B2)
+  reaction_class: suzuki_miyaura
+  reported_yield_percent: 60.1
+  temperature_c: 100.0
+  time_h: 5.0
+  workup_steps:
+  - Liquid-liquid extraction (incl. drying/filtration of desiccant)
+  - Classical chromatography
+  source:
+    entry: benchmark
+    ord_reaction_id: ord-a719aaabe79a47f5811f1517a636e559
+    patent: US07629346B2
+  components:
+  - name: sodium carbonate
+    role: base
+    smiles: O=C([O-])[O-].[Na+].[Na+]
+    mass_g: 5.3
+  - name: 4-fluorophenylboronic acid
+    role: reactant
+    smiles: OB(O)c1ccc(F)cc1
+    mass_g: 3.078
+  - name: water
+    role: water
+    smiles: O
+    volume_ml: 50.0
+    stage: reaction
+  - name: 3,5-dibromo-pyrazin-2-ylamine
+    role: reactant
+    smiles: Nc1ncc(Br)nc1Br
+    mass_g: 5.058
+  - name: 1,2-dimethoxyethane
+    role: reaction_solvent
+    smiles: COCCOC
+    volume_ml: 100.0
+  - name: tetrakis(triphenylphosphine) palladium (0)
+    role: catalyst
+    smiles: '[Pd].c1ccc(P(c2ccccc2)c2ccccc2)cc1.c1ccc(P(c2ccccc2)c2ccccc2)cc1.c1ccc(P(c2ccccc2)c2ccccc2)cc1.c1ccc(P(c2ccccc2)c2ccccc2)cc1'
+    mass_g: 1.156
+  - name: 5-bromo-3-(4-fluorophenyl)pyrazin-2-amine
+    role: product
+    smiles: Nc1ncc(Br)nc1-c1ccc(F)cc1
+    mass_g: 3.22
+known_greener:
+- description: Isopropanol/water or 2-MeTHF/water in place of 1,2-dimethoxyethane
+  kind: reaction_solvent
+  target: 1,2-dimethoxyethane
+  replacement_smiles:
+  - CC(C)O.O
+  - CC1CCCO1.O
+  source:
+    citation: J. Sherwood, Beilstein J. Org. Chem., 2020, 16, 1001-1005
+    doi: 10.3762/bjoc.16.89

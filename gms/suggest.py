@@ -60,6 +60,7 @@ class Candidate:
     target: str
     replacement: str
     edit_list: list
+    replacement_smiles: str = ""
     problem: str = ""
     scope: str = ""
     caveats: str = ""
@@ -208,7 +209,7 @@ def _table_candidates(reaction: Reaction) -> list[Candidate]:
                 out.append(Candidate(
                     id=_cid(rule["id"], comp.name, rep["name"]), kind=kind,
                     title=f"{rep['name']} in place of {comp.name}", target=comp.name, replacement=rep["name"],
-                    edit_list=ed, problem=rule.get("problem", ""), scope=rep.get("scope", ""),
+                    edit_list=ed, replacement_smiles=rep["smiles"], problem=rule.get("problem", ""), scope=rep.get("scope", ""),
                     caveats=rep.get("caveats", ""), rule_id=rule["id"], evidence_level=rep["evidence"],
                     sources=rep.get("sources", []),
                     precedent=(
